@@ -4,7 +4,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import PostPreview from '../../components/PostPreview.astro';
-import Subscribe from '../../components/Subscribe.astro';
 import { sortItemsByDateDesc } from '../../utils/data-utils';
 import { slugify } from '../../utils/common-utils';
 
@@ -55,7 +54,7 @@ const { Content } = await post.render();
                 tags.length > 0 && (
                     <div class="flex flex-wrap gap-x-5 gap-y-1 text-sm">
                         {tags.map((tag) => (
-                            <a class="text-main hover:underline" href={`/tags/${slugify(tag)}`}>
+                            <a class="text-main hover:underline bg-gray-700 border-none rounded-lg p-1" href={`/tags/${slugify(tag)}`}>
                                 #{tag}
                             </a>
                         ))}
@@ -74,7 +73,6 @@ const { Content } = await post.render();
             </div>
         )
     }
-    <Subscribe class="my-16 sm:my-24" />
 </BaseLayout>
 
 <script>
