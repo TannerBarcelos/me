@@ -18,7 +18,14 @@ I have a passion for building innovative web platforms and applications that lev
 
 ## Skills and Expertise
 
-I build web applications for Finance and AI/ML platforms, focusing on elegant, user-friendly experiences that scale. My expertise includes front-end design, back-end development, and database management, ensuring seamless AI integration. Technologies I use: React, TypeScript, NodeJS, Fastify, Golang, MongoDB, PostgreSQL, Docker, Kubernetes, and AWS.
+I build web applications for Finance and AI/ML platforms, focusing on elegant, user-friendly experiences that scale. My expertise includes front-end design, back-end development, and database management.
+
+Technologies I am proficient in:
+
+- **Frontend**: React, TypeScript, Tailwind, Tanstack Tools, NextJS
+- **Backend**: NodeJS, Fastify, Golang, Fiber
+- **Database**: PostgreSQL, MySQL, MongoDB, Redis
+- **DevOps**: Docker, Kubernetes, Jenkins, GitHub Actions
 
 Driven by a passion for UI/UX, I strive to develop innovative applications that provide exceptional user experiences and harness the power of AI to deliver intelligent solutions.
 
