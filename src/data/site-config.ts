@@ -74,7 +74,7 @@ const siteConfig: SiteConfig = {
         }
     ],
     hero: {
-        text: "**Greetings!** I'm Tanner Barcelos. I am a Senior Full-Stack Engineer in Silicon Valley currently working at [Visa](https://usa.visa.com/) as a Senior Full Stack ML Engineer on the Hyperscale AI Platform team. <br /><br /> I am passionate about building scalable, performant, and user-friendly web applications. I have experience working with a variety of technologies including React, Node.js, TypeScript, GraphQL, and AWS. <br /><br />I am always looking for new opportunities to learn and grow as an engineer so please feel free to reach out if you would like to connect!",
+        text: "**Greetings!** I'm Tanner Barcelos. I am a Senior Full-Stack Engineer in Silicon Valley currently working at [Visa](https://usa.visa.com/) as a Senior Full Stack ML Engineer on the Hyperscale AI Platform team. <br /><br /> I am passionate about building scalable, performant, and user-friendly web applications for Finance and AI/ML. <br /><br /> I have experience working with a variety of technologies including React, Typescript, NodeJS, Fastify, Golang, Postgres and more. <br /><br />I am always looking for new opportunities to learn and grow as an engineer so please feel free to reach out if you would like to connect!",
         image: {
             src: '/hero.jpeg',
             alt: 'A person sitting at a desk in front of a computer'
