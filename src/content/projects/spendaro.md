@@ -87,8 +87,8 @@ A twist on this application is that it allows budgeting not only for the individ
 
 ## Technology Stack
 
-- Frontend: React & React Native, Tailwind, TypeScript, Tanstack
-- Backend: Fastify on Node.js, MongoDB, Postgres (Supabase)
+- Frontend: NextJS / React for the Web & React Native for mobile, Tailwind, TypeScript, Tanstack
+- Backend: Fastify on Node.js, Clerk
 - Database: Postgres (Supabase), Vector Store (Supabase), Redis (Upstash)
 - AI Integration: OpenAI, Vercel AI SDK
 
