@@ -7,6 +7,7 @@ export type Image = {
 export type Link = {
     text: string;
     href: string;
+    newTab?: boolean;
 };
 
 export type Hero = {
@@ -33,7 +34,6 @@ export type SiteConfig = {
     socialLinks?: Link[];
     hero?: Hero;
     subscribe?: Subscribe;
-    postsPerPage?: number;
     projectsPerPage?: number;
 };
 
@@ -54,13 +54,9 @@ const siteConfig: SiteConfig = {
             href: '/projects'
         },
         {
-            text: 'Blog',
-            href: '/blog'
+            text: 'About Me',
+            href: '/about'
         },
-        {
-            text: 'Tags',
-            href: '/tags'
-        }
     ],
     footerNavLinks: [
         {
@@ -92,10 +88,14 @@ const siteConfig: SiteConfig = {
             {
                 text: 'Get in Touch',
                 href: '/contact'
+            },
+            {
+                text: 'Read my Blog',
+                href: 'https://blog.tannerbarcelos.com',
+                newTab: true
             }
         ]
     },
-    postsPerPage: 8,
     projectsPerPage: 8
 };
 

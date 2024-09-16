@@ -18,9 +18,13 @@ const hero = siteConfig.hero;
             {hero.text && <div class="max-w-none prose prose-dante sm:prose-lg" set:html={marked.parse(hero.text)} />}
             {hero.actions && hero.actions.length > 0 && (
                 <div class="flex flex-wrap gap-4">
-                    {hero.actions.map((action) => (
-                        <Button href={action.href}>{action.text}</Button>
-                    ))}
+                    {hero.actions.map((action) => {
+                        return (
+                            <Button href={action.href} target={action.newTab ? '_blank' : '_self'}>
+                                {action.text}
+                            </Button>
+                        );
+                    })}
                 </div>
             )}
         </section>
