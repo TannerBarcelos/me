@@ -27,11 +27,9 @@ Technologies I am proficient in:
 - **Database**: PostgreSQL, MySQL, MongoDB, Redis
 - **DevOps**: Docker, Kubernetes, Jenkins, GitHub Actions
 
-Driven by a passion for UI/UX, I strive to develop innovative applications that provide exceptional user experiences and harness the power of AI to deliver intelligent solutions.
-
 ## Innovation and Problem-Solving
 
-I thrive on solving complex problems and transforming ideas into functional, elegant websites. Whether it's optimizing performance, implementing new features, or troubleshooting issues, I approach each challenge with enthusiasm and a commitment to delivering high-quality solutions.
+I am very interested in Database Systems, Distributed Systems, and Machine Learning. I have a strong background in building scalable, high-performance web applications that deliver exceptional user experiences that solve complex problems in finance and AI/ML platforms.
 
 ## Continuous Learning
 
