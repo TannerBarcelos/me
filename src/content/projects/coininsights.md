@@ -11,56 +11,33 @@ seo:
 ![Project preview](/coin.jpeg)
 
 **Project Overview:**
-Spendaro is an AI-driven personal finance management application that helps users track their expenses, set budgets, and achieve financial goals following the "give every dollar a job" philosophy. By providing actionable insights, personalized recommendations, and real-time transaction monitoring, Spendaro empowers users to take control of their finances and build a secure financial future.
-
-A twist on this application is that it allows budgeting not only for the individual but also for the family. This feature allows families to set collective financial goals, track expenses, and allocate resources efficiently, fostering financial transparency and collaboration within the household.
+CoinInsights is a cryptocurrency portfolio tracker that provides up to date crypto market data as well as latest crypto news aggregated by coin. Users can add coins to a watch list and gain understanding on coin performance over time.
 
 ## Objectives
 
-1. Develop a user-friendly mobile app that motivates individuals to adopt sustainable practices in their daily lives.
-2. Utilize gamification elements to make sustainable living fun and interactive.
-3. Provide educational resources and personalized challenges to empower users to make informed eco-conscious decisions.
+1. Provide real-time market data for popular cryptocurrencies.
+2. Allow users to track coin performance over time.
+3. Aggregate latest news for each coin so you can get a better understanding of the coin's performance within context of the application.
 
 ## Features
 
-1. **EcoScore and Challenges:**
+1. **Real-Time Market Data:**
 
-- Users are assigned an EcoScore based on their sustainable activities and choices.
-- Daily and weekly challenges encourage users to adopt new habits and compete with friends or the community to earn EcoPoints.
+   - Display real-time price, market cap, volume, and price change for popular cryptocurrencies.
+   - Support multiple fiat currencies for price conversion and comparison.
 
-2. **Personalized Eco-Goals:**
-
-- Users can set and track personalized eco-goals, such as reducing plastic usage, conserving water, or choosing eco-friendly transportation.
-- The app provides tips and suggestions to help users achieve their goals.
-
-3. **Green Rewards Marketplace:**
-
-- EcoPoints earned through challenges and sustainable actions can be redeemed in a virtual Green Rewards Marketplace.
-- The marketplace offers discounts on eco-friendly products, services, and even contributions to environmental causes.
-
-4. **Community Hub:**
-
-- A community feature allows users to connect, share their eco-friendly achievements, and inspire others.
-- Users can join local eco-groups, organize clean-up events, and collaborate on sustainability projects.
-
-5. **EcoEducator AI Assistant:**
-
-- An AI-powered assistant, EcoEducator, provides personalized eco-tips, facts, and information based on users' preferences and habits.
-- Users can chat with EcoEducator for instant advice on sustainable living.
+2. **Dynamic Data Visualization:**
+   - Visualize coin performance over time using interactive charts and graphs.
+   - Analyze historical price trends, trading volume, and market capitalization.
+3. **Personalized Watchlist:**
+   - Create a personalized watchlist of favorite coins for easy tracking.
+   - Receive notifications for price changes, market updates, and news alerts.
 
 ## Technology Stack
 
-- Frontend: React Native for cross-platform mobile app development.
-- Backend: Firebase for real-time data synchronization and user authentication.
-- Database: Firestore for scalable and flexible data storage.
-- AI Integration: Dialogflow for natural language processing and conversation with EcoEducator.
+- Frontend: React, Redux, Chart.js, CoinGecko API
+- Backend: Firebase
 
 ## Outcome
 
-EcoBuddy has successfully created a community of environmentally conscious individuals who actively participate in sustainable living practices. The app not only educates and motivates users but also provides tangible rewards for their commitment to a greener lifestyle, fostering a positive impact on the environment.
-
-## Client Testimonial
-
-> We couldn't be happier with the results delivered by Tanner Barcelos. From the initial concept discussions to the final product, their responsiveness and collaborative approach were impressive. Our startup's website now stands out, thanks to their creative input and commitment to excellence.
-
-**Note:** This case study is entirely fictional and created for the purpose of showcasing [Dante Astro.js theme functionality](https://justgoodui.com/astro-themes/dante/).
+CoinInsights has been well-received by cryptocurrency enthusiasts and investors who appreciate its user-friendly interface, real-time data updates, and personalized insights. The application has helped users make informed investment decisions, track their portfolio performance, and stay up-to-date with the latest market trends. Future updates will include additional features such as portfolio analysis tools, price alerts, and social sharing capabilities.
