@@ -52,6 +52,10 @@ const siteConfig: SiteConfig = {
             text: 'About Me',
             href: '/about'
         },
+        {
+            text: 'Resume',
+            href: 'https://drive.google.com/file/d/1_NSb3QQiJTV44SaywnNCYiJsciOdZ8n9/view?usp=sharing'
+        }
     ],
     footerNavLinks: [
         {

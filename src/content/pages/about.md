@@ -29,7 +29,7 @@ Technologies I am proficient in:
 
 ## Innovation and Problem-Solving
 
-I am very interested in Database Systems, Distributed Systems, and Machine Learning. I have a strong background in building scalable, high-performance web applications that deliver exceptional user experiences that solve complex problems in finance and AI/ML platforms.
+I am very interested in the Web, Database Systems, Distributed Systems, and Machine Learning. I have a strong background in building scalable, high-performance web applications that deliver exceptional user experiences that solve complex problems in finance and AI/ML platforms.
 
 ## Continuous Learning
 
