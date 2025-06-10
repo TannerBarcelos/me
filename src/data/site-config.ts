@@ -54,7 +54,7 @@ const siteConfig: SiteConfig = {
         },
         {
             text: 'Resume',
-            href: 'https://drive.google.com/file/d/11zM8kVQbdneQCdqlLzujP4XOeqyMUOeg/view?usp=sharing'
+            href: 'https://drive.google.com/file/d/1LWW2Jaci9PDlzEa-0X5wLiwLWkNzhupx/view?usp=drivesdk'
         }
     ],
     footerNavLinks: [
