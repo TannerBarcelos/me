@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@theme {
+    --font-sans: 'Lora Variable', 'serif';
+    --font-serif: 'IBM Plex Sans Variable', 'sans-serif';
+}
+
 @layer base {
     :root {
         --color-text-main: 23 23 23; /* #171717 */
