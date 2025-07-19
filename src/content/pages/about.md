@@ -1,16 +1,9 @@
 ---
-title: About
+title: About Me
 seo:
   title: About Me
-  description: Learn more about the person behind the website and embark on a journey of inspiration and shared experiences.
-  image:
-    src: '/about.jpeg'
-    alt: A person sitting at a desk in front of a computer
+  description: Learn more about me
 ---
-
-![Alt text for image](/about.jpeg)
-
-## Tanner Barcelos - Senior Full-Stack Engineer
 
 **Greetings!** I'm Tanner Barcelos. I am a Senior Full-Stack Engineer in Silicon Valley currently working at [Visa](https://usa.visa.com/) as a Senior Full Stack ML Engineer on the Hyperscale AI Platform team building a unified, beautiful, single pane of glass operational control plane for data scientists to deploy and manage machine learning models for Visa's business critical transactional fraud detection systems.
 

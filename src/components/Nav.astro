@@ -20,26 +20,24 @@ const navLinks = siteConfig.headerNavLinks || [];
                 </button>
                 <ul id="menu-items" class="menu flex gap-6">
                     {navLinks.map((link) => {
-                        if (link.text.toLocaleLowerCase() === 'resume') {
-                            return <li class="py-1">
-                                <a
+                        return (
+                            <li class="py-1">
+                                <NavLink
                                     class="text-xl font-serif text-main hover:underline hover:underline-offset-2 hover:decoration-1 md:text-base"
                                     href={link.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                    target={link.newTab ? '_blank' : undefined}
+                                    rel={link.newTab ? 'noopener noreferrer' : undefined}
+                                    aria-label={link.text}
                                 >
                                     {link.text}
-                                </a>
-                            </li>;
-                        }
-                        return <li class="py-1">
-                            <NavLink
-                                class="text-xl font-serif text-main hover:underline hover:underline-offset-2 hover:decoration-1 md:text-base"
-                                href={link.href}
-                            >
-                                {link.text}
-                            </NavLink>
-                        </li>;
+                                    {link.newTab && (
+                                        <span class="ml-1 text-xs text-gray-500" aria-label="Opens in a new tab">
+                                            ↗
+                                        </span>
+                                    )}
+                                </NavLink>
+                            </li>
+                        );
                     })}
                 </ul>
             </div>
