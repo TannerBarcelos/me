@@ -84,18 +84,14 @@ const siteConfig: SiteConfig = {
         }
     ],
     hero: {
-        text: "**Greetings!** I&apos;m a Software Engineer in Silicon Valley currently working at [Visa](https://usa.visa.com/) as a Senior ML Engineer on the Hyperscale AI Platform team. <br /><br /> I am passionate about building scalable, performant, and user-friendly web platforms for Finance and AI/ML and internal tools. <br /><br /> I have experience working with a variety of technologies including React, Typescript, NodeJS, Fastify, Golang, Postgres and more. <br /><br />I am always looking for new opportunities to learn and grow as an engineer so please feel free to reach out if you would like to connect!",
-        image: {
-            src: '/hero.jpeg',
-            alt: 'A person sitting at a desk in front of a computer'
-        },
+        text: "**Greetings!** I&apos;m a Senior Software Engineer in Silicon Valley currently working at [Visa](https://usa.visa.com/) as a Senior ML Engineer on the AI as Services team. <br /><br /> I am passionate about building scalable, performant, and user-friendly web services for AI, Data and Finance. <br /><br /> I have experience working with a variety of technologies including React, Typescript, NodeJS, Fastify, GraphQL, Golang, Postgres, MySQL, Kubernetes and more. <br /><br />I am always looking for new opportunities to learn and grow as an engineer so please feel free to reach out if you would like to connect!",
         actions: [
             {
-                text: 'Get in Touch',
+                text: 'Reach Out',
                 href: '/contact'
             },
             {
-                text: 'Read my Blog',
+                text: 'Blog',
                 href: 'https://blog.tannerbarcelos.com',
                 newTab: true
             }

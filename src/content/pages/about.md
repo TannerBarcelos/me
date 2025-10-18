@@ -2,34 +2,62 @@
 title: About Me
 seo:
   title: About Me
-  description: Learn more about me
+  description: Senior ML Engineer & Lead Engineer building AI platforms at Visa
 ---
 
-**Greetings!** I'm Tanner Barcelos. I am a Senior Full-Stack Engineer in Silicon Valley currently working at [Visa](https://usa.visa.com/) as a Senior Full Stack ML Engineer on the Hyperscale AI Platform team building a unified, beautiful, single pane of glass operational control plane for data scientists to deploy and manage machine learning models for Visa's business critical transactional fraud detection systems.
+**Greetings!** I'm Tanner Barcelos, a **Lead Engineer** at [Visa](https://usa.visa.com/) with a passion for building intelligent web platforms that make AI accessible to everyone. Over the past **4+ years**, I've specialized in leading UI teams that transform complex machine learning infrastructure into elegant, intuitive experiences.
 
-I have a passion for building innovative web platforms and applications that leverage AI and machine learning technologies to deliver intelligent solutions.
+I thrive at the intersection of **AI/ML and web development**, where sophisticated technology meets human-centered design. My drive comes from democratizing powerful AI capabilities through beautifully crafted interfaces that anyone can use—from data scientists to business stakeholders.
 
-## Skills and Expertise
+## What Drives Me
 
-I build web applications for Finance and AI/ML platforms, focusing on elegant, user-friendly experiences that scale. My expertise includes front-end design, back-end development, and database management.
+I believe that the most powerful AI systems are worthless if people can't use them effectively. That's why I'm passionate about **bridging the gap** between cutting-edge ML infrastructure and intuitive user experiences. I lead teams that don't just build features—we craft experiences that transform how organizations interact with AI at scale.
 
-Technologies I am proficient in:
+At Visa, I spearhead the UI development for our next-generation MLOps platform, creating unified experiences comparable to industry leaders like Uber's Michelangelo. But beyond the technology, I'm motivated by the human impact: enabling thousands of engineers and analysts to deploy, monitor, and understand ML models without barriers.
 
-- **Frontend**: React, TypeScript, Tailwind, Tanstack Tools, NextJS
-- **Backend**: NodeJS, Fastify, Golang, Fiber
-- **Database**: PostgreSQL, MySQL, MongoDB, Redis
-- **DevOps**: Docker, Kubernetes, Jenkins, GitHub Actions
+## Leadership & Impact
 
-## Innovation and Problem-Solving
+**UI Team Leadership** — I lead cross-functional teams of designers, frontend engineers, and product managers in building Visa's comprehensive AI platform. My approach focuses on translating complex stakeholder needs into cohesive product experiences that seamlessly integrate with upstream ML infrastructure.
 
-I am very interested in the Web, Database Systems, Distributed Systems, and Machine Learning. I have a strong background in building scalable, high-performance web applications that deliver exceptional user experiences that solve complex problems in finance and AI/ML platforms.
+**Measurable Results** — Under my leadership, we've delivered a **90% reduction in analysis time** through intelligent React + LangChain interfaces that translate natural language into SQL queries. We've also achieved **Level 5 accessibility certification** across all platform interfaces, ensuring inclusive access to advanced AI capabilities.
 
-## Continuous Learning
+**Platform Innovation** — I specialize in creating unified web experiences from disparate backend services—inference engines, model registries, monitoring systems—abstracting complexity while maintaining full operational control for technical users.
 
-The dynamic nature of the tech industry inspires me to stay up-to-date with the latest trends and advancements. I'm always eager to expand my skill set and embrace emerging technologies that enhance the functionality and aesthetics of the websites I create.
+**Team Development** — I establish component libraries, UI standards, and development practices that accelerate productivity across distributed engineering teams, fostering a culture of both technical excellence and user empathy.
 
-## Get in Touch
+## Technical Expertise
 
-Are you looking to elevate your online presence or bring your digital ideas to life? I'd love to hear from you! Feel free to reach out for collaboration, consultation, or just a friendly chat about all things web development.
+My full-stack capabilities span the modern web development ecosystem:
 
-_Let's build something amazing together!_
+**Frontend Excellence** — React, TypeScript, Next.js, Tailwind CSS, with deep expertise in state management, performance optimization, and component architecture. I build responsive, accessible interfaces that handle enterprise-scale complexity gracefully.
+
+**Backend & Integration** — Go, Python, Node.js with GraphQL and REST APIs. I design resilient architectures that connect web applications with ML infrastructure (Kubernetes, Nomad, Redis) while maintaining scalability and reliability.
+
+**AI-Powered Interfaces** — LangChain integration, natural language processing, and LLM-powered features that simplify complex ML operations for non-technical users. I'm particularly passionate about making AI feel intuitive rather than intimidating.
+
+**Platform Engineering** — Docker, CI/CD pipelines, microservices architecture, and distributed systems. I build the infrastructure that supports thousands of users across global deployments.
+
+## Innovation Philosophy
+
+I approach every project with a **user-first mindset**. Technology should amplify human capability, not create barriers. Whether I'm designing a new feature or architecting a platform integration, I ask: "How can this empower users to achieve their goals more effectively?"
+
+This philosophy drives my work in:
+
+- **Accessible Design**: Ensuring AI platforms are inclusive and compliant with modern accessibility standards
+- **Intuitive Complexity**: Making sophisticated ML systems feel approachable through thoughtful UX design
+- **Cross-Functional Collaboration**: Building bridges between technical and business teams through shared understanding
+- **Scalable Solutions**: Creating systems that grow gracefully with organizational needs
+
+## Continuous Growth
+
+The dynamic intersection of AI and web technologies constantly challenges me to evolve. I stay current with modern frontend patterns, cloud-native architectures, and emerging AI integration techniques. I'm particularly excited about the potential of LLMs to create more natural, conversational interfaces for complex technical systems.
+
+I also invest in growing as a technical leader—mentoring engineers, establishing best practices, and fostering team cultures that balance innovation with reliability.
+
+## Let's Connect
+
+I'm passionate about **building the future of AI-human interaction** through exceptional web experiences. Whether you're exploring technical leadership opportunities, discussing AI platform architecture, or simply want to chat about the latest in React and ML integration, I'd love to connect.
+
+I'm particularly interested in roles where I can combine my technical expertise with strategic impact—leading teams that build platforms which truly democratize AI capabilities across organizations.
+
+_Transforming complex AI systems into elegant user experiences, one interface at a time._
