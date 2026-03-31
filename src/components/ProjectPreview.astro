@@ -1,24 +1,28 @@
 ---
 import { type CollectionEntry } from 'astro:content';
-import ArrowRight from '../icons/ArrowRight.astro';
 
 type Props = { project: CollectionEntry<'projects'>; class?: string; headingLevel?: 'h2' | 'h3' };
 
 const { project, class: className, headingLevel = 'h2' } = Astro.props;
-const { title, description } = project.data;
+const { title, description, publishDate } = project.data;
 const TitleTag = headingLevel;
+const year = publishDate.getFullYear();
 ---
 
-<a class:list={['flex justify-between items-start gap-8 group', className]} href={`/projects/${project.slug}/`}>
-    <div class="grow">
-        <TitleTag
-            class="text-xl leading-tight font-serif font-medium group-hover:underline group-hover:decoration-dashed group-hover:underline-offset-4 group-hover:decoration-1 sm:text-2xl"
-        >
-            {title}
-        </TitleTag>
-        {description && <div class="mt-1 text-sm leading-normal">{description}</div>}
-    </div>
-    <div class="hidden font-serif italic opacity-0 transition group-hover:opacity-100 sm:inline-flex sm:gap-1 sm:items-center sm:shrink-0">
-        View Project <ArrowRight class="fill-current w-4 h-4" />
-    </div>
+<a class:list={['group block', className]} href={`/projects/${project.slug}/`}>
+    <article class="flex items-baseline justify-between gap-6 py-5 border-b border-main/15 transition-colors duration-200 group-hover:border-main/40">
+        <div class="min-w-0">
+            <TitleTag
+                class="font-serif text-lg sm:text-xl font-medium text-main leading-snug tracking-tight group-hover:opacity-80 transition-opacity duration-200"
+            >
+                {title}
+            </TitleTag>
+            {
+                description && (
+                    <p class="mt-1.5 text-sm text-muted leading-relaxed line-clamp-2">{description}</p>
+                )
+            }
+        </div>
+        <span class="font-mono text-xs text-muted/60 shrink-0 tabular-nums">{year}</span>
+    </article>
 </a>

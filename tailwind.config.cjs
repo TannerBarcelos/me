@@ -5,12 +5,15 @@ module.exports = {
     darkMode: 'class',
     theme: {
         fontFamily: {
-            sans: ['Lora', ...defaultTheme.fontFamily.sans],
-            serif: ['IBM Plex Sans', ...defaultTheme.fontFamily.serif]
+            sans: ['IBM Plex Sans Variable', 'IBM Plex Sans', ...defaultTheme.fontFamily.sans],
+            serif: ['Lora Variable', 'Lora', ...defaultTheme.fontFamily.serif],
+            mono: ['IBM Plex Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace']
         },
         extend: {
             textColor: {
-                main: 'rgb(var(--color-text-main) / <alpha-value>)'
+                main: 'rgb(var(--color-text-main) / <alpha-value>)',
+                muted: 'rgb(var(--color-text-muted) / <alpha-value>)',
+                bg: 'rgb(var(--color-bg-main) / <alpha-value>)'
             },
             backgroundColor: {
                 main: 'rgb(var(--color-bg-main) / <alpha-value>)',
@@ -35,30 +38,32 @@ module.exports = {
                         '--tw-prose-captions': theme('textColor.main / 100%'),
                         '--tw-prose-code': theme('textColor.main / 100%'),
                         '--tw-prose-pre-code': theme('colors.zinc.100'),
-                        '--tw-prose-pre-bg': theme('colors.zinc.800'),
+                        '--tw-prose-pre-bg': theme('colors.zinc.900'),
                         '--tw-prose-th-borders': theme('borderColor.main / 100%'),
                         '--tw-prose-td-borders': theme('borderColor.main / 100%')
                     }
                 },
                 DEFAULT: {
                     css: {
+                        maxWidth: 'none',
                         a: {
                             fontWeight: 'normal',
                             textDecoration: 'underline',
                             textDecorationStyle: 'dashed',
                             textDecorationThickness: '1px',
-                            textUnderlineOffset: '2px',
+                            textUnderlineOffset: '3px',
                             '&:hover': {
                                 textDecorationStyle: 'solid'
                             }
                         },
                         'h1,h2,h3,h4,h5,h6': {
-                            fontFamily: theme('fontFamily.serif'),
-                            fontWeight: 500
+                            fontFamily: theme('fontFamily.serif').join(', '),
+                            fontWeight: '500',
+                            letterSpacing: '-0.01em'
                         },
                         blockquote: {
                             border: 0,
-                            fontFamily: theme('fontFamily.serif'),
+                            fontFamily: theme('fontFamily.serif').join(', '),
                             fontSize: '1.3125em',
                             fontStyle: 'italic',
                             fontWeight: 'normal',
@@ -68,7 +73,17 @@ module.exports = {
                                 fontSize: '1.66667em',
                                 lineHeight: 1.3
                             }
-                        }
+                        },
+                        code: {
+                            fontFamily: theme('fontFamily.mono').join(', '),
+                            fontSize: '0.875em',
+                            backgroundColor: 'rgb(var(--color-bg-muted))',
+                            padding: '0.15em 0.35em',
+                            borderRadius: '3px',
+                            fontWeight: '400'
+                        },
+                        'code::before': { content: '""' },
+                        'code::after': { content: '""' }
                     }
                 },
                 lg: {

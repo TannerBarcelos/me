@@ -11,19 +11,32 @@ const projects = (await getCollection('projects')).sort(sortItemsByDateDesc);
 const featuredProjects = projects.filter(({ data }) => data.isFeatured);
 ---
 
-<BaseLayout description={siteConfig.description}>
+<BaseLayout description={siteConfig.description} showHeader={false}>
     <Hero />
+
     {
         featuredProjects?.length > 0 && (
-            <div class="mb-16 sm:mb-24">
-                <h2 class="mb-12 text-xl font-serif italic sm:mb-16 sm:text-2xl">Projects</h2>
-                {featuredProjects.map((project) => (
-                    <ProjectPreview project={project} class="mb-10 sm:mb-12" headingLevel="h3" />
-                ))}
-                <div class="mt-12 sm:mt-16">
-                    <Button href="/projects">View All Projects</Button>
+            <section class="pb-24 sm:pb-32">
+                {/* Section label */}
+                <div class="flex items-baseline justify-between mb-8">
+                    <p class="font-mono text-xs text-muted select-none">
+                        <span class="opacity-50">{'// '}</span>selected projects
+                    </p>
+                    <a
+                        href="/projects"
+                        class="font-mono text-xs text-muted hover:text-main transition-colors duration-200"
+                    >
+                        view all →
+                    </a>
                 </div>
-            </div>
+
+                {/* Project list */}
+                <div>
+                    {featuredProjects.map((project) => (
+                        <ProjectPreview project={project} headingLevel="h3" />
+                    ))}
+                </div>
+            </section>
         )
     }
 </BaseLayout>
