@@ -6,7 +6,6 @@ module.exports = {
     theme: {
         fontFamily: {
             sans: ['IBM Plex Sans Variable', 'IBM Plex Sans', ...defaultTheme.fontFamily.sans],
-            serif: ['Lora Variable', 'Lora', ...defaultTheme.fontFamily.serif],
             mono: ['IBM Plex Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace']
         },
         extend: {
@@ -57,13 +56,13 @@ module.exports = {
                             }
                         },
                         'h1,h2,h3,h4,h5,h6': {
-                            fontFamily: theme('fontFamily.serif').join(', '),
+                            fontFamily: theme('fontFamily.sans').join(', '),
                             fontWeight: '500',
                             letterSpacing: '-0.01em'
                         },
                         blockquote: {
                             border: 0,
-                            fontFamily: theme('fontFamily.serif').join(', '),
+                            fontFamily: theme('fontFamily.sans').join(', '),
                             fontSize: '1.3125em',
                             fontStyle: 'italic',
                             fontWeight: 'normal',

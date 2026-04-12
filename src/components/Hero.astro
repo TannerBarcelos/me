@@ -6,54 +6,84 @@ const hero = siteConfig.hero;
 ---
 
 {
-    (hero?.text || (hero?.actions && hero.actions.length > 0)) && (
+    hero?.actions && hero.actions.length > 0 && (
         <section class="w-full pt-20 pb-24 sm:pt-28 sm:pb-32">
-            {/* Eyebrow label — editor comment style */}
-            <p class="font-mono text-xs text-muted mb-6 tracking-wide select-none" aria-hidden="true">
-                <span class="opacity-50">{'// '}</span>senior ml engineer · visa · silicon valley
-            </p>
-
             {/* Large name heading with blinking cursor */}
-            <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl font-medium tracking-tight text-main leading-[1.1] mb-8">
-                Tanner Barcelos<span class="cursor" aria-hidden="true" />
+            <h1 class="font-sans text-4xl sm:text-5xl md:text-6xl font-medium tracking-tight text-main leading-[1.1] mb-5">
+                Tanner Barcelos<span class="name-cursor" aria-hidden="true" />
             </h1>
 
-            {/* Bio text */}
-            {hero.text && (
-                <p class="text-main/80 text-lg sm:text-xl leading-relaxed max-w-xl mb-12 font-sans">
-                    Building scalable web services for AI, data, and finance. React, TypeScript, Node, Go, Kubernetes — and more.
-                </p>
-            )}
+            {/* Typed rotating tagline — fixed height prevents layout shift */}
+            <p class="font-mono text-sm sm:text-base text-muted mb-12 h-6 sm:h-7" aria-live="polite">
+                <span id="typed-tagline"></span>
+            </p>
 
-            {/* Actions */}
-            {hero.actions && hero.actions.length > 0 && (
-                <div class="flex flex-wrap items-center gap-4">
-                    {hero.actions.map((action, i) => (
-                        <Button href={action.href} target={action.newTab ? '_blank' : '_self'} variant={i === 0 ? 'primary' : 'ghost'}>
-                            {action.text}
-                        </Button>
-                    ))}
-                </div>
-            )}
+            {/* CTA buttons */}
+            <div class="flex flex-wrap items-center gap-4">
+                {hero.actions.map((action, i) => (
+                    <Button href={action.href} target={action.newTab ? '_blank' : '_self'} variant={i === 0 ? 'primary' : 'ghost'}>
+                        {action.text}
+                    </Button>
+                ))}
+            </div>
         </section>
     )
 }
 
 <style>
-    .cursor::after {
+    /* Blinking underscore cursor on the name */
+    .name-cursor::after {
         content: '_';
         animation: cursor-blink 1.1s step-end infinite;
         margin-left: 1px;
         font-weight: 300;
+        opacity: 0.6;
     }
 
     @keyframes cursor-blink {
-        0%,
-        100% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0;
-        }
+        0%, 100% { opacity: 0.6; }
+        50%       { opacity: 0; }
+    }
+
+    /* Make typed.js cursor match the name cursor */
+    :global(.typed-cursor) {
+        font-weight: 300;
+        opacity: 0.5;
     }
 </style>
+
+<script>
+    import Typed from 'typed.js';
+
+    function initTyped() {
+        const el = document.getElementById('typed-tagline');
+        if (!el) return;
+
+        // Clear any leftover content from a previous instance
+        el.textContent = '';
+
+        const typed = new Typed('#typed-tagline', {
+            strings: [
+                'building AI/ML platforms',
+                'senior ml engineer @ visa',
+                'react · typescript · go',
+                'distributed systems',
+                'ai enthusiast',
+                'building developer tooling',
+                'silicon valley'
+            ],
+            typeSpeed: 42,
+            backSpeed: 22,
+            backDelay: 2200,
+            startDelay: 400,
+            loop: true,
+            cursorChar: '_',
+            smartBackspace: false
+        });
+
+        // Destroy before client-side page swap to avoid duplicate instances
+        document.addEventListener('astro:before-swap', () => typed.destroy(), { once: true });
+    }
+
+    document.addEventListener('astro:page-load', initTyped);
+</script>
