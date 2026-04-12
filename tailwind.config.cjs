@@ -12,14 +12,16 @@ module.exports = {
             textColor: {
                 main: 'rgb(var(--color-text-main) / <alpha-value>)',
                 muted: 'rgb(var(--color-text-muted) / <alpha-value>)',
-                bg: 'rgb(var(--color-bg-main) / <alpha-value>)'
+                bg: 'rgb(var(--color-bg-main) / <alpha-value>)',
+                accent: 'rgb(var(--color-accent) / <alpha-value>)'
             },
             backgroundColor: {
                 main: 'rgb(var(--color-bg-main) / <alpha-value>)',
                 muted: 'rgb(var(--color-bg-muted) / <alpha-value>)'
             },
             borderColor: {
-                main: 'rgb(var(--color-border-main) / <alpha-value>)'
+                main: 'rgb(var(--color-border-main) / <alpha-value>)',
+                accent: 'rgb(var(--color-accent) / <alpha-value>)'
             },
             typography: (theme) => ({
                 dante: {
@@ -48,11 +50,13 @@ module.exports = {
                         a: {
                             fontWeight: 'normal',
                             textDecoration: 'underline',
+                            textDecorationColor: 'rgb(var(--color-accent) / 0.35)',
                             textDecorationStyle: 'dashed',
                             textDecorationThickness: '1px',
                             textUnderlineOffset: '3px',
                             '&:hover': {
-                                textDecorationStyle: 'solid'
+                                textDecorationStyle: 'solid',
+                                textDecorationColor: 'rgb(var(--color-accent) / 0.65)'
                             }
                         },
                         'h1,h2,h3,h4,h5,h6': {
@@ -78,8 +82,9 @@ module.exports = {
                             fontSize: '0.875em',
                             backgroundColor: 'rgb(var(--color-bg-muted))',
                             padding: '0.15em 0.35em',
-                            borderRadius: '3px',
-                            fontWeight: '400'
+                            borderRadius: '0',
+                            fontWeight: '400',
+                            boxShadow: 'inset 0 0 0 1px rgb(var(--color-border-main) / 0.35)'
                         },
                         'code::before': { content: '""' },
                         'code::after': { content: '""' }

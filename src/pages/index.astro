@@ -6,6 +6,8 @@ import ProjectPreview from '../components/ProjectPreview.astro';
 import ReadPreview from '../components/ReadPreview.astro';
 import siteConfig from '../data/site-config';
 import { sortItemsByDateDesc, sortReadsReadingNow } from '../utils/data-utils';
+import { DEFAULT_READ_SHELF } from '../data/read-shelves';
+import { readsShelfPath } from '../utils/reads-links';
 
 const projects = (await getCollection('projects')).sort(sortItemsByDateDesc);
 /** "What I'm building" = projects whose tags include `in-progress` (excludes paused, live-only, etc.). */
@@ -13,6 +15,8 @@ const buildingProjects = projects.filter(({ data }) => data.tags.includes('in-pr
 
 const reads = await getCollection('reads');
 const readingNow = reads.filter(({ data }) => data.readingNow).sort(sortReadsReadingNow);
+const readingNowShelves = [...new Set(readingNow.map((r) => r.data.shelf))];
+const readingNowShelfOnly = readingNowShelves.length === 1 ? readingNowShelves[0] : undefined;
 ---
 
 <BaseLayout description={siteConfig.description} showHeader={false}>
@@ -28,7 +32,7 @@ const readingNow = reads.filter(({ data }) => data.readingNow).sort(sortReadsRea
                     </p>
                     <a
                         href="/projects"
-                        class="font-mono text-xs text-muted hover:text-main transition-colors duration-200"
+                        class="font-mono text-xs text-muted hover:text-main transition-colors duration-200 underline underline-offset-[5px] decoration-dashed decoration-accent/35 hover:decoration-solid hover:decoration-accent/65"
                     >
                         view all →
                     </a>
@@ -52,15 +56,15 @@ const readingNow = reads.filter(({ data }) => data.readingNow).sort(sortReadsRea
                         <span class="opacity-50">{'// '}</span>what I'm reading
                     </p>
                     <a
-                        href="/reads"
-                        class="font-mono text-xs text-muted hover:text-main transition-colors duration-200"
+                        href={readsShelfPath(readingNowShelfOnly ?? DEFAULT_READ_SHELF)}
+                        class="font-mono text-xs text-muted hover:text-main transition-colors duration-200 underline underline-offset-[5px] decoration-dashed decoration-accent/35 hover:decoration-solid hover:decoration-accent/65"
                     >
-                        all reads →
+                        bookshelf →
                     </a>
                 </div>
 
                 <div>
-                    {readingNow.map((read) => <ReadPreview read={read} headingLevel="h3" />)}
+                    {readingNow.map((read) => <ReadPreview read={read} headingLevel="h3" showTopicTags={false} />)}
                 </div>
             </section>
         )

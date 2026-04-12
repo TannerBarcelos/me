@@ -1,33 +1,52 @@
 ---
 import siteConfig from '../data/site-config';
 
+export type Props = {
+    /** Matches `<main>` max width from BaseLayout (site default `max-w-4xl`). */
+    contentMaxWidthClass?: string;
+};
+
+const { contentMaxWidthClass = 'max-w-4xl' } = Astro.props;
 const socialLinks = siteConfig.socialLinks || [];
 const navLinks = siteConfig.footerNavLinks || [];
 ---
 
-<footer class="w-full max-w-3xl mx-auto pt-16 pb-10 sm:pt-24 sm:pb-14 border-t border-main/20 mt-16 sm:mt-24">
+<footer
+    class:list={[
+        'w-full mx-auto pt-16 pb-10 sm:pt-24 sm:pb-14 border-t border-main/15 mt-16 sm:mt-24',
+        contentMaxWidthClass
+    ]}
+>
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         {/* Left: nav + social */}
         <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
             {
                 navLinks.map((link) => (
                     <a
-                        class="font-mono text-xs text-muted hover:text-main transition-colors duration-200"
+                        class="font-mono text-xs text-muted hover:text-main transition-colors duration-200 underline underline-offset-[5px] decoration-dashed decoration-accent/40 hover:decoration-solid hover:decoration-accent/70"
                         href={link.href}
+                        target={link.newTab ? '_blank' : undefined}
+                        rel={link.newTab ? 'noopener noreferrer' : undefined}
                     >
                         {link.text}
+                        {link.newTab && (
+                            <>
+                                {' '}
+                                <span class="opacity-40">&#8599;</span>
+                            </>
+                        )}
                     </a>
                 ))
             }
             {
                 socialLinks.map((link) => (
                     <a
-                        class="font-mono text-xs text-muted hover:text-main transition-colors duration-200"
+                        class="font-mono text-xs text-muted hover:text-main transition-colors duration-200 underline underline-offset-[5px] decoration-dashed decoration-accent/40 hover:decoration-solid hover:decoration-accent/70"
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        {link.text} <span class="opacity-40">↗</span>
+                        {link.text} <span class="opacity-40">&#8599;</span>
                     </a>
                 ))
             }

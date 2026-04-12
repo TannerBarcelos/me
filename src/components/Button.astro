@@ -8,10 +8,12 @@ type Props = ButtonProps | AnchorProps;
 
 const { href, class: className, variant = 'primary', ...rest } = Astro.props;
 
-const base = 'inline-flex items-center justify-center font-mono text-xs tracking-wide transition-all duration-200 px-5 py-2.5 rounded-sm';
+const base =
+    'inline-flex items-center justify-center font-mono text-xs tracking-wide transition-all duration-200 px-5 py-2.5 rounded-none border';
 const variants = {
-    primary: '[background:rgb(var(--color-text-main))] [color:rgb(var(--color-bg-main))] border [border-color:rgb(var(--color-text-main))] hover:opacity-75',
-    ghost: 'border border-main/30 text-muted hover:border-main/60 hover:text-main'
+    primary:
+        '[background:rgb(var(--color-text-main))] [color:rgb(var(--color-bg-main))] [border-color:rgb(var(--color-text-main))] hover:opacity-[0.82] active:opacity-95 shadow-[0_1px_0_0_rgb(var(--color-text-main)/0.12)]',
+    ghost: 'border-main/30 text-muted hover:border-main/55 hover:text-main hover:bg-muted/40'
 };
 
 const buttonClasses = `${base} ${variants[variant as keyof typeof variants] ?? variants.primary}`;

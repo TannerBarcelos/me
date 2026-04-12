@@ -1,0 +1,103 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BookshelfShelfPanel from '../../../components/BookshelfShelfPanel.astro';
+import BookshelfShelfToggle from '../../../components/BookshelfShelfToggle.astro';
+import ReadPreview from '../../../components/ReadPreview.astro';
+import ReadsBrowseStrip from '../../../components/ReadsBrowseStrip.astro';
+import { READ_KINDS, type ReadKind } from '../../../data/read-kinds';
+import { parseShelfFromQuery } from '../../../data/read-shelves';
+import { sortLeisureReads, sortReadsByAddedDesc } from '../../../utils/data-utils';
+import { kindsFromReads, loadReadsBrowseData, topicsFromReads } from '../../../utils/reads-browse';
+import { slugifyTopic } from '../../../utils/slugify';
+
+export async function getStaticPaths() {
+    const reads = (await getCollection('reads')).sort(sortReadsByAddedDesc);
+    const { topics } = await loadReadsBrowseData();
+
+    return topics.map(({ slug }) => ({
+        params: { topic: slug },
+        props: {
+            allForTopic: reads.filter((r) => r.data.topics.some((t) => slugifyTopic(t) === slug))
+        }
+    }));
+}
+
+type Props = { allForTopic: CollectionEntry<'reads'>[] };
+
+const { allForTopic } = Astro.props;
+const topic = Astro.params.topic!;
+const technicalList = allForTopic.filter((r) => r.data.shelf === 'technical');
+const leisureList = allForTopic.filter((r) => r.data.shelf === 'leisure').sort(sortLeisureReads);
+
+const { topics } = await loadReadsBrowseData();
+const technicalTopics = topicsFromReads(technicalList);
+const leisureTopics = topicsFromReads(leisureList);
+const technicalKinds = kindsFromReads(technicalList);
+const leisureKinds = kindsFromReads(leisureList);
+const topicMeta = topics.find((t) => t.slug === topic);
+const topicLabel = topicMeta?.label ?? topic;
+const rawKind = Astro.url.searchParams.get('kind');
+const urlKind =
+    rawKind && (READ_KINDS as readonly string[]).includes(rawKind) ? (rawKind as ReadKind) : undefined;
+const urlShelf = parseShelfFromQuery(Astro.url.searchParams.get('shelf'));
+---
+
+<BaseLayout
+    title={`Bookshelf · ${topicLabel}`}
+    description={`Shelf picks tagged “${topicLabel}”.`}
+    showHeader={false}
+>
+    <div class="pt-16 sm:pt-24 pb-24 sm:pb-32">
+        <p class="font-mono text-xs text-muted mb-4 select-none">
+            <span class="opacity-50">{'// '}</span>bookshelf / topic / {topic}
+        </p>
+        <h1 class="font-sans text-3xl sm:text-4xl font-medium tracking-tight text-main mb-3">{topicLabel}</h1>
+        <p class="text-muted text-sm sm:text-base leading-relaxed max-w-2xl mb-10 sm:mb-12">
+            Entries tagged here; open the funnel control to filter by format or other topics.
+        </p>
+
+        <BookshelfShelfToggle pathname={Astro.url.pathname}>
+            <BookshelfShelfPanel shelf="technical">
+                <ReadsBrowseStrip
+                    pathname={Astro.url.pathname}
+                    presentKinds={technicalKinds}
+                    topics={technicalTopics}
+                    active={{ type: 'topic', slug: topic }}
+                    shelf="technical"
+                    urlKind={urlKind}
+                    urlShelf={urlShelf}
+                />
+                <div data-bookshelf-read-list>
+                    {
+                        technicalList.length > 0 ? (
+                            technicalList.map((read) => <ReadPreview read={read} />)
+                        ) : (
+                            <p class="text-muted text-sm py-8">No technical shelf entries for this topic.</p>
+                        )
+                    }
+                </div>
+            </BookshelfShelfPanel>
+            <BookshelfShelfPanel shelf="leisure">
+                <ReadsBrowseStrip
+                    pathname={Astro.url.pathname}
+                    presentKinds={leisureKinds}
+                    topics={leisureTopics}
+                    active={{ type: 'topic', slug: topic }}
+                    shelf="leisure"
+                    urlKind={urlKind}
+                    urlShelf={urlShelf}
+                />
+                <div data-bookshelf-read-list>
+                    {
+                        leisureList.length > 0 ? (
+                            leisureList.map((read) => <ReadPreview read={read} />)
+                        ) : (
+                            <p class="text-muted text-sm py-8">No leisure shelf entries for this topic.</p>
+                        )
+                    }
+                </div>
+            </BookshelfShelfPanel>
+        </BookshelfShelfToggle>
+    </div>
+</BaseLayout>

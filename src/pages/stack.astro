@@ -1,0 +1,479 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SimpleIcon from '../components/SimpleIcon.astro';
+import {
+    siAnthropic,
+    siAstro,
+    siBun,
+    siClaude,
+    siCursor,
+    siDatadog,
+    siDocker,
+    siGithubactions,
+    siGo,
+    siGooglegemini,
+    siGrafana,
+    siGraphql,
+    siHelm,
+    siHono,
+    siJavascript,
+    siKubernetes,
+    siLangchain,
+    siMongodb,
+    siNodedotjs,
+    siChatbot,
+    siOpentelemetry,
+    siJest,
+    siPostgresql,
+    siPrometheus,
+    siPython,
+    siReact,
+    siRedis,
+    siSocketdotio,
+    siSvelte,
+    siTailwindcss,
+    siTanstack,
+    siTerraform,
+    siTmux,
+    siTypescript,
+    siVite,
+    siVitest
+} from 'simple-icons';
+
+const title = 'Tech stack & AI tools';
+const description = 'What I use in production: languages, platforms, and AI tooling.';
+
+const tagBase = 'font-mono text-xs px-1.5 py-0.5 leading-tight border';
+const tagNeutral =
+    'border-zinc-500/30 bg-zinc-400/[0.05] text-zinc-600 dark:border-zinc-500/25 dark:bg-zinc-400/[0.04] dark:text-zinc-400';
+const tagViolet =
+    'border-violet-600/35 bg-violet-500/[0.06] text-violet-700 dark:border-violet-400/25 dark:bg-violet-400/[0.05] dark:text-violet-400';
+const tagEmerald =
+    'border-emerald-600/35 bg-emerald-500/[0.06] text-emerald-700 dark:border-emerald-400/25 dark:bg-emerald-400/[0.05] dark:text-emerald-400';
+const tagSky =
+    'border-sky-600/35 bg-sky-500/[0.06] text-sky-800 dark:border-sky-400/25 dark:bg-sky-400/[0.06] dark:text-sky-300';
+
+type SoftwareRow = { icon: (typeof siReact)[]; label: string; detail?: string };
+
+const software: { id: string; title: string; intro: string; rows: SoftwareRow[] }[] = [
+    {
+        id: 'languages',
+        title: 'Languages',
+        intro: 'What I write most often — not the same thing as runtimes or frameworks below.',
+        rows: [
+            {
+                icon: [siTypescript, siJavascript, siGo, siPython],
+                label: 'TypeScript · JavaScript · Go · Python',
+                detail: 'TypeScript and JavaScript for application code; Go for microservices and control planes; Python for tooling, notebooks, and ML-adjacent glue.'
+            }
+        ]
+    },
+    {
+        id: 'runtimes',
+        title: 'Runtimes',
+        intro: 'Where JS/TS executes — distinct from Hono or any web framework.',
+        rows: [
+            {
+                icon: [siBun, siNodedotjs],
+                label: 'Bun · Node.js',
+                detail: 'Bun is my usual Node-compatible runtime for new JS services and scripts. I still reach for Node.js when tooling, libraries, or deployment targets expect it.'
+            }
+        ]
+    },
+    {
+        id: 'web-ui',
+        title: 'Web UI & client stack',
+        intro: 'Product-facing work: frameworks, styling, and build tooling.',
+        rows: [
+            {
+                icon: [siReact, siTanstack, siSvelte, siTailwindcss, siVite, siAstro],
+                label: 'React · TanStack Suite · Svelte / SvelteKit · Tailwind CSS · Vite · Astro',
+                detail: 'React with the TanStack Suite (Query, Router, and whatever else fits the feature); Svelte and SvelteKit when I want lean reactivity. Tailwind everywhere; Vite for builds; Astro for content sites like this one.'
+            }
+        ]
+    },
+    {
+        id: 'backend',
+        title: 'Backend & APIs',
+        intro: 'Services and HTTP boundaries — framework choice is separate from which runtime hosts it.',
+        rows: [
+            {
+                icon: [siGo, siHono, siGraphql, siSocketdotio],
+                label: 'Go (Gin, Chi) · Hono · GraphQL federation · REST · WebSockets',
+                detail: 'Go for most service logic. Hono is my go-to small web framework for TypeScript HTTP APIs; I usually run it on Bun, but that is a hosting choice — not the same dimension as “what language” or “what framework.” GraphQL (including federation), REST, and WebSockets for APIs and realtime surfaces (dashboards, control planes, live updates).'
+            }
+        ]
+    },
+    {
+        id: 'platform',
+        title: 'Data, infrastructure, observability & ML',
+        intro: 'The resume-shaped layer: storage, delivery, signals, tests, and production ML patterns.',
+        rows: [
+            {
+                icon: [siPostgresql, siRedis, siMongodb],
+                label: 'PostgreSQL · Redis · MongoDB',
+                detail: ''
+            },
+            {
+                icon: [siKubernetes, siDocker, siTerraform, siHelm],
+                label: 'Kubernetes · Docker · Terraform · Helm',
+                detail: 'Multi-cluster and resilient deployments; GitOps and infra-as-code.'
+            },
+            {
+                icon: [siGithubactions],
+                label: 'GitHub Actions',
+                detail: 'CI/CD pipelines and release automation.'
+            },
+            {
+                icon: [siDatadog, siPrometheus, siGrafana, siOpentelemetry],
+                label: 'Datadog · Prometheus · Grafana · OpenTelemetry',
+                detail: 'Metrics, traces, and dashboards aligned with on-call reality.'
+            },
+            {
+                icon: [siVitest, siJest],
+                label: 'Playwright · Vitest · Jest · React Testing Library',
+                detail: ''
+            },
+            {
+                icon: [siLangchain],
+                label: 'LangChain · prompt engineering · model APIs',
+                detail: 'Plus evaluation and guardrail patterns for control planes in front of real models and traffic.'
+            }
+        ]
+    }
+];
+
+type RankItem = {
+    rank: string;
+    name: string;
+    icon: typeof siReact;
+    tags: { label: string; tone: 'neutral' | 'violet' | 'emerald' | 'sky' }[];
+    body: string;
+    pros?: string[];
+    cons?: string[];
+};
+
+const modelRankings: RankItem[] = [
+    {
+        rank: '01',
+        name: 'Claude Opus 4.6',
+        icon: siAnthropic,
+        tags: [
+            { label: 'frontend', tone: 'violet' },
+            { label: 'ui', tone: 'sky' },
+            { label: 'coding', tone: 'emerald' }
+        ],
+        body: 'My default for frontend and UI-heavy work — strong layout sense, good tool use, and a bias toward shipping visible progress.',
+        pros: ['Excellent for components, CSS, and product polish', 'Reliable multi-step refactors with clear structure'],
+        cons: ['Premium cost versus smaller models', 'Not my first pick for tiny drive-by edits']
+    },
+    {
+        rank: '02',
+        name: 'Composer 2',
+        icon: siCursor,
+        tags: [
+            { label: 'cursor only', tone: 'neutral' },
+            { label: 'ui', tone: 'sky' },
+            { label: 'frontend', tone: 'violet' },
+            { label: 'fast iteration', tone: 'emerald' }
+        ],
+        body: 'Composer 2 in Cursor is a workhorse for me — including UI and frontend: it is excellent at layout and component iteration, quick visual passes, and tight edit loops. I reach for it often alongside Opus when the task fits “fast and in-repo.”',
+        pros: ['Outstanding for UI work and design-in-the-editor iteration', 'Very fast feedback loop for surgical multi-file edits'],
+        cons: ['Tied to Cursor subscriptions and routing', 'Less “deep reasoning” than frontier chat models for ambiguous architecture']
+    },
+    {
+        rank: '03',
+        name: 'Gemini 3 Pro',
+        icon: siGooglegemini,
+        tags: [
+            { label: 'general', tone: 'neutral' },
+            { label: 'non-technical', tone: 'sky' }
+        ],
+        body: 'I use the Gemini app with Gemini 3 Pro for everyday, non-technical assistant tasks — travel, drafting, research summaries — separate from my coding harnesses.',
+        pros: ['Strong for long-context reading and general knowledge work', 'Good multimodal workflows in the app'],
+        cons: ['Not my primary coding agent', 'Less integrated into my editor-centric loop']
+    },
+    {
+        rank: '04',
+        name: 'ChatGPT (latest)',
+        icon: siChatbot,
+        tags: [
+            { label: 'general', tone: 'neutral' },
+            { label: 'research', tone: 'sky' }
+        ],
+        body: 'OpenAI’s current flagship ChatGPT model for open-ended research, comparison shopping for ideas, and general knowledge work outside Gemini — I rotate based on task and which app I have at hand.',
+        pros: ['Strong for synthesis, brainstorming, and digging through messy topics', 'Familiar chat UX for long research threads'],
+        cons: ['Not wired into my editor the way Cursor models are', 'I still fact-check anything that might affect production or writing I ship']
+    }
+];
+
+const harnessRankings: RankItem[] = [
+    {
+        rank: '01',
+        name: 'Cursor',
+        icon: siCursor,
+        tags: [
+            { label: 'coding', tone: 'violet' },
+            { label: 'editor', tone: 'sky' },
+            { label: 'cloud agents', tone: 'neutral' }
+        ],
+        body: 'My first-choice harness for day-to-day coding — the editor, agents, and where I run Composer 2 and frontier models against a real repo.',
+        pros: ['Tight integration with the project graph', 'Cloud agents when I want parallel exploration'],
+        cons: ['Platform churn and stability are occasional tax', 'Worth budgeting inference spend deliberately']
+    },
+    {
+        rank: '02',
+        name: 'Claude Code',
+        icon: siAnthropic,
+        tags: [
+            { label: 'work primary', tone: 'neutral' },
+            { label: 'cli', tone: 'sky' },
+            { label: 'desktop', tone: 'neutral' }
+        ],
+        body: 'Second in my personal stack, but what I use most through Visa: Claude Code on CLI and desktop where it is the supported path, integrated with org workflows.',
+        pros: ['Fits enterprise-approved tooling and guardrails', 'Strong terminal-first and automation-friendly flows'],
+        cons: ['When I am choosing freely, I still prefer a full IDE command center like Cursor for most coding']
+    },
+    {
+        rank: '03',
+        name: 'Claude',
+        icon: siClaude,
+        tags: [
+            { label: 'general assistant', tone: 'violet' },
+            { label: 'app & api', tone: 'neutral' }
+        ],
+        body: 'Claude (app and API) for planning, writing, architecture reasoning, and long-form work outside the editor — not my primary coding harness.',
+        pros: ['Flexible across tasks beyond code', 'Great for structured outputs and critique'],
+        cons: ['Separate from repo context unless wired in manually']
+    },
+    {
+        rank: '04',
+        name: 'Opencode',
+        icon: siTmux,
+        tags: [
+            { label: 'tui', tone: 'sky' },
+            { label: 'terminal', tone: 'neutral' }
+        ],
+        body: 'Opencode when I want a TUI-forward coding session — keyboard-driven, minimal chrome, and a change of pace from GUI editors.',
+        pros: ['Fast, focused terminal workflows', 'Nice contrast to mouse-heavy UI work'],
+        cons: ['Smaller ecosystem than mainstream IDEs', 'Steeper context-switch if I need heavy debugging tooling']
+    }
+];
+
+function tagClasses(tone: RankItem['tags'][number]['tone']) {
+    switch (tone) {
+        case 'violet':
+            return tagViolet;
+        case 'emerald':
+            return tagEmerald;
+        case 'sky':
+            return tagSky;
+        default:
+            return tagNeutral;
+    }
+}
+---
+
+<BaseLayout title={title} {description} showHeader={false}>
+    <article class="pt-16 sm:pt-24 pb-16 sm:pb-24">
+        <header class="mb-12 sm:mb-16">
+            <p class="font-mono text-xs text-muted mb-4 select-none">
+                <span class="opacity-50">{'// '}</span>stack / tools / rankings
+            </p>
+            <h1 class="font-sans text-3xl sm:text-5xl font-medium tracking-tight text-main leading-tight">{title}</h1>
+            <p class="mt-5 text-muted text-base sm:text-lg leading-relaxed max-w-2xl">
+                what i use in production
+            </p>
+            <blockquote class="mt-6 max-w-2xl border-l-2 border-main/25 pl-4 text-sm text-muted italic leading-relaxed">
+                All of these rankings are my opinion — not a live, up-to-the-minute picture of the landscape.
+            </blockquote>
+        </header>
+
+        <!-- State of AI -->
+        <section class="mb-20 sm:mb-24" aria-labelledby="state-ai-heading">
+            <div class="flex flex-wrap items-end gap-4 gap-y-2 border-b border-main/20 pb-6 mb-10">
+                <p class="font-mono text-xs text-muted tabular-nums">01</p>
+                <h2 id="state-ai-heading" class="font-sans text-2xl sm:text-3xl font-medium tracking-tight text-main">
+                    State of AI
+                </h2>
+            </div>
+
+            <p class="text-sm text-muted leading-relaxed mb-10 max-w-2xl">
+                Rankings are personal defaults, not universal truths. I still review anything that touches production — models
+                accelerate exploration; they do not replace ownership.
+            </p>
+
+            <div class="space-y-12">
+                <div>
+                    <div class="flex flex-wrap items-baseline gap-3 mb-6">
+                        <span class="font-mono text-xs text-muted tabular-nums">01</span>
+                        <h3 class="font-sans text-xl font-medium text-main">Models</h3>
+                    </div>
+                    <div class="space-y-5">
+                        {
+                            modelRankings.map((item) => (
+                                <article class="border border-main/20 bg-muted/30 dark:bg-muted/20 overflow-hidden">
+                                    <div class="flex flex-col sm:flex-row sm:items-stretch">
+                                        <div class="font-mono text-xs text-muted tabular-nums px-4 py-3 sm:px-5 sm:py-4 border-b sm:border-b-0 sm:border-r border-main/15 bg-main/[0.03] shrink-0 sm:w-14 flex sm:items-start">
+                                            {item.rank}
+                                        </div>
+                                        <div class="flex-1 px-4 py-4 sm:px-6 sm:py-5 min-w-0">
+                                            <div class="flex flex-wrap items-start gap-4 gap-y-3">
+                                                <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-main/15 bg-main/5 text-main">
+                                                    <SimpleIcon icon={item.icon} class="h-6 w-6" title={item.name} />
+                                                </span>
+                                                <div class="min-w-0 flex-1">
+                                                    <h4 class="font-sans text-lg font-medium text-main leading-tight">
+                                                        {item.name}
+                                                    </h4>
+                                                    <div class="mt-2 flex flex-wrap gap-1.5">
+                                                        {item.tags.map((t) => (
+                                                            <span class:list={[tagBase, tagClasses(t.tone)]}>{t.label}</span>
+                                                        ))}
+                                                    </div>
+                                                    <p class="mt-3 text-sm text-muted leading-relaxed">{item.body}</p>
+                                                    {item.pros && item.pros.length > 0 && (
+                                                        <div class="mt-4 grid sm:grid-cols-2 gap-6 text-sm">
+                                                            <div>
+                                                                <p class="font-mono text-xs mb-1.5 text-main">
+                                                                    <span class="text-emerald-700 dark:text-emerald-400">+</span>
+                                                                    <span class="text-muted ml-1.5">Pros</span>
+                                                                </p>
+                                                                <ul class="space-y-1 text-muted list-disc pl-4 marker:text-main/40">
+                                                                    {item.pros.map((p) => (
+                                                                        <li>{p}</li>
+                                                                    ))}
+                                                                </ul>
+                                                            </div>
+                                                            {item.cons && item.cons.length > 0 && (
+                                                                <div>
+                                                                    <p class="font-mono text-xs mb-1.5 text-main">
+                                                                        <span class="text-amber-800 dark:text-amber-300">−</span>
+                                                                        <span class="text-muted ml-1.5">Cons</span>
+                                                                    </p>
+                                                                    <ul class="space-y-1 text-muted list-disc pl-4 marker:text-main/40">
+                                                                        {item.cons.map((c) => (
+                                                                            <li>{c}</li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex flex-wrap items-baseline gap-3 mb-6">
+                        <span class="font-mono text-xs text-muted tabular-nums">02</span>
+                        <h3 class="font-sans text-xl font-medium text-main">Harnesses</h3>
+                    </div>
+                    <div class="space-y-5">
+                        {
+                            harnessRankings.map((item) => (
+                                <article class="border border-main/20 bg-muted/30 dark:bg-muted/20 overflow-hidden">
+                                    <div class="flex flex-col sm:flex-row sm:items-stretch">
+                                        <div class="font-mono text-xs text-muted tabular-nums px-4 py-3 sm:px-5 sm:py-4 border-b sm:border-b-0 sm:border-r border-main/15 bg-main/[0.03] shrink-0 sm:w-14 flex sm:items-start">
+                                            {item.rank}
+                                        </div>
+                                        <div class="flex-1 px-4 py-4 sm:px-6 sm:py-5 min-w-0">
+                                            <div class="flex flex-wrap items-start gap-4 gap-y-3">
+                                                <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-main/15 bg-main/5 text-main">
+                                                    <SimpleIcon icon={item.icon} class="h-6 w-6" title={item.name} />
+                                                </span>
+                                                <div class="min-w-0 flex-1">
+                                                    <h4 class="font-sans text-lg font-medium text-main leading-tight">
+                                                        {item.name}
+                                                    </h4>
+                                                    <div class="mt-2 flex flex-wrap gap-1.5">
+                                                        {item.tags.map((t) => (
+                                                            <span class:list={[tagBase, tagClasses(t.tone)]}>{t.label}</span>
+                                                        ))}
+                                                    </div>
+                                                    <p class="mt-3 text-sm text-muted leading-relaxed">{item.body}</p>
+                                                    {item.pros && item.pros.length > 0 && (
+                                                        <div class="mt-4 grid sm:grid-cols-2 gap-6 text-sm">
+                                                            <div>
+                                                                <p class="font-mono text-xs mb-1.5 text-main">
+                                                                    <span class="text-emerald-700 dark:text-emerald-400">+</span>
+                                                                    <span class="text-muted ml-1.5">Pros</span>
+                                                                </p>
+                                                                <ul class="space-y-1 text-muted list-disc pl-4 marker:text-main/40">
+                                                                    {item.pros.map((p) => (
+                                                                        <li>{p}</li>
+                                                                    ))}
+                                                                </ul>
+                                                            </div>
+                                                            {item.cons && item.cons.length > 0 && (
+                                                                <div>
+                                                                    <p class="font-mono text-xs mb-1.5 text-main">
+                                                                        <span class="text-amber-800 dark:text-amber-300">−</span>
+                                                                        <span class="text-muted ml-1.5">Cons</span>
+                                                                    </p>
+                                                                    <ul class="space-y-1 text-muted list-disc pl-4 marker:text-main/40">
+                                                                        {item.cons.map((c) => (
+                                                                            <li>{c}</li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- State of Software -->
+        <section class="mb-8" aria-labelledby="state-software-heading">
+            <div class="flex flex-wrap items-end gap-4 gap-y-2 border-b border-main/20 pb-6 mb-10">
+                <p class="font-mono text-xs text-muted tabular-nums">02</p>
+                <h2 id="state-software-heading" class="font-sans text-2xl sm:text-3xl font-medium tracking-tight text-main">
+                    State of Software
+                </h2>
+            </div>
+
+            <div class="space-y-14">
+                {
+                    software.map((block) => (
+                        <div class="space-y-4">
+                            <div>
+                                <h3 class="font-sans text-lg font-medium text-main">{block.title}</h3>
+                                {block.intro && <p class="mt-1 text-sm text-muted leading-relaxed">{block.intro}</p>}
+                            </div>
+                            <ul class="space-y-4">
+                                {block.rows.map((row) => (
+                                    <li class="border border-main/20 bg-muted/40 dark:bg-muted/25 px-4 py-4 sm:px-5 sm:py-5">
+                                        <div class="flex flex-wrap items-center gap-2 mb-3">
+                                            {row.icon.map((ico) => (
+                                                <span class="text-main/90 inline-flex h-8 w-8 items-center justify-center border border-main/15 bg-main/5">
+                                                    <SimpleIcon icon={ico} class="h-4 w-4" title={ico.title} />
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <p class="font-mono text-sm text-main leading-snug">{row.label}</p>
+                                        {row.detail && <p class="mt-2 text-sm text-muted leading-relaxed">{row.detail}</p>}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+                }
+            </div>
+        </section>
+    </article>
+</BaseLayout>

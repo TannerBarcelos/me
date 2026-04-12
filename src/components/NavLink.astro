@@ -9,20 +9,36 @@ const { pathname } = Astro.url;
 const pathNorm = pathname.replace(/\/$/, '') || '/';
 const hrefStr = href != null ? String(href) : '';
 const isExternal = hrefStr.startsWith('http');
-const hrefNorm = hrefStr.replace(/\/$/, '') || '/';
+
+/** Path only — query/hash break active matching (e.g. Bookshelf is /reads with any ?shelf=&kind=). */
+let hrefPathOnly = hrefStr;
+if (!isExternal && hrefStr) {
+    try {
+        hrefPathOnly = new URL(hrefStr, 'https://nav-link.invalid').pathname;
+    } catch {
+        hrefPathOnly = hrefStr.split('?')[0].split('#')[0];
+    }
+}
+const hrefNorm = hrefPathOnly.replace(/\/$/, '') || '/';
 
 let isActive = false;
 if (isExternal) {
     isActive = false;
 } else if (hrefNorm === '/') {
     isActive = pathNorm === '/';
+} else if (hrefNorm === '/reads' || hrefNorm.startsWith('/reads/shelf')) {
+    /* One nav item for the bookshelf; stay highlighted on any /reads/* route (shelves, topics, entries). */
+    isActive = pathNorm === '/reads' || pathNorm.startsWith('/reads/');
 } else {
     isActive = pathNorm === hrefNorm || pathNorm.startsWith(`${hrefNorm}/`);
 }
 ---
 
 <a
-    class:list={[className, { 'text-main! bg-muted': isActive }]}
+    class:list={[
+        className,
+        isActive && 'text-main! bg-muted md:[border-left-color:rgb(var(--color-accent)/0.88)]'
+    ]}
     href={href}
     aria-current={isActive ? 'page' : undefined}
     {...props}

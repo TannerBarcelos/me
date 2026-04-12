@@ -16,3 +16,23 @@ export function sortReadsReadingNow(itemA: CollectionEntry<'reads'>, itemB: Coll
     return sortReadsByAddedDesc(itemA, itemB);
 }
 
+/** Leisure shelf: actively reading first, then finished, then queued / unset. */
+export function sortLeisureReads(itemA: CollectionEntry<'reads'>, itemB: CollectionEntry<'reads'>) {
+    const rank = (r: CollectionEntry<'reads'>) => {
+        const p = r.data.readProgress;
+        if (p === 'reading' || r.data.readingNow) return 0;
+        if (p === 'finished') return 1;
+        if (p === 'queued') return 2;
+        return 1;
+    };
+    const ra = rank(itemA);
+    const rb = rank(itemB);
+    if (ra !== rb) return ra - rb;
+    if (ra === 0) {
+        const oa = itemA.data.readingNowOrder ?? 999;
+        const ob = itemB.data.readingNowOrder ?? 999;
+        if (oa !== ob) return oa - ob;
+    }
+    return sortReadsByAddedDesc(itemA, itemB);
+}
+

@@ -10,19 +10,20 @@
         --color-bg-main: 246 245 240;     /* #F6F5F0 */
         --color-bg-muted: 236 235 228;    /* #ECEBE4 */
         --color-border-main: 214 212 206; /* #D6D4CE */
+        --color-accent: 145 90 48;
     }
 
     /* ─── Dark mode — editor dark ─── */
-    /* Body text: ~#C8C5BD — softer than near-white on #0D0D0B; contrast ≈11:1 (WCAG AAA for normal text). */
+    /* Body text: ~#C8C5BD — softer than near-white on #0D0D0B; WCAG AAA for normal text. */
     html.dark {
         --color-text-main: 200 197 189;   /* #C8C5BD */
         --color-text-muted: 132 129 121;  /* #848179 — ~4.8:1 on bg for secondary UI copy */
         --color-bg-main: 13 13 11;        /* #0D0D0B */
         --color-bg-muted: 22 22 19;       /* #161613 */
         --color-border-main: 40 39 35;    /* #282723 */
+        --color-accent: 212 168 120;
     }
 
-    /* ─── Blinking cursor ─── */
     @keyframes cursor-blink {
         0%,
         100% {
@@ -33,23 +34,65 @@
         }
     }
 
+    @keyframes hero-in {
+        from {
+            opacity: 0;
+            transform: translateY(0.4rem);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
     html,
     body {
         height: 100%;
     }
 
-    /* Smooth scrolling */
-    html {
-        scroll-behavior: smooth;
+    body {
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
     }
 
-    /* Better default selection */
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        html {
+            scroll-behavior: smooth;
+        }
+    }
+
     ::selection {
         background-color: rgb(var(--color-text-main) / 0.12);
     }
 
-    /* Thin scrollbar on dark */
+    :where(a, button, summary, input, textarea, select):focus-visible {
+        outline: 2px solid rgb(var(--color-text-main) / 0.35);
+        outline-offset: 3px;
+    }
+
+    html.dark :where(a, button, summary, input, textarea, select):focus-visible {
+        outline-color: rgb(var(--color-text-main) / 0.45);
+    }
+
     html.dark {
         color-scheme: dark;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .hero-headline {
+            animation: hero-in 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        .hero-tagline {
+            animation: hero-in 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+        }
+        .hero-actions {
+            animation: hero-in 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+        }
     }
 }

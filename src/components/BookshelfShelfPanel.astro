@@ -1,0 +1,11 @@
+---
+import type { ReadShelf } from '../data/read-shelves';
+
+type Props = { shelf: ReadShelf };
+
+const { shelf } = Astro.props;
+---
+
+<div class="bookshelf-shelf-panel" data-bookshelf-panel={shelf}>
+    <slot />
+</div>

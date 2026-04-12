@@ -1,13 +1,15 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { loadReadsBrowseData } from '../../utils/reads-browse';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { loadReadsBrowseData } from '../../../utils/reads-browse';
+import { withReadsBrowseQuery } from '../../../utils/reads-links';
+import { readShelfTabLabel } from '../../../data/read-shelves';
 
 const { topics } = await loadReadsBrowseData();
 ---
 
 <BaseLayout
-    title="Read topics"
-    description="Browse favorite reads by topic — scales as the library grows."
+    title="Bookshelf topics"
+    description="Browse the bookshelf by topic — scales as the library grows."
     showHeader={false}
 >
     <div class="pt-16 sm:pt-24 pb-24 sm:pb-32">
@@ -15,14 +17,23 @@ const { topics } = await loadReadsBrowseData();
             href="/reads/"
             class="inline-flex items-center gap-1 font-mono text-xs text-muted hover:text-main transition-colors duration-200 mb-8"
         >
-            ← All reads
+            ← Bookshelf
         </a>
         <p class="font-mono text-xs text-muted mb-4 select-none">
             <span class="opacity-50">{'// '}</span>topics
         </p>
         <h1 class="font-sans text-3xl sm:text-4xl font-medium tracking-tight text-main mb-3">Topics</h1>
-        <p class="text-muted text-sm sm:text-base leading-relaxed max-w-2xl mb-12">
-            Every topic links to a filtered, paginated shelf. Add topics in front matter as you catalog more reads.
+        <p class="text-muted text-sm sm:text-base leading-relaxed max-w-2xl mb-6">
+            Every topic links to a filtered shelf view. Counts below combine both shelves; scoped lists (tags on one shelf
+            only) are under{' '}
+            <a href="/reads/topics/technical/" class="text-main/90 hover:opacity-80 transition-opacity duration-200">
+                {readShelfTabLabel.technical}
+            </a>
+            {' · '}
+            <a href="/reads/topics/leisure/" class="text-main/90 hover:opacity-80 transition-opacity duration-200">
+                {readShelfTabLabel.leisure}
+            </a>
+            .
         </p>
 
         <ul class="divide-y divide-main/10 border-t border-main/10">
@@ -30,7 +41,7 @@ const { topics } = await loadReadsBrowseData();
                 topics.map((t) => (
                     <li>
                         <a
-                            href={`/reads/topic/${t.slug}/`}
+                            href={withReadsBrowseQuery(`/reads/topic/${t.slug}/`, {})}
                             class="flex items-baseline justify-between gap-4 py-4 group"
                         >
                             <span class="font-sans text-base text-main group-hover:opacity-75 transition-opacity duration-200">

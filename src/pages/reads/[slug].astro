@@ -1,7 +1,10 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { readKindToBadge } from '../../data/read-kinds';
+/**
+ * Legacy per-read URLs: redirect to the canonical external link (or back to the shelf).
+ * The bookshelf lists link directly to `url`; this keeps old bookmarks working.
+ */
+import { getCollection } from 'astro:content';
+import { readsShelfPath } from '../../utils/reads-links';
 
 export async function getStaticPaths() {
     const reads = await getCollection('reads');
@@ -11,91 +14,27 @@ export async function getStaticPaths() {
     }));
 }
 
-type Props = { read: CollectionEntry<'reads'> };
-
 const { read } = Astro.props;
-const { title, authors, kind, url, source, publicationYear, addedDate, topics, description, seo } = read.data;
-const { Content } = await read.render();
-const kindBadge = readKindToBadge(kind);
-const hasBody = read.body.trim().length > 0;
-const layoutTitle = seo?.title ?? title;
-const layoutDescription = seo?.description ?? description;
+const dest = read.data.url ?? readsShelfPath(read.data.shelf);
+const layoutTitle = read.data.seo?.title ?? read.data.title;
 ---
 
-<BaseLayout title={layoutTitle} description={layoutDescription} image={seo?.image} showHeader={false}>
-    <article class="pt-16 sm:pt-24 pb-16 sm:pb-24">
-        <a
-            href="/reads/"
-            class="inline-flex items-center gap-1 font-mono text-xs text-muted hover:text-main transition-colors duration-200 mb-8"
-        >
-            ← All reads
-        </a>
-
-        <header class="mb-10 sm:mb-12">
-            <div class="flex flex-wrap items-center gap-2 mb-4">
-                <span class:list={['font-mono text-xs px-1.5 py-0.5 leading-tight', kindBadge.classes]}>{kindBadge.label}</span>
-                {
-                    topics.map((t) => (
-                        <span class="font-mono text-[0.65rem] uppercase tracking-wide text-muted/70 px-1.5 py-0.5 leading-tight border border-main/15 bg-main/5">
-                            {t}
-                        </span>
-                    ))
-                }
-            </div>
-            <h1 class="font-sans text-3xl sm:text-5xl font-medium tracking-tight text-main leading-tight">{title}</h1>
-            <p class="mt-3 text-base text-muted leading-relaxed">{authors.join(', ')}</p>
-            <dl class="mt-6 grid gap-2 font-mono text-xs text-muted sm:grid-cols-2">
-                {
-                    publicationYear != null && (
-                        <div class="flex gap-2">
-                            <dt class="text-muted/60 shrink-0">Published</dt>
-                            <dd class="text-main/90">{publicationYear}</dd>
-                        </div>
-                    )
-                }
-                <div class="flex gap-2">
-                    <dt class="text-muted/60 shrink-0">Added</dt>
-                    <dd class="text-main/90 tabular-nums">
-                        {addedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-                    </dd>
-                </div>
-                {
-                    source && (
-                        <div class="flex gap-2 sm:col-span-2">
-                            <dt class="text-muted/60 shrink-0">Source</dt>
-                            <dd class="text-main/90">{source}</dd>
-                        </div>
-                    )
-                }
-            </dl>
-            {
-                description && (
-                    <p class="mt-8 text-main/95 leading-relaxed border-l-2 border-main/20 pl-4 sm:text-lg">{description}</p>
-                )
-            }
-            {
-                url && (
-                    <p class="mt-8">
-                        <a
-                            href={url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="inline-flex items-center gap-2 font-mono text-sm text-main underline decoration-dashed decoration-1 underline-offset-4 hover:decoration-solid"
-                        >
-                            Open link (new tab)
-                        </a>
-                    </p>
-                )
-            }
-        </header>
-
-        {
-            hasBody && (
-                <div class="max-w-none prose prose-dante sm:prose-lg border-t border-main/15 pt-10 sm:pt-12">
-                    <h2 class="!mt-0 font-sans text-xl font-medium text-main">Notes</h2>
-                    <Content />
-                </div>
-            )
-        }
-    </article>
-</BaseLayout>
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="robots" content="noindex" />
+        <meta http-equiv="refresh" content={`0;url=${dest}`} />
+        <title>{layoutTitle}</title>
+        <script is:inline define:vars={{ dest }}>
+            try {
+                window.location.replace(dest);
+            } catch (e) {}
+        </script>
+    </head>
+    <body>
+        <p>
+            <a href={dest}>{read.data.url ? 'Continue to source' : 'Back to bookshelf'}</a>
+        </p>
+    </body>
+</html>

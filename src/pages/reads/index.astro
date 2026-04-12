@@ -1,0 +1,51 @@
+---
+/**
+ * `/reads/` is a stub: static hosting serves one HTML for all query variants, so the real
+ * redirect runs in the inline script and preserves `?shelf=`, `?kind=`, and `?topic=`.
+ */
+import { READ_KINDS } from '../../data/read-kinds';
+import { DEFAULT_READ_SHELF } from '../../data/read-shelves';
+import { readsShelfPath, withReadsBrowseQuery } from '../../utils/reads-links';
+
+const fallbackHref = withReadsBrowseQuery(readsShelfPath(DEFAULT_READ_SHELF), {});
+const kindListJson = JSON.stringify([...READ_KINDS]);
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="robots" content="noindex" />
+        <meta http-equiv="refresh" content={`0;url=${fallbackHref}`} />
+        <link rel="canonical" href={Astro.site ? new URL(fallbackHref, Astro.site).href : fallbackHref} />
+        <title>Bookshelf</title>
+        <script
+            is:inline
+            define:vars={{ shelfDefault: DEFAULT_READ_SHELF, kindListJson }}
+        >
+            (function () {
+                try {
+                    var KINDS = JSON.parse(kindListJson);
+                    var u = new URL(window.location.href);
+                    var rawShelf = u.searchParams.get('shelf');
+                    var s =
+                        rawShelf === 'leisure' || rawShelf === 'technical' ? rawShelf : shelfDefault;
+                    var dest = '/reads/shelf/' + s + '/';
+                    var q = new URLSearchParams();
+                    var k = u.searchParams.get('kind');
+                    if (k && KINDS.indexOf(k) !== -1) q.set('kind', k);
+                    var t = u.searchParams.get('topic');
+                    if (t && t.trim()) q.set('topic', t.trim());
+                    var qs = q.toString();
+                    if (qs) dest += '?' + qs;
+                    if (window.location.pathname + window.location.search + window.location.hash !== dest) {
+                        window.location.replace(dest);
+                    }
+                } catch (e) {}
+            })();
+        </script>
+    </head>
+    <body>
+        <p><a href={fallbackHref}>Continue to bookshelf</a></p>
+    </body>
+</html>

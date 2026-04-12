@@ -4,7 +4,7 @@ authors:
   - Martin Kleppmann
   - Chris Riccomini
 kind: book
-url: 'https://dataintensive.net/'
+url: 'https://www.amazon.com/dp/B0GS3RRZCT'
 source: "O'Reilly"
 publicationYear: 2026
 addedDate: 'Apr 01 2024'
@@ -16,7 +16,7 @@ description: >-
   The clearest tour of the ideas behind modern data systems — storage, replication, partitioning, stream processing,
   and the tradeoffs that actually matter in production. I'm actively reading the second edition now.
 readingNow: true
-readingNowOrder: 2
+readingNowOrder: 4
 seo:
   title: 'Designing Data-Intensive Applications — Reads'
   description: 'Kleppmann on reliable, scalable, maintainable data systems — working through the 2nd edition.'

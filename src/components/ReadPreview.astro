@@ -1,50 +1,58 @@
 ---
 import { type CollectionEntry } from 'astro:content';
-import { readKindToBadge } from '../data/read-kinds';
+import ReadPreviewRow from './ReadPreviewRow.astro';
+import { externalLinkSiteLabel } from '../utils/read-external-label';
+import { slugifyTopic } from '../utils/slugify';
 
-type Props = { read: CollectionEntry<'reads'>; class?: string; headingLevel?: 'h2' | 'h3' };
+type Props = {
+    read: CollectionEntry<'reads'>;
+    class?: string;
+    headingLevel?: 'h2' | 'h3';
+    /** Topic chips under the description (off for home “reading now” strip). */
+    showTopicTags?: boolean;
+};
 
-const { read, class: className, headingLevel = 'h2' } = Astro.props;
-const { title, authors, kind, description, topics, publicationYear, addedDate } = read.data;
-const TitleTag = headingLevel;
-const kindBadge = readKindToBadge(kind);
-const authorLine = authors.join(', ');
-const yearLabel = publicationYear ?? addedDate.getFullYear();
-const topicChips = topics.slice(0, 4);
+const { read, class: className, headingLevel = 'h2', showTopicTags = true } = Astro.props;
+const { title, authors, kind, description, topics, publicationYear, addedDate, url, readProgress } = read.data;
+const topicSlugList = topics.map(slugifyTopic).filter(Boolean).join(' ');
+const siteLabel = url ? externalLinkSiteLabel(url) : null;
+const overlayLabel = siteLabel ? `View on ${siteLabel}` : null;
+const ariaLabel = url ? `${title} — ${overlayLabel} (opens in new tab)` : undefined;
+
+const shellClass =
+    'read-preview group relative block focus-visible:outline-offset-4' + (className ? ` ${className}` : '');
+
+const rowProps = {
+    title,
+    authors,
+    kind,
+    readProgress,
+    description,
+    topics,
+    publicationYear,
+    addedYear: addedDate.getFullYear(),
+    headingLevel,
+    showTopicTags,
+    overlayLabel
+};
 ---
 
-<a class:list={['group block', className]} href={`/reads/${read.slug}/`}>
-    <article class="flex items-start justify-between gap-6 py-5 border-b border-main/15 transition-colors duration-200 group-hover:border-main/35">
-        <div class="min-w-0 pt-0.5">
-            <TitleTag
-                class="font-sans text-lg sm:text-xl font-medium text-main leading-snug tracking-tight group-hover:opacity-75 transition-opacity duration-200"
-            >
-                {title}
-            </TitleTag>
-            <p class="mt-1 text-sm text-muted/90 leading-relaxed">{authorLine}</p>
-            {
-                description && (
-                    <p class="mt-1.5 text-sm text-muted leading-relaxed line-clamp-2">{description}</p>
-                )
-            }
-            {
-                topicChips.length > 0 && (
-                    <div class="mt-2 flex flex-wrap gap-1.5">
-                        {topicChips.map((t) => (
-                            <span class="font-mono text-[0.65rem] uppercase tracking-wide text-muted/70 px-1.5 py-0.5 leading-tight border border-main/15 bg-main/5">
-                                {t}
-                            </span>
-                        ))}
-                    </div>
-                )
-            }
+{
+    url ? (
+        <a
+            class:list={[shellClass]}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={ariaLabel}
+            data-read-kind={kind}
+            data-read-topic-slugs={topicSlugList}
+        >
+            <ReadPreviewRow {...rowProps} />
+        </a>
+    ) : (
+        <div class:list={[shellClass]} data-read-kind={kind} data-read-topic-slugs={topicSlugList}>
+            <ReadPreviewRow {...rowProps} overlayLabel={null} />
         </div>
-
-        <div class="flex flex-col items-end gap-2 shrink-0 pt-0.5">
-            <span class:list={['font-mono text-xs px-1.5 py-0.5 leading-tight', kindBadge.classes]}>
-                {kindBadge.label}
-            </span>
-            <span class="font-mono text-xs text-muted/60 tabular-nums">{yearLabel}</span>
-        </div>
-    </article>
-</a>
+    )
+}

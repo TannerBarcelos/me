@@ -1,8 +1,11 @@
 import { defineCollection, z } from 'astro:content';
 import { READ_KINDS, type ReadKind } from '../data/read-kinds';
+import { READ_SHELVES, type ReadShelf } from '../data/read-shelves';
 import { PROJECT_TAG_IDS, type ProjectTagId } from '../data/project-tags';
 
 const readKindSchema = z.enum(READ_KINDS as [ReadKind, ...ReadKind[]]);
+const readShelfSchema = z.enum(READ_SHELVES as [ReadShelf, ...ReadShelf[]]);
+const readProgressSchema = z.enum(['reading', 'finished', 'queued']);
 
 const projectTagIdSchema = z.enum(PROJECT_TAG_IDS as [ProjectTagId, ...ProjectTagId[]]);
 
@@ -41,6 +44,8 @@ const reads = defineCollection({
         title: z.string(),
         authors: z.array(z.string()).min(1),
         kind: readKindSchema,
+        /** Technical vs leisure — drives the two shelf tabs on the bookshelf. */
+        shelf: readShelfSchema.default('technical'),
         /** Canonical / purchase / original link */
         url: z.string().url().optional(),
         /** Venue or publisher, e.g. O'Reilly, ACM Queue */
@@ -51,6 +56,8 @@ const reads = defineCollection({
         /** Free-form facets for browsing at scale */
         topics: z.array(z.string()).default([]),
         description: z.string().optional(),
+        /** Leisure (or any) progress chip on the shelf — optional. */
+        readProgress: readProgressSchema.optional(),
         /** Show on homepage under “what I’m reading”. */
         readingNow: z.boolean().default(false),
         /** Lower numbers first; ties fall back to added date (newer first). */
