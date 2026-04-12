@@ -3,10 +3,21 @@ import NavLink from './NavLink.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import siteConfig from '../data/site-config';
 
+export type Props = {
+    /** Matches `<main>` max width from BaseLayout (site default `max-w-4xl`). */
+    contentMaxWidthClass?: string;
+};
+
+const { contentMaxWidthClass = 'max-w-4xl' } = Astro.props;
 const navLinks = siteConfig.headerNavLinks || [];
 ---
 
-<nav class="w-full max-w-3xl mx-auto flex items-center justify-between pt-8 pb-3 md:pb-0 md:pt-12 md:border-b md:border-main/10">
+<nav
+    class:list={[
+        'w-full mx-auto flex items-center justify-between pt-8 pb-3 md:pb-0 md:pt-12 md:border-b md:border-main/10',
+        contentMaxWidthClass
+    ]}
+>
     {/* Site identity — left */}
     <a
         href="/"

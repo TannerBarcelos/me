@@ -274,12 +274,7 @@ function tagClasses(tone: RankItem['tags'][number]['tone']) {
 }
 ---
 
-<BaseLayout
-    title={title}
-    {description}
-    showHeader={false}
-    contentWidth="wide"
->
+<BaseLayout title={title} {description} showHeader={false}>
     <article class="pt-16 sm:pt-24 pb-16 sm:pb-24">
         <header class="mb-12 sm:mb-16">
             <p class="font-mono text-xs text-muted mb-4 select-none">
@@ -294,48 +289,10 @@ function tagClasses(tone: RankItem['tags'][number]['tone']) {
             </blockquote>
         </header>
 
-        <!-- State of Software -->
-        <section class="mb-20 sm:mb-24" aria-labelledby="state-software-heading">
+        <!-- State of AI -->
+        <section class="mb-20 sm:mb-24" aria-labelledby="state-ai-heading">
             <div class="flex flex-wrap items-end gap-4 gap-y-2 border-b border-main/20 pb-6 mb-10">
                 <p class="font-mono text-xs text-muted tabular-nums">01</p>
-                <h2 id="state-software-heading" class="font-sans text-2xl sm:text-3xl font-medium tracking-tight text-main">
-                    State of Software
-                </h2>
-            </div>
-
-            <div class="space-y-14">
-                {
-                    software.map((block) => (
-                        <div class="space-y-4">
-                            <div>
-                                <h3 class="font-sans text-lg font-medium text-main">{block.title}</h3>
-                                {block.intro && <p class="mt-1 text-sm text-muted leading-relaxed">{block.intro}</p>}
-                            </div>
-                            <ul class="space-y-4">
-                                {block.rows.map((row) => (
-                                    <li class="border border-main/20 bg-muted/40 dark:bg-muted/25 px-4 py-4 sm:px-5 sm:py-5">
-                                        <div class="flex flex-wrap items-center gap-2 mb-3">
-                                            {row.icon.map((ico) => (
-                                                <span class="text-main/90 inline-flex h-8 w-8 items-center justify-center border border-main/15 bg-main/5">
-                                                    <SimpleIcon icon={ico} class="h-4 w-4" title={ico.title} />
-                                                </span>
-                                            ))}
-                                        </div>
-                                        <p class="font-mono text-sm text-main leading-snug">{row.label}</p>
-                                        {row.detail && <p class="mt-2 text-sm text-muted leading-relaxed">{row.detail}</p>}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))
-                }
-            </div>
-        </section>
-
-        <!-- State of AI -->
-        <section class="mb-8" aria-labelledby="state-ai-heading">
-            <div class="flex flex-wrap items-end gap-4 gap-y-2 border-b border-main/20 pb-6 mb-10">
-                <p class="font-mono text-xs text-muted tabular-nums">02</p>
                 <h2 id="state-ai-heading" class="font-sans text-2xl sm:text-3xl font-medium tracking-tight text-main">
                     State of AI
                 </h2>
@@ -478,6 +435,44 @@ function tagClasses(tone: RankItem['tags'][number]['tone']) {
                         }
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- State of Software -->
+        <section class="mb-8" aria-labelledby="state-software-heading">
+            <div class="flex flex-wrap items-end gap-4 gap-y-2 border-b border-main/20 pb-6 mb-10">
+                <p class="font-mono text-xs text-muted tabular-nums">02</p>
+                <h2 id="state-software-heading" class="font-sans text-2xl sm:text-3xl font-medium tracking-tight text-main">
+                    State of Software
+                </h2>
+            </div>
+
+            <div class="space-y-14">
+                {
+                    software.map((block) => (
+                        <div class="space-y-4">
+                            <div>
+                                <h3 class="font-sans text-lg font-medium text-main">{block.title}</h3>
+                                {block.intro && <p class="mt-1 text-sm text-muted leading-relaxed">{block.intro}</p>}
+                            </div>
+                            <ul class="space-y-4">
+                                {block.rows.map((row) => (
+                                    <li class="border border-main/20 bg-muted/40 dark:bg-muted/25 px-4 py-4 sm:px-5 sm:py-5">
+                                        <div class="flex flex-wrap items-center gap-2 mb-3">
+                                            {row.icon.map((ico) => (
+                                                <span class="text-main/90 inline-flex h-8 w-8 items-center justify-center border border-main/15 bg-main/5">
+                                                    <SimpleIcon icon={ico} class="h-4 w-4" title={ico.title} />
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <p class="font-mono text-sm text-main leading-snug">{row.label}</p>
+                                        {row.detail && <p class="mt-2 text-sm text-muted leading-relaxed">{row.detail}</p>}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+                }
             </div>
         </section>
     </article>
