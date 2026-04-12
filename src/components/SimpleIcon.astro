@@ -5,15 +5,16 @@ type Props = {
     icon: SimpleIconType;
     class?: string;
     title?: string;
+    viewBox?: string;
 };
 
-const { icon, class: className, title } = Astro.props;
+const { icon, class: className, title, viewBox = '0 0 24 24' } = Astro.props;
 const label = title ?? icon.title;
 ---
 
 <svg
     role="img"
-    viewBox="0 0 24 24"
+    viewBox={viewBox}
     xmlns="http://www.w3.org/2000/svg"
     class:list={[className]}
     aria-hidden={label ? undefined : 'true'}

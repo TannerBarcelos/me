@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SimpleIcon from '../components/SimpleIcon.astro';
+import type { SimpleIcon } from 'simple-icons';
 import {
     siAnthropic,
     siAstro,
@@ -21,7 +22,6 @@ import {
     siLangchain,
     siMongodb,
     siNodedotjs,
-    siChatbot,
     siOpentelemetry,
     siJest,
     siPostgresql,
@@ -43,6 +43,15 @@ import {
 const title = 'Tech stack & AI tools';
 const description = 'What I use in production: languages, platforms, and AI tooling.';
 
+const siOpenAI: SimpleIcon = {
+    title: 'OpenAI',
+    slug: 'openai',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-openai" viewBox="0 0 16 16"><path d="M14.949 6.547a3.94 3.94 0 0 0-.348-3.273 4.11 4.11 0 0 0-4.4-1.934A4.1 4.1 0 0 0 8.423.2 4.15 4.15 0 0 0 6.305.086a4.1 4.1 0 0 0-1.891.948 4.04 4.04 0 0 0-1.158 1.753 4.1 4.1 0 0 0-1.563.679A4 4 0 0 0 .554 4.72a3.99 3.99 0 0 0 .502 4.731 3.94 3.94 0 0 0 .346 3.274 4.11 4.11 0 0 0 4.402 1.933c.382.425.852.764 1.377.995.526.231 1.095.35 1.67.346 1.78.002 3.358-1.132 3.901-2.804a4.1 4.1 0 0 0 1.563-.68 4 4 0 0 0 1.14-1.253 3.99 3.99 0 0 0-.506-4.716m-6.097 8.406a3.05 3.05 0 0 1-1.945-.694l.096-.054 3.23-1.838a.53.53 0 0 0 .265-.455v-4.49l1.366.778q.02.011.025.035v3.722c-.003 1.653-1.361 2.992-3.037 2.996m-6.53-2.75a2.95 2.95 0 0 1-.36-2.01l.095.057L5.29 12.09a.53.53 0 0 0 .527 0l3.949-2.246v1.555a.05.05 0 0 1-.022.041L6.473 13.3c-1.454.826-3.311.335-4.15-1.098m-.85-6.94A3.02 3.02 0 0 1 3.07 3.949v3.785a.51.51 0 0 0 .262.451l3.93 2.237-1.366.779a.05.05 0 0 1-.048 0L2.585 9.342a2.98 2.98 0 0 1-1.113-4.094zm11.216 2.571L8.747 5.576l1.362-.776a.05.05 0 0 1 .048 0l3.265 1.86a3 3 0 0 1 1.173 1.207 2.96 2.96 0 0 1-.27 3.2 3.05 3.05 0 0 1-1.36.997V8.279a.52.52 0 0 0-.276-.445m1.36-2.015-.097-.057-3.226-1.855a.53.53 0 0 0-.53 0L6.249 6.153V4.598a.04.04 0 0 1 .019-.04L9.533 2.7a3.07 3.07 0 0 1 3.257.139c.474.325.843.778 1.066 1.303.223.526.289 1.103.191 1.664zM5.503 8.575 4.139 7.8a.05.05 0 0 1-.026-.037V4.049c0-.57.166-1.127.476-1.607s.752-.864 1.275-1.105a3.08 3.08 0 0 1 3.234.41l-.096.054-3.23 1.838a.53.53 0 0 0-.265.455zm.742-1.577 1.758-1 1.762 1v2l-1.755 1-1.762-1z"/></svg>',
+    path: 'M14.949 6.547a3.94 3.94 0 0 0-.348-3.273 4.11 4.11 0 0 0-4.4-1.934A4.1 4.1 0 0 0 8.423.2 4.15 4.15 0 0 0 6.305.086a4.1 4.1 0 0 0-1.891.948 4.04 4.04 0 0 0-1.158 1.753 4.1 4.1 0 0 0-1.563.679A4 4 0 0 0 .554 4.72a3.99 3.99 0 0 0 .502 4.731 3.94 3.94 0 0 0 .346 3.274 4.11 4.11 0 0 0 4.402 1.933c.382.425.852.764 1.377.995.526.231 1.095.35 1.67.346 1.78.002 3.358-1.132 3.901-2.804a4.1 4.1 0 0 0 1.563-.68 4 4 0 0 0 1.14-1.253 3.99 3.99 0 0 0-.506-4.716m-6.097 8.406a3.05 3.05 0 0 1-1.945-.694l.096-.054 3.23-1.838a.53.53 0 0 0 .265-.455v-4.49l1.366.778q.02.011.025.035v3.722c-.003 1.653-1.361 2.992-3.037 2.996m-6.53-2.75a2.95 2.95 0 0 1-.36-2.01l.095.057L5.29 12.09a.53.53 0 0 0 .527 0l3.949-2.246v1.555a.05.05 0 0 1-.022.041L6.473 13.3c-1.454.826-3.311.335-4.15-1.098m-.85-6.94A3.02 3.02 0 0 1 3.07 3.949v3.785a.51.51 0 0 0 .262.451l3.93 2.237-1.366.779a.05.05 0 0 1-.048 0L2.585 9.342a2.98 2.98 0 0 1-1.113-4.094zm11.216 2.571L8.747 5.576l1.362-.776a.05.05 0 0 1 .048 0l3.265 1.86a3 3 0 0 1 1.173 1.207 2.96 2.96 0 0 1-.27 3.2 3.05 3.05 0 0 1-1.36.997V8.279a.52.52 0 0 0-.276-.445m1.36-2.015-.097-.057-3.226-1.855a.53.53 0 0 0-.53 0L6.249 6.153V4.598a.04.04 0 0 1 .019-.04L9.533 2.7a3.07 3.07 0 0 1 3.257.139c.474.325.843.778 1.066 1.303.223.526.289 1.103.191 1.664zM5.503 8.575 4.139 7.8a.05.05 0 0 1-.026-.037V4.049c0-.57.166-1.127.476-1.607s.752-.864 1.275-1.105a3.08 3.08 0 0 1 3.234.41l-.096.054-3.23 1.838a.53.53 0 0 0-.265.455zm.742-1.577 1.758-1 1.762 1v2l-1.755 1-1.762-1z',
+    source: 'https://openai.com/brand',
+    hex: '000000'
+};
+
 const tagBase = 'font-mono text-xs px-1.5 py-0.5 leading-tight border';
 const tagNeutral =
     'border-zinc-500/30 bg-zinc-400/[0.05] text-zinc-600 dark:border-zinc-500/25 dark:bg-zinc-400/[0.04] dark:text-zinc-400';
@@ -53,7 +62,7 @@ const tagEmerald =
 const tagSky =
     'border-sky-600/35 bg-sky-500/[0.06] text-sky-800 dark:border-sky-400/25 dark:bg-sky-400/[0.06] dark:text-sky-300';
 
-type SoftwareRow = { icon: (typeof siReact)[]; label: string; detail?: string };
+type SoftwareRow = { icon: SimpleIcon[]; label: string; detail?: string };
 
 const software: { id: string; title: string; intro: string; rows: SoftwareRow[] }[] = [
     {
@@ -146,7 +155,8 @@ const software: { id: string; title: string; intro: string; rows: SoftwareRow[] 
 type RankItem = {
     rank: string;
     name: string;
-    icon: typeof siReact;
+    icon: SimpleIcon;
+    viewBox?: string;
     tags: { label: string; tone: 'neutral' | 'violet' | 'emerald' | 'sky' }[];
     body: string;
     pros?: string[];
@@ -159,13 +169,13 @@ const modelRankings: RankItem[] = [
         name: 'Claude Opus 4.6',
         icon: siAnthropic,
         tags: [
-            { label: 'frontend', tone: 'violet' },
-            { label: 'ui', tone: 'sky' },
-            { label: 'coding', tone: 'emerald' }
+            { label: 'reasoning', tone: 'violet' },
+            { label: 'research', tone: 'sky' },
+            { label: 'tech', tone: 'emerald' }
         ],
-        body: 'My default for frontend and UI-heavy work — strong layout sense, good tool use, and a bias toward shipping visible progress.',
-        pros: ['Excellent for components, CSS, and product polish', 'Reliable multi-step refactors with clear structure'],
-        cons: ['Premium cost versus smaller models', 'Not my first pick for tiny drive-by edits']
+        body: 'Opus 4.6 is where I go for hardcore reasoning and technical research. It is the model I trust most when the task is messy, the architecture is unclear, or I want a strong thinking partner on difficult engineering tradeoffs.',
+        pros: ['Excellent for deep technical reasoning and architecture work', 'Strong at research-heavy problem framing and critique'],
+        cons: ['Slower and more expensive than faster editor-native options', 'Not the model I reach for first when the task is mostly visual iteration']
     },
     {
         rank: '02',
@@ -173,38 +183,44 @@ const modelRankings: RankItem[] = [
         icon: siCursor,
         tags: [
             { label: 'cursor only', tone: 'neutral' },
-            { label: 'ui', tone: 'sky' },
             { label: 'frontend', tone: 'violet' },
+            { label: 'ui', tone: 'sky' },
             { label: 'fast iteration', tone: 'emerald' }
         ],
-        body: 'Composer 2 in Cursor is a workhorse for me — including UI and frontend: it is excellent at layout and component iteration, quick visual passes, and tight edit loops. I reach for it often alongside Opus when the task fits “fast and in-repo.”',
-        pros: ['Outstanding for UI work and design-in-the-editor iteration', 'Very fast feedback loop for surgical multi-file edits'],
-        cons: ['Tied to Cursor subscriptions and routing', 'Less “deep reasoning” than frontier chat models for ambiguous architecture']
+        body: 'Composer 2 is my workhorse in Cursor for UI and day-to-day implementation. For the price, speed, and capability, it is fantastic for layout, component iteration, visual cleanup, and keeping momentum in the repo.',
+        pros: ['Outstanding for UI work and design-in-the-editor iteration', 'Excellent value-to-speed ratio for day-to-day product work'],
+        cons: ['Tied to Cursor subscriptions and routing', 'Less suited than Opus for ambiguous deep research and hardest reasoning']
     },
     {
         rank: '03',
-        name: 'Gemini 3 Pro',
-        icon: siGooglegemini,
+        name: 'GPT 5.4',
+        icon: siOpenAI,
+        viewBox: '0 0 16 16',
         tags: [
-            { label: 'general', tone: 'neutral' },
-            { label: 'non-technical', tone: 'sky' }
+            { label: 'coding', tone: 'violet' },
+            { label: 'modern tools', tone: 'emerald' },
+            { label: 'up-to-date', tone: 'sky' }
         ],
-        body: 'I use the Gemini app with Gemini 3 Pro for everyday, non-technical assistant tasks — travel, drafting, research summaries — separate from my coding harnesses.',
-        pros: ['Strong for long-context reading and general knowledge work', 'Good multimodal workflows in the app'],
-        cons: ['Not my primary coding agent', 'Less integrated into my editor-centric loop']
+        body: 'GPT 5.4 sits below Opus and Composer 2 for how I route most work, but it is still incredible for building modern tools and software. It has fast, reliable tool calling and will often one-shot a feature or feedback pass when I give it a strong prompt, and the more up-to-date training data shows up in newer APIs, libraries, and patterns.',
+        pros: ['Fast, reliable tool calling with strong one-shot implementation ability', 'Very strong for building modern software against newer tooling'],
+        cons: ['Opus and Composer 2 still win for my default reasoning and in-editor loops', 'I review output carefully on anything production-critical']
     },
     {
         rank: '04',
-        name: 'ChatGPT (latest)',
-        icon: siChatbot,
+        name: 'Gemini 3.1 Pro',
+        icon: siGooglegemini,
         tags: [
             { label: 'general', tone: 'neutral' },
-            { label: 'research', tone: 'sky' }
+            { label: 'non-technical', tone: 'sky' },
+            { label: 'multimodal', tone: 'violet' }
         ],
-        body: 'OpenAI’s current flagship ChatGPT model for open-ended research, comparison shopping for ideas, and general knowledge work outside Gemini — I rotate based on task and which app I have at hand.',
-        pros: ['Strong for synthesis, brainstorming, and digging through messy topics', 'Familiar chat UX for long research threads'],
-        cons: ['Not wired into my editor the way Cursor models are', 'I still fact-check anything that might affect production or writing I ship']
-    }
+        body: 'I use Gemini 3.1 Pro in the Gemini app for everyday, non-technical conversations — travel, drafting, general chat — separate from my coding harnesses. It has the full breadth of Google behind it, which shows up in multimodal workflows and general knowledge.',
+        pros: ['Strong multimodal and long-context workflows in the app', 'Great breadth for general chatting and non-technical assistant tasks'],
+        cons: [
+            'Not where I lean for agent harnesses or agentic coding workloads right now — tool calling is not strong enough compared to my top picks',
+            'Not my primary coding agent and less integrated into my editor-centric loop'
+        ]
+    },
 ];
 
 const harnessRankings: RankItem[] = [
@@ -215,27 +231,47 @@ const harnessRankings: RankItem[] = [
         tags: [
             { label: 'coding', tone: 'violet' },
             { label: 'editor', tone: 'sky' },
-            { label: 'cloud agents', tone: 'neutral' }
+            { label: 'composer', tone: 'neutral' },
+            { label: 'cloud agents', tone: 'emerald' }
         ],
-        body: 'My first-choice harness for day-to-day coding — the editor, agents, and where I run Composer 2 and frontier models against a real repo.',
-        pros: ['Tight integration with the project graph', 'Cloud agents when I want parallel exploration'],
-        cons: ['Platform churn and stability are occasional tax', 'Worth budgeting inference spend deliberately']
+        body: 'My main harness and clear number one. Cursor wins for me because I can use all the models I care about, Composer usage is generous, cloud agents are a huge plus for real development work, and the overall UX, speed, and reliability are strong enough that it just works and just makes sense.',
+        pros: [
+            'Cloud agents are a major strength — I lean on them heavily for development work',
+            'Best overall mix of model access, generous Composer, UX, speed, and reliability'
+        ],
+        cons: ['Platform churn still happens from time to time', 'Worth budgeting inference spend deliberately']
     },
     {
         rank: '02',
-        name: 'Claude Code',
-        icon: siAnthropic,
+        name: 'OpenCode',
+        icon: siTmux,
         tags: [
-            { label: 'work primary', tone: 'neutral' },
-            { label: 'cli', tone: 'sky' },
-            { label: 'desktop', tone: 'neutral' }
+            { label: 'tui', tone: 'sky' },
+            { label: 'terminal', tone: 'neutral' },
+            { label: 'oss models', tone: 'emerald' }
         ],
-        body: 'Second in my personal stack, but what I use most through Visa: Claude Code on CLI and desktop where it is the supported path, integrated with org workflows.',
-        pros: ['Fits enterprise-approved tooling and guardrails', 'Strong terminal-first and automation-friendly flows'],
-        cons: ['When I am choosing freely, I still prefer a full IDE command center like Cursor for most coding']
+        body: 'OpenCode is my number two when I want CLI or TUI workflows: open source, free models for experimentation, and sometimes light feature work in a keyboard-driven session with minimal chrome.',
+        pros: [
+            'My personal pick for terminal-first work when I am not in Cursor',
+            'Great sandbox for OSS models without meter anxiety; fast for small scoped changes'
+        ],
+        cons: ['Not my first pick for heavy production refactors or deep debugging', 'Smaller ecosystem than mainstream IDEs']
     },
     {
         rank: '03',
+        name: 'Claude Code',
+        icon: siAnthropic,
+        tags: [
+            { label: 'work only', tone: 'neutral' },
+            { label: 'cli', tone: 'sky' },
+            { label: 'desktop', tone: 'neutral' }
+        ],
+        body: 'Claude Code is third for me. For work, CLI and desktop is Claude Code — the supported path in my Visa setup with org workflows and guardrails. When I want CLI or TUI on my own time, I reach for OpenCode instead.',
+        pros: ['Fits enterprise-approved tooling and guardrails', 'Strong terminal-first and automation-friendly flows for the job'],
+        cons: ['Not my personal default for terminal work outside work', 'I still prefer Cursor as the all-around command center for most coding']
+    },
+    {
+        rank: '04',
         name: 'Claude',
         icon: siClaude,
         tags: [
@@ -245,18 +281,6 @@ const harnessRankings: RankItem[] = [
         body: 'Claude (app and API) for planning, writing, architecture reasoning, and long-form work outside the editor — not my primary coding harness.',
         pros: ['Flexible across tasks beyond code', 'Great for structured outputs and critique'],
         cons: ['Separate from repo context unless wired in manually']
-    },
-    {
-        rank: '04',
-        name: 'Opencode',
-        icon: siTmux,
-        tags: [
-            { label: 'tui', tone: 'sky' },
-            { label: 'terminal', tone: 'neutral' }
-        ],
-        body: 'Opencode when I want a TUI-forward coding session — keyboard-driven, minimal chrome, and a change of pace from GUI editors.',
-        pros: ['Fast, focused terminal workflows', 'Nice contrast to mouse-heavy UI work'],
-        cons: ['Smaller ecosystem than mainstream IDEs', 'Steeper context-switch if I need heavy debugging tooling']
     }
 ];
 
@@ -320,7 +344,7 @@ function tagClasses(tone: RankItem['tags'][number]['tone']) {
                                         <div class="flex-1 px-4 py-4 sm:px-6 sm:py-5 min-w-0">
                                             <div class="flex flex-wrap items-start gap-4 gap-y-3">
                                                 <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-main/15 bg-main/5 text-main">
-                                                    <SimpleIcon icon={item.icon} class="h-6 w-6" title={item.name} />
+                                                    <SimpleIcon icon={item.icon} class="h-6 w-6" title={item.name} viewBox={item.viewBox} />
                                                 </span>
                                                 <div class="min-w-0 flex-1">
                                                     <h4 class="font-sans text-lg font-medium text-main leading-tight">
