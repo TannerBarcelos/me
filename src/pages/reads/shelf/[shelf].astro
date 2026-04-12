@@ -9,7 +9,6 @@ import { READ_KINDS, type ReadKind } from '../../../data/read-kinds';
 import { READ_SHELVES } from '../../../data/read-shelves';
 import { sortLeisureReads, sortReadsByAddedDesc } from '../../../utils/data-utils';
 import { kindsFromReads, topicsFromReads } from '../../../utils/reads-browse';
-import { slugifyTopic } from '../../../utils/slugify';
 
 export function getStaticPaths() {
     return READ_SHELVES.map((shelf) => ({ params: { shelf } }));
@@ -25,13 +24,9 @@ const allReads = (await getCollection('reads')).sort(sortReadsByAddedDesc);
 const technicalReadsAll = allReads.filter((r) => r.data.shelf === 'technical');
 const leisureReadsAll = allReads.filter((r) => r.data.shelf === 'leisure').sort(sortLeisureReads);
 
-function filterByTopicSlug(entries: typeof allReads, slug: string | undefined) {
-    if (!slug) return entries;
-    return entries.filter((r) => r.data.topics.some((t) => slugifyTopic(t) === slug));
-}
-
-const technicalReads = filterByTopicSlug(technicalReadsAll, topicSlug);
-const leisureReads = filterByTopicSlug(leisureReadsAll, topicSlug);
+/** Topic filter is applied client-side (static HTML is shared for all `?topic=` values). */
+const technicalReads = technicalReadsAll;
+const leisureReads = leisureReadsAll;
 
 const technicalTopics = topicsFromReads(technicalReadsAll);
 const leisureTopics = topicsFromReads(leisureReadsAll);

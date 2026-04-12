@@ -4,12 +4,11 @@ authors:
   - Martin Kleppmann
   - Chris Riccomini
 kind: book
-url: 'https://dataintensive.net/'
+url: 'https://www.amazon.com/dp/B0GS3RRZCT'
 source: "O'Reilly"
 publicationYear: 2026
 addedDate: 'Apr 01 2024'
 topics:
-  - Non-fiction
   - Distributed systems
   - Data engineering
   - Architecture

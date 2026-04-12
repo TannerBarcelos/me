@@ -32,6 +32,9 @@ function topicActive(slug: string): boolean {
 
 const kindInQuery = urlKind !== undefined ? { kind: urlKind } : {};
 
+/** Keeps `<details>` open on first paint when this strip reflects an active filter (topic pages, SSR shelf with `?kind=`). */
+const filtersInitiallyOpen = active.type === 'topic' || urlKind !== undefined;
+
 function topicChipHref(t: TopicBrowseItem): string {
     if (onShelfPath) {
         if (topicActive(t.slug)) {
@@ -55,9 +58,12 @@ function topicChipTitle(t: TopicBrowseItem): string {
 }
 ---
 
-<details class="reads-browse-filters border border-main/15 mb-10 sm:mb-12 transition-[border-color] duration-300 hover:border-main/25 open:border-accent/25">
+<details
+    class="reads-browse-filters border border-main/15 mb-10 sm:mb-12 transition-[border-color] duration-300 hover:border-main/25 open:border-accent/25 px-3 py-2 sm:px-5 sm:py-3"
+    open={filtersInitiallyOpen || undefined}
+>
     <summary
-        class="cursor-pointer select-none list-none flex items-center gap-2 font-mono text-xs text-muted hover:text-main py-2.5 px-2 -mx-0.5 transition-colors duration-200 [&::-webkit-details-marker]:hidden"
+        class="cursor-pointer select-none list-none flex items-center gap-2 font-mono text-xs text-muted hover:text-main py-2.5 px-1 sm:px-0 -mx-0.5 transition-colors duration-200 [&::-webkit-details-marker]:hidden"
     >
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -76,9 +82,9 @@ function topicChipTitle(t: TopicBrowseItem): string {
         </svg>
         <span>Format &amp; topics</span>
     </summary>
-    <div class="pt-1 pb-3 px-0.5 space-y-6 border-t border-main/10">
+    <div class="pt-4 pb-2 sm:pt-5 sm:pb-3 mt-3 space-y-8 border-t border-main/10">
         <div>
-            <p class="font-mono text-[0.65rem] uppercase tracking-wider text-muted/70 mb-2">Format</p>
+            <p class="font-mono text-[0.65rem] uppercase tracking-wider text-muted/70 mb-3">Format</p>
             <div class="flex flex-wrap gap-2">
                 <a
                     href={shelf !== undefined ? withReadsBrowseQuery(path, { shelf }) : withReadsBrowseQuery(path, {})}
@@ -116,7 +122,7 @@ function topicChipTitle(t: TopicBrowseItem): string {
         {
             topics.length > 0 && (
                 <div>
-                    <div class="flex items-baseline justify-between gap-4 mb-2">
+                    <div class="flex items-baseline justify-between gap-4 mb-3">
                         <p class="font-mono text-[0.65rem] uppercase tracking-wider text-muted/70">Topics</p>
                         <a
                             href={shelf !== undefined ? `/reads/topics/${shelf}/` : '/reads/topics/'}

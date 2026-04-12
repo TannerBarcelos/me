@@ -19,11 +19,13 @@ const panelRules = READ_SHELVES.map(
 
 const kindFilterCss = READ_KINDS.map(
     (k: ReadKind) =>
-        `[data-bookshelf-read-list][data-active-kind="${k}"] a.read-preview[data-read-kind]:not([data-read-kind="${k}"]){display:none!important;}`
+        `[data-bookshelf-read-list][data-active-kind="${k}"] a.read-preview[data-read-kind]:not([data-read-kind="${k}"]){display:none!important;}[data-bookshelf-read-list][data-active-kind="${k}"] div.read-preview[data-read-kind]:not([data-read-kind="${k}"]){display:none!important;}`
 ).join('');
 
+const topicChipActiveCss = `.bookshelf-shelf-toggle a[data-topic-slug].bookshelf-topic-active{border-color:rgb(var(--color-border-main) / 0.25);background-color:rgb(var(--color-bg-muted));color:rgb(var(--color-text-main) / 1);}`;
+
 const shelfPanelCss = `.bookshelf-shelf-toggle .bookshelf-shelf-panel{display:none;}${panelRules}`;
-const combinedCss = shelfPanelCss + kindFilterCss;
+const combinedCss = shelfPanelCss + kindFilterCss + topicChipActiveCss;
 const shelfIdsJson = JSON.stringify([...READ_SHELVES]);
 const kindIdsJson = JSON.stringify([...READ_KINDS]);
 ---
@@ -192,6 +194,9 @@ const kindIdsJson = JSON.stringify([...READ_KINDS]);
                     if (changed) history.replaceState(null, '', u.pathname + u.search + u.hash);
 
                     var curKind = u.searchParams.get('kind');
+                    var curTopic = (u.searchParams.get('topic') || '').trim();
+                    var topicPathM = u.pathname.match(/^\/reads\/topic\/([^/]+)/);
+                    var keepFiltersExpanded = !!(curKind || curTopic || topicPathM);
 
                     roots.forEach(function (root) {
                         root.setAttribute('data-active-shelf', s);
@@ -214,6 +219,26 @@ const kindIdsJson = JSON.stringify([...READ_KINDS]);
                             el.setAttribute('data-active-kind', effective);
                         });
 
+                        root.querySelectorAll('a[data-topic-slug]').forEach(function (a) {
+                            var slug = a.getAttribute('data-topic-slug');
+                            if (curTopic && slug === curTopic) a.classList.add('bookshelf-topic-active');
+                            else a.classList.remove('bookshelf-topic-active');
+                        });
+
+                        root.querySelectorAll('[data-bookshelf-read-list]').forEach(function (list) {
+                            list.querySelectorAll('.read-preview').forEach(function (card) {
+                                var raw = card.getAttribute('data-read-topic-slugs') || '';
+                                var slugs = raw.split(/\s+/).filter(Boolean);
+                                if (!curTopic) {
+                                    card.style.removeProperty('display');
+                                } else if (slugs.indexOf(curTopic) !== -1) {
+                                    card.style.removeProperty('display');
+                                } else {
+                                    card.style.setProperty('display', 'none', 'important');
+                                }
+                            });
+                        });
+
                         root.querySelectorAll('.bookshelf-shelf-panel').forEach(function (panel) {
                             var pid = panel.getAttribute('data-bookshelf-panel');
                             var isActivePanel = pid === s;
@@ -230,6 +255,12 @@ const kindIdsJson = JSON.stringify([...READ_KINDS]);
                                 else a.removeAttribute('aria-current');
                             });
                         });
+
+                        if (keepFiltersExpanded) {
+                            root.querySelectorAll('details.reads-browse-filters').forEach(function (d) {
+                                d.open = true;
+                            });
+                        }
                     });
 
                     patchShelfTabHrefs();
