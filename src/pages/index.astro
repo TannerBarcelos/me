@@ -64,7 +64,9 @@ const readingNowShelfOnly = readingNowShelves.length === 1 ? readingNowShelves[0
                 </div>
 
                 <div>
-                    {readingNow.map((read) => <ReadPreview read={read} headingLevel="h3" showTopicTags={false} />)}
+                    {readingNow.map((read) => (
+                        <ReadPreview read={read} headingLevel="h3" showTopicTags={false} hideMetaBadgesOnMobile />
+                    ))}
                 </div>
             </section>
         )

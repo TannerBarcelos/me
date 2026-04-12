@@ -308,31 +308,26 @@ function tagClasses(tone: RankItem['tags'][number]['tone']) {
             <p class="mt-5 text-muted text-base sm:text-lg leading-relaxed max-w-2xl">
                 what i use in production
             </p>
-            <blockquote class="mt-6 max-w-2xl border-l-2 border-main/25 pl-4 text-sm text-muted italic leading-relaxed">
-                All of these rankings are my opinion — not a live, up-to-the-minute picture of the landscape.
-            </blockquote>
+            <p
+                class="mt-6 max-w-2xl border-l border-main/20 dark:border-main/25 pl-3.5 text-[0.7rem] sm:text-xs text-muted/75 dark:text-muted/70 leading-relaxed tracking-wide"
+            >
+                <span class="font-mono text-muted/90">Disclaimer.</span>{' '}
+                Rankings here are my personal defaults and opinion — not universal truth or a live snapshot of the field. I still
+                review anything that touches production; models speed exploration but do not replace ownership.
+            </p>
         </header>
 
         <!-- State of AI -->
         <section class="mb-20 sm:mb-24" aria-labelledby="state-ai-heading">
-            <div class="flex flex-wrap items-end gap-4 gap-y-2 border-b border-main/20 pb-6 mb-10">
-                <p class="font-mono text-xs text-muted tabular-nums">01</p>
-                <h2 id="state-ai-heading" class="font-sans text-2xl sm:text-3xl font-medium tracking-tight text-main">
+            <div class="border-b border-main/20 pb-3.5 mb-6">
+                <h2 id="state-ai-heading" class="font-sans text-3xl sm:text-4xl font-semibold tracking-tight text-main leading-tight">
                     State of AI
                 </h2>
             </div>
 
-            <p class="text-sm text-muted leading-relaxed mb-10 max-w-2xl">
-                Rankings are personal defaults, not universal truths. I still review anything that touches production — models
-                accelerate exploration; they do not replace ownership.
-            </p>
-
             <div class="space-y-12">
                 <div>
-                    <div class="flex flex-wrap items-baseline gap-3 mb-6">
-                        <span class="font-mono text-xs text-muted tabular-nums">01</span>
-                        <h3 class="font-sans text-xl font-medium text-main">Models</h3>
-                    </div>
+                    <h3 class="font-sans text-xl font-medium text-main mb-6">Models</h3>
                     <div class="space-y-5">
                         {
                             modelRankings.map((item) => (
@@ -395,10 +390,7 @@ function tagClasses(tone: RankItem['tags'][number]['tone']) {
                 </div>
 
                 <div>
-                    <div class="flex flex-wrap items-baseline gap-3 mb-6">
-                        <span class="font-mono text-xs text-muted tabular-nums">02</span>
-                        <h3 class="font-sans text-xl font-medium text-main">Harnesses</h3>
-                    </div>
+                    <h3 class="font-sans text-xl font-medium text-main mb-6">Harnesses</h3>
                     <div class="space-y-5">
                         {
                             harnessRankings.map((item) => (
@@ -462,12 +454,11 @@ function tagClasses(tone: RankItem['tags'][number]['tone']) {
             </div>
         </section>
 
-        <!-- State of Software -->
+        <!-- Tech stack (languages, platforms, tooling) -->
         <section class="mb-8" aria-labelledby="state-software-heading">
-            <div class="flex flex-wrap items-end gap-4 gap-y-2 border-b border-main/20 pb-6 mb-10">
-                <p class="font-mono text-xs text-muted tabular-nums">02</p>
-                <h2 id="state-software-heading" class="font-sans text-2xl sm:text-3xl font-medium tracking-tight text-main">
-                    State of Software
+            <div class="border-b border-main/20 pb-3.5 mb-6">
+                <h2 id="state-software-heading" class="font-sans text-3xl sm:text-4xl font-semibold tracking-tight text-main leading-tight">
+                    Tech stack
                 </h2>
             </div>
 

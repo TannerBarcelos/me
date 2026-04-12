@@ -3,8 +3,8 @@
 ---
 
 <button
-    id="theme-toggle"
-    class="w-8 h-8 -mr-1 flex items-center justify-center text-muted hover:text-main transition-colors duration-200"
+    type="button"
+    class="theme-toggle-trigger w-8 h-8 -mr-1 flex items-center justify-center text-muted hover:text-main transition-colors duration-200"
     aria-label="Toggle color scheme"
     title="Toggle light / dark"
 >
@@ -41,7 +41,9 @@
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         };
 
-        document.getElementById('theme-toggle')?.addEventListener('click', handleToggleClick);
+        document.querySelectorAll<HTMLButtonElement>('.theme-toggle-trigger').forEach((btn) => {
+            btn.addEventListener('click', handleToggleClick);
+        });
     });
 </script>
 

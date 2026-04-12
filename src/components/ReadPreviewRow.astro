@@ -17,6 +17,8 @@ type Props = {
     showTopicTags: boolean;
     /** Shown on hover/focus overlay; omit for no overlay. */
     overlayLabel?: string | null;
+    /** Hide read-progress + kind badges below `sm`; year stays visible. */
+    hideMetaBadgesOnMobile?: boolean;
 };
 
 const {
@@ -30,7 +32,8 @@ const {
     addedYear,
     headingLevel,
     showTopicTags,
-    overlayLabel
+    overlayLabel,
+    hideMetaBadgesOnMobile = false
 } = Astro.props;
 
 const TitleTag = headingLevel;
@@ -77,14 +80,22 @@ const topicChips = topics.slice(0, 4);
     </div>
 
     <div class="flex flex-col items-end gap-2 shrink-0 pt-0.5">
-        {
-            progressBadge && (
-                <span class:list={['font-mono text-xs px-1.5 py-0.5 leading-tight', progressBadge.classes]}>
-                    {progressBadge.label}
-                </span>
-            )
-        }
-        <span class:list={['font-mono text-xs px-1.5 py-0.5 leading-tight', kindBadge.classes]}>{kindBadge.label}</span>
+        <div
+            class:list={[
+                hideMetaBadgesOnMobile
+                    ? 'hidden sm:flex sm:flex-col sm:items-end sm:gap-2'
+                    : 'flex flex-col items-end gap-2'
+            ]}
+        >
+            {
+                progressBadge && (
+                    <span class:list={['font-mono text-xs px-1.5 py-0.5 leading-tight', progressBadge.classes]}>
+                        {progressBadge.label}
+                    </span>
+                )
+            }
+            <span class:list={['font-mono text-xs px-1.5 py-0.5 leading-tight', kindBadge.classes]}>{kindBadge.label}</span>
+        </div>
         <span class="font-mono text-xs text-muted/60 tabular-nums">{yearLabel}</span>
     </div>
 
@@ -102,7 +113,24 @@ const topicChips = topics.slice(0, 4);
                 ]}
                 aria-hidden="true"
             >
-                <span class="font-mono text-xs sm:text-sm text-main tracking-wide px-3 text-center">{overlayLabel}</span>
+                <span class="font-mono text-xs sm:text-sm text-main tracking-wide px-3 inline-flex items-center justify-center gap-1.5 text-center">
+                    {overlayLabel}
+                    <svg
+                        class="w-3.5 h-3.5 shrink-0 text-main/90"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                    >
+                        <path
+                            d="M2 10L10 2M10 2H5.5M10 2V6.5"
+                            stroke="currentColor"
+                            stroke-width="1.25"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
+                </span>
             </div>
         )
     }
