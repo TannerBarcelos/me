@@ -10,7 +10,7 @@ const { href, class: className, variant = 'primary', ...rest } = Astro.props;
 
 const base = 'inline-flex items-center justify-center font-mono text-xs tracking-wide transition-all duration-200 px-5 py-2.5 rounded-sm';
 const variants = {
-    primary: 'bg-main [color:rgb(var(--color-bg-main))] border border-main hover:opacity-80',
+    primary: '[background:rgb(var(--color-text-main))] [color:rgb(var(--color-bg-main))] border [border-color:rgb(var(--color-text-main))] hover:opacity-75',
     ghost: 'border border-main/30 text-muted hover:border-main/60 hover:text-main'
 };
 

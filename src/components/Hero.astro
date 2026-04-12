@@ -13,10 +13,10 @@ const hero = siteConfig.hero;
                 Tanner Barcelos<span class="name-cursor" aria-hidden="true" />
             </h1>
 
-            {/* Typed rotating tagline — fixed height prevents layout shift */}
-            <p class="font-mono text-sm sm:text-base text-muted mb-12 h-6 sm:h-7" aria-live="polite">
+            {/* Typed rotating tagline */}
+            <div class="font-mono text-sm sm:text-base text-muted mb-12 min-h-[1.5rem]">
                 <span id="typed-tagline"></span>
-            </p>
+            </div>
 
             {/* CTA buttons */}
             <div class="flex flex-wrap items-center gap-4">
@@ -37,32 +37,32 @@ const hero = siteConfig.hero;
         animation: cursor-blink 1.1s step-end infinite;
         margin-left: 1px;
         font-weight: 300;
-        opacity: 0.6;
+        opacity: 0.5;
     }
 
     @keyframes cursor-blink {
-        0%, 100% { opacity: 0.6; }
+        0%, 100% { opacity: 0.5; }
         50%       { opacity: 0; }
-    }
-
-    /* Make typed.js cursor match the name cursor */
-    :global(.typed-cursor) {
-        font-weight: 300;
-        opacity: 0.5;
     }
 </style>
 
 <script>
     import Typed from 'typed.js';
 
+    // Track the active instance so we can destroy before re-init
+    let typedInstance: InstanceType<typeof Typed> | null = null;
+
     function initTyped() {
         const el = document.getElementById('typed-tagline');
         if (!el) return;
 
-        // Clear any leftover content from a previous instance
-        el.textContent = '';
+        // Destroy any existing instance before creating a new one
+        if (typedInstance) {
+            typedInstance.destroy();
+            typedInstance = null;
+        }
 
-        const typed = new Typed('#typed-tagline', {
+        typedInstance = new Typed('#typed-tagline', {
             strings: [
                 'building AI/ML platforms',
                 'senior ml engineer @ visa',
@@ -75,15 +75,26 @@ const hero = siteConfig.hero;
             typeSpeed: 42,
             backSpeed: 22,
             backDelay: 2200,
-            startDelay: 400,
+            startDelay: 250,
             loop: true,
             cursorChar: '_',
-            smartBackspace: false
+            smartBackspace: false,
+            contentType: 'text'
         });
-
-        // Destroy before client-side page swap to avoid duplicate instances
-        document.addEventListener('astro:before-swap', () => typed.destroy(), { once: true });
     }
 
+    // Destroy on page swap (before new content loads)
+    document.addEventListener('astro:before-swap', () => {
+        if (typedInstance) {
+            typedInstance.destroy();
+            typedInstance = null;
+        }
+    });
+
+    // Re-init after every page load (covers SPA navigation)
     document.addEventListener('astro:page-load', initTyped);
+
+    // Also init directly — astro:page-load on initial load can race with
+    // module script registration depending on ClientRouter timing
+    initTyped();
 </script>
