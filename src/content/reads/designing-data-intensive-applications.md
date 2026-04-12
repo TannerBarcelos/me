@@ -17,7 +17,7 @@ description: >-
   The clearest tour of the ideas behind modern data systems — storage, replication, partitioning, stream processing,
   and the tradeoffs that actually matter in production. I'm actively reading the second edition now.
 readingNow: true
-readingNowOrder: 3
+readingNowOrder: 4
 seo:
   title: 'Designing Data-Intensive Applications — Reads'
   description: 'Kleppmann on reliable, scalable, maintainable data systems — working through the 2nd edition.'

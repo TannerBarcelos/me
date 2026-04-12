@@ -2,54 +2,13 @@
 title: About
 seo:
   title: About — Tanner Barcelos
-  description: Senior Full Stack Engineer with 4+ years building AI/ML platforms and distributed systems at Visa.
+  description: Full-stack engineer in the Bay Area. I build platforms for ML and shipping software—with humans and agents in the loop.
 ---
 
-Senior Full Stack Engineer with 4+ years architecting AI/ML platforms and distributed systems. Currently at Visa leading the ML platform serving 200+ engineers and the control plane managing fraud models processing 10M+ daily transactions.
+I’m Tanner, a full-stack engineer based in the Bay Area. I work at Visa, where most of my time goes to the space where **machine learning meets real infrastructure**: control planes, federated services, and UIs that have to stay fast and legible when the systems behind them are anything but simple. I like the work that sits between “make the model go” and “make the team able to ship without losing their minds”—platforms, tooling, and the glue that turns a pile of services into something coherent.
 
-[Resume (PDF)](https://drive.google.com/file/d/1v1T8hgVPnij6_8762_Vl7HfQB1efQ_7Q/view?usp=drivesdk) — traditional CV if you need the one-pager.
+I care a lot about **craft at scale**. Small details in a component library matter when thirty apps inherit them. A GraphQL boundary matters when five teams stop duplicating the same fetch logic. I’m as happy in React and TypeScript as I am in Go when the problem is orchestration, reliability, or shaving seconds off a path that runs thousands of times a day. The through-line is always the same: **clarity for the people using what we build**, whether they’re engineers, analysts, or customers who will never see the repo.
 
----
+Lately I’ve been deep on **agentic coding**—not as a gimmick, but as a way to stay in flow. I use AI as a serious pair programmer: exploring designs, stress-testing APIs, and turning vague ideas into concrete diffs faster than I could alone. The best sessions feel like having a patient, encyclopedic collaborator who never tires of “what if we tried it this way?” I’m interested in how that changes how we review code, how we document intent, and how we keep quality high when the machine can generate so much, so fast. It’s still early, and that’s what makes it fun.
 
-## Experience
-
-**Senior Full Stack Engineer — Visa**
-Feb 2022 – Present · Foster City, CA
-
-- Owned end-to-end development of ML platform control plane managing fraud models across 10M+ daily transactions — reduced deployment time 90% (45 min → 5 min)
-- Led Nexus AI, unified ML platform integrating 5 systems for 200+ data scientists — cut context-switching 80% and accelerated workflows 45%
-- Authored GraphQL federation gateway unifying 5 microservices — reduced page loads from 8s to 1.2s (85% improvement)
-- Designed Go microservices orchestrating Kubernetes/Nomad across multi-DC infrastructure — reduced MTTR from 4 hrs to 8 min, saving $500K annually
-- Led React modernization with TanStack/Vite across 6 teams — improved build times 60%, bundle size 45%, Core Web Vitals 35%
-- Delivered 80+ WCAG 2.1 AA-compliant UI components adopted across 30+ applications
-
-**Frontend Engineer — Scalable Commerce**
-Apr 2021 – Feb 2022 · Santa Barbara, CA
-
-- Built React/TypeScript CRM with WebSocket real-time updates handling 10K+ daily tickets — reduced response time 25%
-- Redesigned onboarding with multi-step wizard — increased retention 18%, generating $200K ARR
-- Implemented GitHub Actions CI/CD with Docker — increased deployment frequency from weekly to daily
-
----
-
-## Skills
-
-**Languages** — TypeScript, JavaScript, Go, Python
-
-**Frontend** — React 19, TanStack Router/Query, TailwindCSS, Vite, GraphQL, WebSockets
-
-**Backend** — Go (Gin, Chi), Node.js, GraphQL Federation, REST APIs
-
-**AI/ML** — LangChain, Claude AI, OpenAI GPT-4, Prompt Engineering
-
-**Infrastructure** — Kubernetes, Nomad, Docker, Terraform, Helm, GitHub Actions, ArgoCD
-
-**Observability** — Datadog, Prometheus, Grafana, OpenTelemetry
-
-**Databases** — PostgreSQL, Redis, MongoDB
-
----
-
-## Education
-
-B.S. Computer Science — California State University, East Bay · 2021
+Outside the job I read, tinker on side projects, and try to leave things a little more understandable than I found them. If you want the formal timeline—titles, dates, and the bullet points—there’s a **[resume (PDF)](https://drive.google.com/file/d/1_boaCqTE2CgyBFrr7qtSEl6dvAHLKtaO/view?usp=sharing)** for that. This page is the short version: **I build systems people rely on, and I’m happiest when the path from idea to production feels humane.**

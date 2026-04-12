@@ -6,14 +6,16 @@ import BookshelfShelfToggle from '../../components/BookshelfShelfToggle.astro';
 import ReadPreview from '../../components/ReadPreview.astro';
 import ReadsBrowseStrip from '../../components/ReadsBrowseStrip.astro';
 import { sortLeisureReads, sortReadsByAddedDesc } from '../../utils/data-utils';
-import { loadReadsBrowseData } from '../../utils/reads-browse';
+import { kindsFromReads, topicsFromReads } from '../../utils/reads-browse';
 
 const reads = (await getCollection('reads')).sort(sortReadsByAddedDesc);
 const technicalReads = reads.filter((r) => r.data.shelf === 'technical');
 const leisureReads = reads.filter((r) => r.data.shelf === 'leisure').sort(sortLeisureReads);
 
-const { topics: technicalTopics } = await loadReadsBrowseData({ shelf: 'technical' });
-const { topics: leisureTopics } = await loadReadsBrowseData({ shelf: 'leisure' });
+const technicalTopics = topicsFromReads(technicalReads);
+const leisureTopics = topicsFromReads(leisureReads);
+const technicalKinds = kindsFromReads(technicalReads);
+const leisureKinds = kindsFromReads(leisureReads);
 ---
 
 <BaseLayout
@@ -35,6 +37,7 @@ const { topics: leisureTopics } = await loadReadsBrowseData({ shelf: 'leisure' }
                 <p class="text-muted text-sm sm:text-base leading-relaxed max-w-2xl mb-8">References I keep coming back to.</p>
                 <ReadsBrowseStrip
                     pathname={Astro.url.pathname}
+                    presentKinds={technicalKinds}
                     topics={technicalTopics}
                     active={{ type: 'all' }}
                     shelf="technical"
@@ -53,6 +56,7 @@ const { topics: leisureTopics } = await loadReadsBrowseData({ shelf: 'leisure' }
                 <p class="text-muted text-sm sm:text-base leading-relaxed max-w-2xl mb-8">Fiction and fun, separate from work.</p>
                 <ReadsBrowseStrip
                     pathname={Astro.url.pathname}
+                    presentKinds={leisureKinds}
                     topics={leisureTopics}
                     active={{ type: 'all' }}
                     shelf="leisure"

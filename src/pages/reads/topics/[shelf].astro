@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { READ_SHELVES, readShelfTabLabel, type ReadShelf } from '../../../data/read-shelves';
+import { loadReadsBrowseData } from '../../../utils/reads-browse';
+import { withReadsBrowseQuery } from '../../../utils/reads-links';
+
+export function getStaticPaths() {
+    return READ_SHELVES.map((shelf) => ({ params: { shelf } }));
+}
+
+const shelf = Astro.params.shelf as ReadShelf;
+const { topics } = await loadReadsBrowseData({ shelf });
+const shelfLabel = readShelfTabLabel[shelf];
+const pageTitle = `Topics · ${shelfLabel}`;
+---
+
+<BaseLayout
+    title={pageTitle}
+    description={`Topic tags used on your ${shelfLabel.toLowerCase()} shelf.`}
+    showHeader={false}
+>
+    <div class="pt-16 sm:pt-24 pb-24 sm:pb-32">
+        <a
+            href={withReadsBrowseQuery('/reads/', { shelf })}
+            class="inline-flex items-center gap-1 font-mono text-xs text-muted hover:text-main transition-colors duration-200 mb-8"
+        >
+            ← Bookshelf
+        </a>
+        <p class="font-mono text-xs text-muted mb-4 select-none">
+            <span class="opacity-50">{'// '}</span>topics / {shelf}
+        </p>
+        <h1 class="font-sans text-3xl sm:text-4xl font-medium tracking-tight text-main mb-3">{pageTitle}</h1>
+        <p class="text-muted text-sm sm:text-base leading-relaxed max-w-2xl mb-12">
+            Only tags that appear on your <span class="text-main/90">{shelfLabel}</span> shelf — nothing pulled in from the
+            other tab.
+        </p>
+
+        <ul class="divide-y divide-main/10 border-t border-main/10">
+            {
+                topics.map((t) => (
+                    <li>
+                        <a
+                            href={withReadsBrowseQuery(`/reads/topic/${t.slug}/`, { shelf })}
+                            class="flex items-baseline justify-between gap-4 py-4 group"
+                        >
+                            <span class="font-sans text-base text-main group-hover:opacity-75 transition-opacity duration-200">
+                                {t.label}
+                            </span>
+                            <span class="font-mono text-xs text-muted tabular-nums shrink-0">{t.count}</span>
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+
+        {
+            topics.length === 0 && (
+                <p class="text-muted text-sm">No topics on this shelf yet.</p>
+            )
+        }
+
+        <p class="mt-10 text-sm text-muted">
+            <a href="/reads/topics/" class="text-main/90 hover:opacity-80 transition-opacity duration-200">
+                Show topics across both shelves →
+            </a>
+        </p>
+    </div>
+</BaseLayout>

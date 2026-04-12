@@ -85,16 +85,31 @@ const kindIdsJson = JSON.stringify([...READ_KINDS]);
             function patchTopicsIndexLink() {
                 document.querySelectorAll('[data-topics-index-link]').forEach(function (a) {
                     var u = new URL(window.location.href);
-                    var nu = new URL('/reads/topics/', window.location.origin);
                     var shelf = u.searchParams.get('shelf');
                     var kind = u.searchParams.get('kind');
-                    if (shelf) nu.searchParams.set('shelf', shelf);
+                    var nu;
+                    if (shelf && SHELVES.indexOf(shelf) !== -1) {
+                        nu = new URL('/reads/topics/' + shelf + '/', window.location.origin);
+                    } else {
+                        nu = new URL('/reads/topics/', window.location.origin);
+                    }
                     if (kind && KINDS.indexOf(kind) !== -1) nu.searchParams.set('kind', kind);
                     a.setAttribute('href', nu.pathname + nu.search + nu.hash);
                 });
             }
             function syncBookshelfFromUrl() {
                 try {
+                    var roots = document.querySelectorAll('[data-bookshelf-root]');
+                    if (roots.length === 0) {
+                        var uClean = new URL(window.location.href);
+                        if (uClean.searchParams.has('shelf') || uClean.searchParams.has('kind')) {
+                            uClean.searchParams.delete('shelf');
+                            uClean.searchParams.delete('kind');
+                            history.replaceState(null, '', uClean.pathname + uClean.search + uClean.hash);
+                        }
+                        return;
+                    }
+
                     var u = new URL(window.location.href);
                     var rawShelf = u.searchParams.get('shelf');
                     var s =
@@ -104,34 +119,67 @@ const kindIdsJson = JSON.stringify([...READ_KINDS]);
                         u.searchParams.set('shelf', s);
                         changed = true;
                     }
+                    var allowedForShelf = [];
+                    if (roots.length) {
+                        var ap = roots[0].querySelector(
+                            '.bookshelf-shelf-panel[data-bookshelf-panel="' + s + '"]'
+                        );
+                        if (ap) {
+                            ap.querySelectorAll('a[data-kind-tab]').forEach(function (a) {
+                                var k = a.getAttribute('data-kind-tab');
+                                if (k && k !== '') allowedForShelf.push(k);
+                            });
+                        }
+                    }
+
                     var rawKind = u.searchParams.get('kind');
-                    if (rawKind && KINDS.indexOf(rawKind) === -1) {
-                        u.searchParams.delete('kind');
-                        changed = true;
+                    if (rawKind) {
+                        if (KINDS.indexOf(rawKind) === -1 || allowedForShelf.indexOf(rawKind) === -1) {
+                            u.searchParams.delete('kind');
+                            changed = true;
+                        }
                     }
                     if (changed) history.replaceState(null, '', u.pathname + u.search + u.hash);
 
-                    document.querySelectorAll('[data-bookshelf-root]').forEach(function (root) {
+                    var curKind = u.searchParams.get('kind');
+
+                    roots.forEach(function (root) {
                         root.setAttribute('data-active-shelf', s);
                         root.querySelectorAll('[data-shelf-tab]').forEach(function (a) {
                             if (a.getAttribute('data-shelf-tab') === s) a.setAttribute('aria-current', 'page');
                             else a.removeAttribute('aria-current');
                         });
-                    });
 
-                    var curKind = u.searchParams.get('kind');
-                    var activeKind =
-                        curKind && KINDS.indexOf(curKind) !== -1 ? curKind : 'all';
-                    document.querySelectorAll('[data-bookshelf-read-list]').forEach(function (el) {
-                        el.setAttribute('data-active-kind', activeKind);
-                    });
+                        root.querySelectorAll('[data-bookshelf-read-list]').forEach(function (el) {
+                            var panel = el.closest('[data-bookshelf-panel]');
+                            var allowed = [];
+                            if (panel) {
+                                panel.querySelectorAll('a[data-kind-tab]').forEach(function (a) {
+                                    var k = a.getAttribute('data-kind-tab');
+                                    if (k && k !== '') allowed.push(k);
+                                });
+                            }
+                            var effective =
+                                curKind && allowed.indexOf(curKind) !== -1 ? curKind : 'all';
+                            el.setAttribute('data-active-kind', effective);
+                        });
 
-                    document.querySelectorAll('[data-kind-tab]').forEach(function (a) {
-                        var tabKind = a.getAttribute('data-kind-tab');
-                        var isAll = !curKind || curKind === '';
-                        if ((tabKind === '' || tabKind === null) && isAll) a.setAttribute('aria-current', 'page');
-                        else if (tabKind === curKind) a.setAttribute('aria-current', 'page');
-                        else a.removeAttribute('aria-current');
+                        root.querySelectorAll('.bookshelf-shelf-panel').forEach(function (panel) {
+                            var pid = panel.getAttribute('data-bookshelf-panel');
+                            var isActivePanel = pid === s;
+                            panel.querySelectorAll('a[data-kind-tab]').forEach(function (a) {
+                                if (!isActivePanel) {
+                                    a.removeAttribute('aria-current');
+                                    return;
+                                }
+                                var tabKind = a.getAttribute('data-kind-tab');
+                                var isAll = !curKind || curKind === '';
+                                if ((tabKind === '' || tabKind === null) && isAll)
+                                    a.setAttribute('aria-current', 'page');
+                                else if (tabKind === curKind) a.setAttribute('aria-current', 'page');
+                                else a.removeAttribute('aria-current');
+                            });
+                        });
                     });
 
                     patchShelfTabHrefs();

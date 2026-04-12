@@ -6,7 +6,7 @@ import BookshelfShelfToggle from '../../../components/BookshelfShelfToggle.astro
 import ReadPreview from '../../../components/ReadPreview.astro';
 import ReadsBrowseStrip from '../../../components/ReadsBrowseStrip.astro';
 import { sortLeisureReads, sortReadsByAddedDesc } from '../../../utils/data-utils';
-import { loadReadsBrowseData } from '../../../utils/reads-browse';
+import { kindsFromReads, loadReadsBrowseData, topicsFromReads } from '../../../utils/reads-browse';
 import { slugifyTopic } from '../../../utils/slugify';
 
 export async function getStaticPaths() {
@@ -29,8 +29,10 @@ const technicalList = allForTopic.filter((r) => r.data.shelf === 'technical');
 const leisureList = allForTopic.filter((r) => r.data.shelf === 'leisure').sort(sortLeisureReads);
 
 const { topics } = await loadReadsBrowseData();
-const { topics: technicalTopics } = await loadReadsBrowseData({ shelf: 'technical' });
-const { topics: leisureTopics } = await loadReadsBrowseData({ shelf: 'leisure' });
+const technicalTopics = topicsFromReads(technicalList);
+const leisureTopics = topicsFromReads(leisureList);
+const technicalKinds = kindsFromReads(technicalList);
+const leisureKinds = kindsFromReads(leisureList);
 const topicMeta = topics.find((t) => t.slug === topic);
 const topicLabel = topicMeta?.label ?? topic;
 ---
@@ -53,6 +55,7 @@ const topicLabel = topicMeta?.label ?? topic;
             <BookshelfShelfPanel shelf="technical">
                 <ReadsBrowseStrip
                     pathname={Astro.url.pathname}
+                    presentKinds={technicalKinds}
                     topics={technicalTopics}
                     active={{ type: 'topic', slug: topic }}
                     shelf="technical"
@@ -70,6 +73,7 @@ const topicLabel = topicMeta?.label ?? topic;
             <BookshelfShelfPanel shelf="leisure">
                 <ReadsBrowseStrip
                     pathname={Astro.url.pathname}
+                    presentKinds={leisureKinds}
                     topics={leisureTopics}
                     active={{ type: 'topic', slug: topic }}
                     shelf="leisure"

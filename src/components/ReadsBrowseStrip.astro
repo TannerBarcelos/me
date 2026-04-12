@@ -1,5 +1,5 @@
 ---
-import { READ_KINDS, type ReadKind } from '../data/read-kinds';
+import type { ReadKind } from '../data/read-kinds';
 import type { ReadShelf } from '../data/read-shelves';
 import type { BrowseActive, TopicBrowseItem } from '../utils/reads-browse';
 import { normalizeReadsPathname, withReadsBrowseQuery } from '../utils/reads-links';
@@ -7,6 +7,8 @@ import { normalizeReadsPathname, withReadsBrowseQuery } from '../utils/reads-lin
 type Props = {
     /** Current page path (e.g. `Astro.url.pathname`) — format/topic links preserve `?kind=` / `?shelf=` on this path. */
     pathname: string;
+    /** Kinds that exist in the reads on this shelf (or filtered list); use `kindsFromReads(...)`. */
+    presentKinds: ReadKind[];
     topics: TopicBrowseItem[];
     active: BrowseActive;
     /** Max topic chips before linking to the full topic index */
@@ -15,7 +17,7 @@ type Props = {
     shelf?: ReadShelf;
 };
 
-const { pathname, topics, active, topicLimit = 18, shelf } = Astro.props;
+const { pathname, presentKinds, topics, active, topicLimit = 18, shelf } = Astro.props;
 const path = normalizeReadsPathname(pathname);
 const shownTopics = topics.slice(0, topicLimit);
 
@@ -61,7 +63,7 @@ function topicActive(slug: string): boolean {
                     All
                 </a>
                 {
-                    READ_KINDS.map((k: ReadKind) => (
+                    presentKinds.map((k: ReadKind) => (
                         <a
                             href={
                                 shelf !== undefined
@@ -88,7 +90,7 @@ function topicActive(slug: string): boolean {
                     <div class="flex items-baseline justify-between gap-4 mb-2">
                         <p class="font-mono text-[0.65rem] uppercase tracking-wider text-muted/70">Topics</p>
                         <a
-                            href={shelf !== undefined ? withReadsBrowseQuery('/reads/topics/', { shelf }) : '/reads/topics/'}
+                            href={shelf !== undefined ? `/reads/topics/${shelf}/` : '/reads/topics/'}
                             data-topics-index-link=""
                             class="font-mono text-[0.65rem] text-muted hover:text-main transition-colors duration-200"
                         >
