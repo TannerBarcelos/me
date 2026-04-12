@@ -24,9 +24,29 @@ type Props = {
 };
 
 const { project, prevProject, nextProject } = Astro.props;
-const { title, description, seo, publishDate } = project.data;
+const { title, description, seo, publishDate, status = 'planned' } = project.data;
 const { Content } = await project.render();
 const year = publishDate.getFullYear();
+
+const statusConfig = {
+    live: {
+        label: 'live',
+        classes:
+            'border border-emerald-600/35 bg-emerald-500/[0.06] text-emerald-700 dark:border-emerald-400/25 dark:bg-emerald-400/[0.05] dark:text-emerald-400'
+    },
+    'in-progress': {
+        label: 'in progress',
+        classes:
+            'border border-violet-600/35 bg-violet-500/[0.06] text-violet-700 dark:border-violet-400/25 dark:bg-violet-400/[0.05] dark:text-violet-400'
+    },
+    planned: {
+        label: 'planned',
+        classes:
+            'border border-zinc-500/30 bg-zinc-400/[0.05] text-zinc-500 dark:border-zinc-500/25 dark:bg-zinc-400/[0.04] dark:text-zinc-500'
+    }
+};
+
+const tag = statusConfig[status] ?? statusConfig.planned;
 ---
 
 <BaseLayout title={seo?.title ?? title} description={seo?.description ?? description} image={seo?.image} pageType="article" showHeader={false}>
@@ -35,10 +55,15 @@ const year = publishDate.getFullYear();
             <p class="font-mono text-xs text-muted mb-4 select-none">
                 <span class="opacity-50">{'// '}</span>{year}
             </p>
-            <h1 class="font-sans text-3xl sm:text-5xl font-medium tracking-tight text-main leading-tight">
-                {title}
-            </h1>
-            {description && <p class="mt-4 text-lg text-muted leading-relaxed max-w-xl">{description}</p>}
+            <div class="flex items-start gap-4 flex-wrap mb-4">
+                <h1 class="font-sans text-3xl sm:text-5xl font-medium tracking-tight text-main leading-tight">
+                    {title}
+                </h1>
+                <span class:list={['font-mono text-xs px-1.5 py-0.5 leading-tight self-start mt-1.5 sm:mt-2.5', tag.classes]}>
+                    {tag.label}
+                </span>
+            </div>
+            {description && <p class="mt-2 text-lg text-muted leading-relaxed max-w-xl">{description}</p>}
         </header>
 
         <div class="max-w-none prose prose-dante sm:prose-lg">
