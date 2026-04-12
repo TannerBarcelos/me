@@ -1,0 +1,89 @@
+---
+import { READ_KINDS, type ReadKind } from '../data/read-kinds';
+import type { BrowseActive, TopicBrowseItem } from '../utils/reads-browse';
+
+type Props = {
+    topics: TopicBrowseItem[];
+    active: BrowseActive;
+    /** Max topic chips before linking to the full topic index */
+    topicLimit?: number;
+};
+
+const { topics, active, topicLimit = 18 } = Astro.props;
+const shownTopics = topics.slice(0, topicLimit);
+
+function kindActive(k: ReadKind): boolean {
+    return active.type === 'kind' && active.kind === k;
+}
+
+function topicActive(slug: string): boolean {
+    return active.type === 'topic' && active.slug === slug;
+}
+---
+
+<div class="mb-10 sm:mb-12 space-y-6">
+    <div>
+        <p class="font-mono text-[0.65rem] uppercase tracking-wider text-muted/70 mb-2">Format</p>
+        <div class="flex flex-wrap gap-2">
+            <a
+                href="/reads/"
+                class:list={[
+                    'font-mono text-xs px-1.5 py-0.5 leading-tight border transition-colors duration-200',
+                    active.type === 'all'
+                        ? 'border-main/25 bg-muted text-main'
+                        : 'border-main/10 text-muted hover:text-main hover:border-main/20'
+                ]}
+            >
+                All
+            </a>
+            {
+                READ_KINDS.map((k) => (
+                    <a
+                        href={`/reads/kind/${k}/`}
+                        class:list={[
+                            'font-mono text-xs px-1.5 py-0.5 leading-tight border transition-colors duration-200',
+                            kindActive(k)
+                                ? 'border-main/25 bg-muted text-main'
+                                : 'border-main/10 text-muted hover:text-main hover:border-main/20'
+                        ]}
+                    >
+                        {k}
+                    </a>
+                ))
+            }
+        </div>
+    </div>
+
+    {
+        topics.length > 0 && (
+            <div>
+                <div class="flex items-baseline justify-between gap-4 mb-2">
+                    <p class="font-mono text-[0.65rem] uppercase tracking-wider text-muted/70">Topics</p>
+                    <a
+                        href="/reads/topics/"
+                        class="font-mono text-[0.65rem] text-muted hover:text-main transition-colors duration-200"
+                    >
+                        View all
+                    </a>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    {shownTopics.map((t) => (
+                        <a
+                            href={`/reads/topic/${t.slug}/`}
+                            class:list={[
+                                'font-mono text-xs px-1.5 py-0.5 leading-tight border transition-colors duration-200 max-w-[14rem] truncate',
+                                topicActive(t.slug)
+                                    ? 'border-main/25 bg-muted text-main'
+                                    : 'border-main/10 text-muted hover:text-main hover:border-main/20'
+                            ]}
+                            title={`${t.label} (${t.count})`}
+                        >
+                            {t.label}
+                            <span class="text-muted/50 tabular-nums">({t.count})</span>
+                        </a>
+                    ))}
+                </div>
+            </div>
+        )
+    }
+</div>

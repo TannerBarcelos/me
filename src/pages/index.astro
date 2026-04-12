@@ -1,26 +1,30 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Button from '../components/Button.astro';
 import Hero from '../components/Hero.astro';
 import ProjectPreview from '../components/ProjectPreview.astro';
+import ReadPreview from '../components/ReadPreview.astro';
 import siteConfig from '../data/site-config';
-import { sortItemsByDateDesc } from '../utils/data-utils';
+import { sortItemsByDateDesc, sortReadsReadingNow } from '../utils/data-utils';
 
 const projects = (await getCollection('projects')).sort(sortItemsByDateDesc);
-const featuredProjects = projects.filter(({ data }) => data.isFeatured);
+/** "What I'm building" = projects whose tags include `in-progress` (excludes paused, live-only, etc.). */
+const buildingProjects = projects.filter(({ data }) => data.tags.includes('in-progress'));
+
+const reads = await getCollection('reads');
+const readingNow = reads.filter(({ data }) => data.readingNow).sort(sortReadsReadingNow);
 ---
 
 <BaseLayout description={siteConfig.description} showHeader={false}>
     <Hero />
 
     {
-        featuredProjects?.length > 0 && (
+        buildingProjects?.length > 0 && (
             <section class="pb-24 sm:pb-32">
                 {/* Section label */}
                 <div class="flex items-baseline justify-between mb-8">
                     <p class="font-mono text-xs text-muted select-none">
-                        <span class="opacity-50">{'// '}</span>selected projects
+                        <span class="opacity-50">{'// '}</span>what I'm building
                     </p>
                     <a
                         href="/projects"
@@ -32,9 +36,31 @@ const featuredProjects = projects.filter(({ data }) => data.isFeatured);
 
                 {/* Project list */}
                 <div>
-                    {featuredProjects.map((project) => (
+                    {buildingProjects.map((project) => (
                         <ProjectPreview project={project} headingLevel="h3" />
                     ))}
+                </div>
+            </section>
+        )
+    }
+
+    {
+        readingNow?.length > 0 && (
+            <section class="pb-24 sm:pb-32">
+                <div class="flex items-baseline justify-between mb-8">
+                    <p class="font-mono text-xs text-muted select-none">
+                        <span class="opacity-50">{'// '}</span>what I'm reading
+                    </p>
+                    <a
+                        href="/reads"
+                        class="font-mono text-xs text-muted hover:text-main transition-colors duration-200"
+                    >
+                        all reads →
+                    </a>
+                </div>
+
+                <div>
+                    {readingNow.map((read) => <ReadPreview read={read} headingLevel="h3" />)}
                 </div>
             </section>
         )

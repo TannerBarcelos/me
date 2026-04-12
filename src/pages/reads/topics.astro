@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { loadReadsBrowseData } from '../../utils/reads-browse';
+
+const { topics } = await loadReadsBrowseData();
+---
+
+<BaseLayout
+    title="Read topics"
+    description="Browse favorite reads by topic — scales as the library grows."
+    showHeader={false}
+>
+    <div class="pt-16 sm:pt-24 pb-24 sm:pb-32">
+        <a
+            href="/reads/"
+            class="inline-flex items-center gap-1 font-mono text-xs text-muted hover:text-main transition-colors duration-200 mb-8"
+        >
+            ← All reads
+        </a>
+        <p class="font-mono text-xs text-muted mb-4 select-none">
+            <span class="opacity-50">{'// '}</span>topics
+        </p>
+        <h1 class="font-sans text-3xl sm:text-4xl font-medium tracking-tight text-main mb-3">Topics</h1>
+        <p class="text-muted text-sm sm:text-base leading-relaxed max-w-2xl mb-12">
+            Every topic links to a filtered, paginated shelf. Add topics in front matter as you catalog more reads.
+        </p>
+
+        <ul class="divide-y divide-main/10 border-t border-main/10">
+            {
+                topics.map((t) => (
+                    <li>
+                        <a
+                            href={`/reads/topic/${t.slug}/`}
+                            class="flex items-baseline justify-between gap-4 py-4 group"
+                        >
+                            <span class="font-sans text-base text-main group-hover:opacity-75 transition-opacity duration-200">
+                                {t.label}
+                            </span>
+                            <span class="font-mono text-xs text-muted tabular-nums shrink-0">{t.count}</span>
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+
+        {
+            topics.length === 0 && (
+                <p class="text-muted text-sm">
+                    No topics yet. Add a topics array in the front matter of any file in src/content/reads/.
+                </p>
+            )
+        }
+    </div>
+</BaseLayout>

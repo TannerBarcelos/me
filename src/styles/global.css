@@ -13,9 +13,10 @@
     }
 
     /* ─── Dark mode — editor dark ─── */
+    /* Body text: ~#C8C5BD — softer than near-white on #0D0D0B; contrast ≈11:1 (WCAG AAA for normal text). */
     html.dark {
-        --color-text-main: 226 224 218;   /* #E2E0DA */
-        --color-text-muted: 108 106 100;  /* #6C6A64 */
+        --color-text-main: 200 197 189;   /* #C8C5BD */
+        --color-text-muted: 132 129 121;  /* #848179 — ~4.8:1 on bg for secondary UI copy */
         --color-bg-main: 13 13 11;        /* #0D0D0B */
         --color-bg-muted: 22 22 19;       /* #161613 */
         --color-border-main: 40 39 35;    /* #282723 */
