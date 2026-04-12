@@ -1,7 +1,7 @@
 ---
 import { READ_KINDS, type ReadKind } from '../data/read-kinds';
 import { DEFAULT_READ_SHELF, READ_SHELVES, readShelfTabLabel, type ReadShelf } from '../data/read-shelves';
-import { normalizeReadsPathname, withReadsShelfQuery } from '../utils/reads-links';
+import { normalizeReadsPathname, readsPathShelf, readsShelfPath, withReadsShelfQuery } from '../utils/reads-links';
 
 type Props = {
     /** Current page path, e.g. `Astro.url.pathname` — used for `?shelf=` tab links. */
@@ -10,6 +10,7 @@ type Props = {
 
 const { pathname } = Astro.props;
 const path = normalizeReadsPathname(pathname);
+const shelfPathActive = readsPathShelf(path) !== undefined;
 
 const panelRules = READ_SHELVES.map(
     (s: ReadShelf) =>
@@ -33,7 +34,7 @@ const kindIdsJson = JSON.stringify([...READ_KINDS]);
             {
                 READ_SHELVES.map((shelfId: ReadShelf) => (
                     <a
-                        href={withReadsShelfQuery(path, shelfId)}
+                        href={shelfPathActive ? readsShelfPath(shelfId) : withReadsShelfQuery(path, shelfId)}
                         data-shelf-tab={shelfId}
                         class:list={[
                             'font-mono text-xs px-1.5 py-0.5 leading-tight border transition-colors duration-200',
@@ -57,35 +58,69 @@ const kindIdsJson = JSON.stringify([...READ_KINDS]);
                 document.querySelectorAll('[data-shelf-tab]').forEach(function (a) {
                     var shelfId = a.getAttribute('data-shelf-tab');
                     var u = new URL(window.location.href);
-                    u.searchParams.set('shelf', shelfId);
-                    a.setAttribute('href', u.pathname + u.search + u.hash);
+                    var pathShelfM = u.pathname.match(/^\/reads\/shelf\/(technical|leisure)(\/|$)/);
+                    var nu;
+                    if (pathShelfM) {
+                        nu = new URL('/reads/shelf/' + shelfId + '/', window.location.origin);
+                        var kind = u.searchParams.get('kind');
+                        var topic = u.searchParams.get('topic');
+                        if (kind && KINDS.indexOf(kind) !== -1) nu.searchParams.set('kind', kind);
+                        if (topic) nu.searchParams.set('topic', topic);
+                    } else {
+                        nu = new URL(window.location.href);
+                        nu.searchParams.set('shelf', shelfId);
+                    }
+                    a.setAttribute('href', nu.pathname + nu.search + nu.hash);
                 });
             }
             function patchKindTabHrefs() {
                 document.querySelectorAll('[data-kind-tab]').forEach(function (a) {
                     var tabKind = a.getAttribute('data-kind-tab');
                     var u = new URL(window.location.href);
-                    if (tabKind === '' || tabKind === null) u.searchParams.delete('kind');
-                    else u.searchParams.set('kind', tabKind);
-                    a.setAttribute('href', u.pathname + u.search + u.hash);
+                    var nu = new URL(u.href);
+                    if (tabKind === '' || tabKind === null) nu.searchParams.delete('kind');
+                    else nu.searchParams.set('kind', tabKind);
+                    a.setAttribute('href', nu.pathname + nu.search + nu.hash);
                 });
             }
             function patchTopicTabHrefs() {
                 document.querySelectorAll('[data-topic-slug]').forEach(function (a) {
                     var slug = a.getAttribute('data-topic-slug');
+                    if (!slug) return;
                     var u = new URL(window.location.href);
-                    var nu = new URL('/reads/topic/' + slug + '/', window.location.origin);
-                    var shelf = u.searchParams.get('shelf');
+                    var pathShelfM = u.pathname.match(/^\/reads\/shelf\/(technical|leisure)(\/|$)/);
+                    var topicPathM = u.pathname.match(/^\/reads\/topic\/([^/]+)(\/|$)/);
+                    var nu;
                     var kind = u.searchParams.get('kind');
-                    if (shelf) nu.searchParams.set('shelf', shelf);
-                    if (kind && KINDS.indexOf(kind) !== -1) nu.searchParams.set('kind', kind);
+                    if (pathShelfM) {
+                        nu = new URL('/reads/shelf/' + pathShelfM[1] + '/', window.location.origin);
+                        var curTopic = u.searchParams.get('topic');
+                        if (curTopic && curTopic === slug) {
+                            /* active chip: clear topic, keep format filter */
+                        } else {
+                            nu.searchParams.set('topic', slug);
+                        }
+                        if (kind && KINDS.indexOf(kind) !== -1) nu.searchParams.set('kind', kind);
+                    } else if (topicPathM && topicPathM[1] === slug) {
+                        var sh = u.searchParams.get('shelf');
+                        var shelfForHome =
+                            sh && SHELVES.indexOf(sh) !== -1 ? sh : defaultShelf;
+                        nu = new URL('/reads/shelf/' + shelfForHome + '/', window.location.origin);
+                        if (kind && KINDS.indexOf(kind) !== -1) nu.searchParams.set('kind', kind);
+                    } else {
+                        nu = new URL('/reads/topic/' + slug + '/', window.location.origin);
+                        var shelf = u.searchParams.get('shelf');
+                        if (shelf) nu.searchParams.set('shelf', shelf);
+                        if (kind && KINDS.indexOf(kind) !== -1) nu.searchParams.set('kind', kind);
+                    }
                     a.setAttribute('href', nu.pathname + nu.search + nu.hash);
                 });
             }
             function patchTopicsIndexLink() {
                 document.querySelectorAll('[data-topics-index-link]').forEach(function (a) {
                     var u = new URL(window.location.href);
-                    var shelf = u.searchParams.get('shelf');
+                    var pathShelfM = u.pathname.match(/^\/reads\/shelf\/(technical|leisure)(\/|$)/);
+                    var shelf = pathShelfM ? pathShelfM[1] : u.searchParams.get('shelf');
                     var kind = u.searchParams.get('kind');
                     var nu;
                     if (shelf && SHELVES.indexOf(shelf) !== -1) {
@@ -111,13 +146,28 @@ const kindIdsJson = JSON.stringify([...READ_KINDS]);
                     }
 
                     var u = new URL(window.location.href);
+                    var pathShelfM = u.pathname.match(/^\/reads\/shelf\/(technical|leisure)(\/|$)/);
+                    var pathShelf = pathShelfM && SHELVES.indexOf(pathShelfM[1]) !== -1 ? pathShelfM[1] : null;
                     var rawShelf = u.searchParams.get('shelf');
-                    var s =
-                        rawShelf && SHELVES.indexOf(rawShelf) !== -1 ? rawShelf : defaultShelf;
+                    var s;
+                    if (pathShelf) {
+                        s = pathShelf;
+                    } else if (rawShelf && SHELVES.indexOf(rawShelf) !== -1) {
+                        s = rawShelf;
+                    } else {
+                        s = defaultShelf;
+                    }
                     var changed = false;
-                    if (!u.searchParams.has('shelf') || SHELVES.indexOf(rawShelf) === -1) {
-                        u.searchParams.set('shelf', s);
-                        changed = true;
+                    if (pathShelf) {
+                        if (u.searchParams.has('shelf')) {
+                            u.searchParams.delete('shelf');
+                            changed = true;
+                        }
+                    } else {
+                        if (!u.searchParams.has('shelf') || SHELVES.indexOf(rawShelf) === -1) {
+                            u.searchParams.set('shelf', s);
+                            changed = true;
+                        }
                     }
                     var allowedForShelf = [];
                     if (roots.length) {

@@ -5,6 +5,8 @@ import BookshelfShelfPanel from '../../../components/BookshelfShelfPanel.astro';
 import BookshelfShelfToggle from '../../../components/BookshelfShelfToggle.astro';
 import ReadPreview from '../../../components/ReadPreview.astro';
 import ReadsBrowseStrip from '../../../components/ReadsBrowseStrip.astro';
+import { READ_KINDS, type ReadKind } from '../../../data/read-kinds';
+import { parseShelfFromQuery } from '../../../data/read-shelves';
 import { sortLeisureReads, sortReadsByAddedDesc } from '../../../utils/data-utils';
 import { kindsFromReads, loadReadsBrowseData, topicsFromReads } from '../../../utils/reads-browse';
 import { slugifyTopic } from '../../../utils/slugify';
@@ -35,6 +37,10 @@ const technicalKinds = kindsFromReads(technicalList);
 const leisureKinds = kindsFromReads(leisureList);
 const topicMeta = topics.find((t) => t.slug === topic);
 const topicLabel = topicMeta?.label ?? topic;
+const rawKind = Astro.url.searchParams.get('kind');
+const urlKind =
+    rawKind && (READ_KINDS as readonly string[]).includes(rawKind) ? (rawKind as ReadKind) : undefined;
+const urlShelf = parseShelfFromQuery(Astro.url.searchParams.get('shelf'));
 ---
 
 <BaseLayout
@@ -59,6 +65,8 @@ const topicLabel = topicMeta?.label ?? topic;
                     topics={technicalTopics}
                     active={{ type: 'topic', slug: topic }}
                     shelf="technical"
+                    urlKind={urlKind}
+                    urlShelf={urlShelf}
                 />
                 <div data-bookshelf-read-list>
                     {
@@ -77,6 +85,8 @@ const topicLabel = topicMeta?.label ?? topic;
                     topics={leisureTopics}
                     active={{ type: 'topic', slug: topic }}
                     shelf="leisure"
+                    urlKind={urlKind}
+                    urlShelf={urlShelf}
                 />
                 <div data-bookshelf-read-list>
                     {

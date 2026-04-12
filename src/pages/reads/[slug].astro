@@ -3,7 +3,7 @@ import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { readKindToBadge } from '../../data/read-kinds';
 import { readProgressToBadge } from '../../data/read-progress';
-import { withReadsBrowseQuery } from '../../utils/reads-links';
+import { readsShelfPath, withReadsBrowseQuery } from '../../utils/reads-links';
 
 export async function getStaticPaths() {
     const reads = await getCollection('reads');
@@ -28,8 +28,8 @@ const layoutDescription = seo?.description ?? description;
 <BaseLayout title={layoutTitle} description={layoutDescription} image={seo?.image} showHeader={false}>
     <article class="pt-16 sm:pt-24 pb-16 sm:pb-24">
         <a
-            href={withReadsBrowseQuery('/reads/', { shelf: read.data.shelf, kind: read.data.kind })}
-            class="inline-flex items-center gap-1 font-mono text-xs text-muted hover:text-main transition-colors duration-200 mb-8"
+            href={withReadsBrowseQuery(readsShelfPath(read.data.shelf), { kind: read.data.kind })}
+            class="inline-flex items-center gap-1 font-mono text-xs text-muted hover:text-main transition-colors duration-200 mb-8 underline underline-offset-[5px] decoration-dashed decoration-accent/35 hover:decoration-solid hover:decoration-accent/65"
         >
             ← Bookshelf
         </a>

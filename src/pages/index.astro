@@ -7,7 +7,7 @@ import ReadPreview from '../components/ReadPreview.astro';
 import siteConfig from '../data/site-config';
 import { sortItemsByDateDesc, sortReadsReadingNow } from '../utils/data-utils';
 import { DEFAULT_READ_SHELF } from '../data/read-shelves';
-import { withReadsBrowseQuery } from '../utils/reads-links';
+import { readsShelfPath } from '../utils/reads-links';
 
 const projects = (await getCollection('projects')).sort(sortItemsByDateDesc);
 /** "What I'm building" = projects whose tags include `in-progress` (excludes paused, live-only, etc.). */
@@ -32,7 +32,7 @@ const readingNowShelfOnly = readingNowShelves.length === 1 ? readingNowShelves[0
                     </p>
                     <a
                         href="/projects"
-                        class="font-mono text-xs text-muted hover:text-main transition-colors duration-200"
+                        class="font-mono text-xs text-muted hover:text-main transition-colors duration-200 underline underline-offset-[5px] decoration-dashed decoration-accent/35 hover:decoration-solid hover:decoration-accent/65"
                     >
                         view all →
                     </a>
@@ -56,10 +56,8 @@ const readingNowShelfOnly = readingNowShelves.length === 1 ? readingNowShelves[0
                         <span class="opacity-50">{'// '}</span>what I'm reading
                     </p>
                     <a
-                        href={withReadsBrowseQuery('/reads/', {
-                            shelf: readingNowShelfOnly ?? DEFAULT_READ_SHELF
-                        })}
-                        class="font-mono text-xs text-muted hover:text-main transition-colors duration-200"
+                        href={readsShelfPath(readingNowShelfOnly ?? DEFAULT_READ_SHELF)}
+                        class="font-mono text-xs text-muted hover:text-main transition-colors duration-200 underline underline-offset-[5px] decoration-dashed decoration-accent/35 hover:decoration-solid hover:decoration-accent/65"
                     >
                         bookshelf →
                     </a>

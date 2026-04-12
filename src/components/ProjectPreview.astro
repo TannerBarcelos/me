@@ -9,8 +9,10 @@ const TitleTag = headingLevel;
 const year = publishDate.getFullYear();
 ---
 
-<a class:list={['group block', className]} href={`/projects/${project.slug}/`}>
-    <article class="flex items-start justify-between gap-6 py-5 border-b border-main/15 transition-colors duration-200 group-hover:border-main/35">
+<a class:list={['group block focus-visible:outline-offset-4', className]} href={`/projects/${project.slug}/`}>
+    <article
+        class="flex items-start justify-between gap-6 py-5 border-b border-main/15 transition-all duration-300 ease-out group-hover:border-accent/30 sm:group-hover:translate-x-[2px]"
+    >
         {/* Left: title + description */}
         <div class="min-w-0 pt-0.5">
             <TitleTag

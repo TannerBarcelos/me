@@ -1,8 +1,8 @@
 ---
 import type { ReadKind } from '../data/read-kinds';
-import type { ReadShelf } from '../data/read-shelves';
+import { DEFAULT_READ_SHELF, type ReadShelf } from '../data/read-shelves';
 import type { BrowseActive, TopicBrowseItem } from '../utils/reads-browse';
-import { normalizeReadsPathname, withReadsBrowseQuery } from '../utils/reads-links';
+import { normalizeReadsPathname, readsPathShelf, readsShelfPath, withReadsBrowseQuery } from '../utils/reads-links';
 
 type Props = {
     /** Current page path (e.g. `Astro.url.pathname`) — format/topic links preserve `?kind=` / `?shelf=` on this path. */
@@ -15,18 +15,47 @@ type Props = {
     topicLimit?: number;
     /** Scope links so the correct shelf tab stays selected after navigation. */
     shelf?: ReadShelf;
+    /** Current `?kind=` from the request URL (when set, topic links preserve it). */
+    urlKind?: ReadKind;
+    /** Current `?shelf=` from the request URL — used when clearing topic from `/reads/topic/…` pages. */
+    urlShelf?: ReadShelf;
 };
 
-const { pathname, presentKinds, topics, active, topicLimit = 18, shelf } = Astro.props;
+const { pathname, presentKinds, topics, active, topicLimit = 18, shelf, urlKind, urlShelf } = Astro.props;
 const path = normalizeReadsPathname(pathname);
+const onShelfPath = readsPathShelf(path) !== undefined;
 const shownTopics = topics.slice(0, topicLimit);
 
 function topicActive(slug: string): boolean {
     return active.type === 'topic' && active.slug === slug;
 }
+
+const kindInQuery = urlKind !== undefined ? { kind: urlKind } : {};
+
+function topicChipHref(t: TopicBrowseItem): string {
+    if (onShelfPath) {
+        if (topicActive(t.slug)) {
+            return withReadsBrowseQuery(path, kindInQuery);
+        }
+        return withReadsBrowseQuery(path, { ...kindInQuery, topic: t.slug });
+    }
+    if (topicActive(t.slug)) {
+        const sh = urlShelf ?? DEFAULT_READ_SHELF;
+        return withReadsBrowseQuery(readsShelfPath(sh), kindInQuery);
+    }
+    return withReadsBrowseQuery(`/reads/topic/${t.slug}/`, {
+        ...(shelf !== undefined ? { shelf } : {}),
+        ...kindInQuery
+    });
+}
+
+function topicChipTitle(t: TopicBrowseItem): string {
+    const base = `${t.label} (${t.count})`;
+    return topicActive(t.slug) ? `Clear topic — ${base}` : base;
+}
 ---
 
-<details class="reads-browse-filters border border-main/15 mb-10 sm:mb-12">
+<details class="reads-browse-filters border border-main/15 mb-10 sm:mb-12 transition-[border-color] duration-300 hover:border-main/25 open:border-accent/25">
     <summary
         class="cursor-pointer select-none list-none flex items-center gap-2 font-mono text-xs text-muted hover:text-main py-2.5 px-2 -mx-0.5 transition-colors duration-200 [&::-webkit-details-marker]:hidden"
     >
@@ -100,7 +129,7 @@ function topicActive(slug: string): boolean {
                     <div class="flex flex-wrap gap-2">
                         {shownTopics.map((t) => (
                             <a
-                                href={withReadsBrowseQuery(`/reads/topic/${t.slug}/`, shelf !== undefined ? { shelf } : {})}
+                                href={topicChipHref(t)}
                                 data-topic-slug={t.slug}
                                 class:list={[
                                     'font-mono text-xs px-1.5 py-0.5 leading-tight border transition-colors duration-200 max-w-[14rem] truncate',
@@ -108,7 +137,7 @@ function topicActive(slug: string): boolean {
                                         ? 'border-main/25 bg-muted text-main'
                                         : 'border-main/10 text-muted hover:text-main hover:border-main/20'
                                 ]}
-                                title={`${t.label} (${t.count})`}
+                                title={topicChipTitle(t)}
                             >
                                 {t.label}
                                 <span class="text-muted/50 tabular-nums">({t.count})</span>

@@ -10,7 +10,7 @@ export function getStaticPaths() {
 }
 
 const kind = Astro.params.kind as ReadKind;
-const target = `/reads/?kind=${encodeURIComponent(kind)}&shelf=${encodeURIComponent(DEFAULT_READ_SHELF)}`;
+const target = `/reads/shelf/${encodeURIComponent(DEFAULT_READ_SHELF)}/?kind=${encodeURIComponent(kind)}`;
 ---
 
 <!doctype html>

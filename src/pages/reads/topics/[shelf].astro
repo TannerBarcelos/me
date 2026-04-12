@@ -2,7 +2,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { READ_SHELVES, readShelfTabLabel, type ReadShelf } from '../../../data/read-shelves';
 import { loadReadsBrowseData } from '../../../utils/reads-browse';
-import { withReadsBrowseQuery } from '../../../utils/reads-links';
+import { readsShelfPath, withReadsBrowseQuery } from '../../../utils/reads-links';
 
 export function getStaticPaths() {
     return READ_SHELVES.map((shelf) => ({ params: { shelf } }));
@@ -21,7 +21,7 @@ const pageTitle = `Topics · ${shelfLabel}`;
 >
     <div class="pt-16 sm:pt-24 pb-24 sm:pb-32">
         <a
-            href={withReadsBrowseQuery('/reads/', { shelf })}
+            href={readsShelfPath(shelf)}
             class="inline-flex items-center gap-1 font-mono text-xs text-muted hover:text-main transition-colors duration-200 mb-8"
         >
             ← Bookshelf
@@ -40,7 +40,7 @@ const pageTitle = `Topics · ${shelfLabel}`;
                 topics.map((t) => (
                     <li>
                         <a
-                            href={withReadsBrowseQuery(`/reads/topic/${t.slug}/`, { shelf })}
+                            href={withReadsBrowseQuery(readsShelfPath(shelf), { topic: t.slug })}
                             class="flex items-baseline justify-between gap-4 py-4 group"
                         >
                             <span class="font-sans text-base text-main group-hover:opacity-75 transition-opacity duration-200">

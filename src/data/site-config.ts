@@ -55,7 +55,7 @@ const siteConfig: SiteConfig = {
         },
         {
             text: 'Bookshelf',
-            href: '/reads/?shelf=technical'
+            href: '/reads/shelf/technical/'
         },
         {
             text: 'About',

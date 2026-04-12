@@ -26,13 +26,19 @@ if (isExternal) {
     isActive = false;
 } else if (hrefNorm === '/') {
     isActive = pathNorm === '/';
+} else if (hrefNorm === '/reads' || hrefNorm.startsWith('/reads/shelf')) {
+    /* One nav item for the bookshelf; stay highlighted on any /reads/* route (shelves, topics, entries). */
+    isActive = pathNorm === '/reads' || pathNorm.startsWith('/reads/');
 } else {
     isActive = pathNorm === hrefNorm || pathNorm.startsWith(`${hrefNorm}/`);
 }
 ---
 
 <a
-    class:list={[className, { 'text-main! bg-muted': isActive }]}
+    class:list={[
+        className,
+        isActive && 'text-main! bg-muted md:[border-left-color:rgb(var(--color-accent)/0.88)]'
+    ]}
     href={href}
     aria-current={isActive ? 'page' : undefined}
     {...props}
