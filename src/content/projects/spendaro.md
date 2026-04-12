@@ -1,16 +1,19 @@
 ---
 title: 'Spendaro'
-description: Spendaro is an AI driven, personal finance management application that helps users track their expenses, set budgets, and achieve financial goals following the give every dollar a job philosophy.
+description: 'Development paused. Personal finance app for expenses, budgets, and “give every dollar a job”—built for individuals and families. Not in active development.'
 publishDate: 'Jan 05 2024'
-isFeatured: true
-status: 'in-progress'
+tags:
+  - paused
 seo:
+  description: 'Spendaro — personal finance side project (development paused). Expense tracking, budgeting, and AI assistant concept; not shipping.'
   image:
     src: '/spendaro.jpeg'
     alt: Project preview
 ---
 
 ![Project preview](/spendaro.jpeg)
+
+**Note:** This project is **paused**: it is not in progress and is not actively shipping. The write-up below describes the intended product, not a live service.
 
 **Project Overview:**
 Spendaro is an AI-driven personal finance management application that helps users track their expenses, set budgets, and achieve financial goals following the "give every dollar a job" philosophy. By providing actionable insights, personalized recommendations, and real-time transaction monitoring, Spendaro empowers users to take control of their finances and build a secure financial future.
@@ -96,4 +99,4 @@ A twist on this application is that it allows budgeting not only for the individ
 
 ## Outcome
 
-_software currently in development_
+_Development is paused; the product is not actively shipping new work at the moment._

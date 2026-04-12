@@ -34,6 +34,7 @@ export type SiteConfig = {
     hero?: Hero;
     subscribe?: Subscribe;
     projectsPerPage?: number;
+    readsPerPage?: number;
 };
 
 const siteConfig: SiteConfig = {
@@ -47,6 +48,14 @@ const siteConfig: SiteConfig = {
         {
             text: 'Projects',
             href: '/projects'
+        },
+        {
+            text: 'Reads',
+            href: '/reads'
+        },
+        {
+            text: 'Stack',
+            href: '/stack'
         },
         {
             text: 'About',
@@ -67,6 +76,10 @@ const siteConfig: SiteConfig = {
         {
             text: 'About',
             href: '/about'
+        },
+        {
+            text: 'Stack',
+            href: '/stack'
         },
         {
             text: 'Contact',
@@ -97,7 +110,8 @@ const siteConfig: SiteConfig = {
             }
         ]
     },
-    projectsPerPage: 8
+    projectsPerPage: 8,
+    readsPerPage: 20
 };
 
 export default siteConfig;

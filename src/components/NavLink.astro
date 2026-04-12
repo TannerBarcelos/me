@@ -6,7 +6,19 @@ type Props = HTMLAttributes<'a'>;
 const { href, class: className, ...props } = Astro.props;
 
 const { pathname } = Astro.url;
-const isActive = href === pathname || href === pathname.replace(/\/$/, '');
+const pathNorm = pathname.replace(/\/$/, '') || '/';
+const hrefStr = href != null ? String(href) : '';
+const isExternal = hrefStr.startsWith('http');
+const hrefNorm = hrefStr.replace(/\/$/, '') || '/';
+
+let isActive = false;
+if (isExternal) {
+    isActive = false;
+} else if (hrefNorm === '/') {
+    isActive = pathNorm === '/';
+} else {
+    isActive = pathNorm === hrefNorm || pathNorm.startsWith(`${hrefNorm}/`);
+}
 ---
 
 <a
