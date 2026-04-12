@@ -210,7 +210,7 @@ const modelRankings: RankItem[] = [
         name: 'Gemini 3.1 Pro',
         icon: siGooglegemini,
         tags: [
-            { label: 'general', tone: 'neutral' },
+            { label: 'general assistant', tone: 'neutral' },
             { label: 'non-technical', tone: 'sky' },
             { label: 'multimodal', tone: 'violet' }
         ],
@@ -259,23 +259,10 @@ const harnessRankings: RankItem[] = [
     },
     {
         rank: '03',
-        name: 'Claude Code',
-        icon: siAnthropic,
-        tags: [
-            { label: 'work only', tone: 'neutral' },
-            { label: 'cli', tone: 'sky' },
-            { label: 'desktop', tone: 'neutral' }
-        ],
-        body: 'Claude Code is third for me. For work, CLI and desktop is Claude Code — the supported path in my Visa setup with org workflows and guardrails. When I want CLI or TUI on my own time, I reach for OpenCode instead.',
-        pros: ['Fits enterprise-approved tooling and guardrails', 'Strong terminal-first and automation-friendly flows for the job'],
-        cons: ['Not my personal default for terminal work outside work', 'I still prefer Cursor as the all-around command center for most coding']
-    },
-    {
-        rank: '04',
         name: 'Claude',
         icon: siClaude,
         tags: [
-            { label: 'general assistant', tone: 'violet' },
+            { label: 'planning & writing', tone: 'violet' },
             { label: 'app & api', tone: 'neutral' }
         ],
         body: 'Claude (app and API) for planning, writing, architecture reasoning, and long-form work outside the editor — not my primary coding harness.',
