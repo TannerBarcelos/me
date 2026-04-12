@@ -67,7 +67,7 @@ const navLinks = siteConfig.headerNavLinks || [];
                         {navLinks.map((link) => (
                             <li>
                                 <NavLink
-                                    class="font-mono text-sm text-muted hover:text-main flex items-center py-3 border-b border-main/30 transition-colors duration-150"
+                                    class="font-mono text-sm text-muted hover:text-main flex items-center px-3 py-3 border-b border-main/30 transition-colors duration-150"
                                     href={link.href}
                                     target={link.newTab ? '_blank' : undefined}
                                     rel={link.newTab ? 'noopener noreferrer' : undefined}
@@ -79,11 +79,27 @@ const navLinks = siteConfig.headerNavLinks || [];
                                 </NavLink>
                             </li>
                         ))}
+                        <li>
+                            <div class="flex items-center justify-between gap-3 px-3 py-3 border-b border-main/30">
+                                <span class="font-mono text-sm text-muted flex items-center min-w-0">
+                                    <span class="text-main/30 mr-3 text-xs select-none shrink-0">//</span>
+                                    Theme
+                                </span>
+                                <ThemeToggle />
+                            </div>
+                        </li>
                     </ul>
                 </>
             )
         }
-        <ThemeToggle />
+        <div
+            class:list={[
+                'items-center shrink-0',
+                navLinks.length > 0 ? 'hidden md:flex' : 'flex'
+            ]}
+        >
+            <ThemeToggle />
+        </div>
     </div>
 </nav>
 

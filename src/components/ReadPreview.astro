@@ -10,9 +10,12 @@ type Props = {
     headingLevel?: 'h2' | 'h3';
     /** Topic chips under the description (off for home “reading now” strip). */
     showTopicTags?: boolean;
+    /** Hide read-progress + kind badges below `sm` (e.g. home reading strip). */
+    hideMetaBadgesOnMobile?: boolean;
 };
 
-const { read, class: className, headingLevel = 'h2', showTopicTags = true } = Astro.props;
+const { read, class: className, headingLevel = 'h2', showTopicTags = true, hideMetaBadgesOnMobile = false } =
+    Astro.props;
 const { title, authors, kind, description, topics, publicationYear, addedDate, url, readProgress } = read.data;
 const topicSlugList = topics.map(slugifyTopic).filter(Boolean).join(' ');
 const siteLabel = url ? externalLinkSiteLabel(url) : null;
@@ -33,7 +36,8 @@ const rowProps = {
     addedYear: addedDate.getFullYear(),
     headingLevel,
     showTopicTags,
-    overlayLabel
+    overlayLabel,
+    hideMetaBadgesOnMobile
 };
 ---
 
