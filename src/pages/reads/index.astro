@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BookshelfShelfPanel from '../../components/BookshelfShelfPanel.astro';
+import BookshelfShelfToggle from '../../components/BookshelfShelfToggle.astro';
+import ReadPreview from '../../components/ReadPreview.astro';
+import ReadsBrowseStrip from '../../components/ReadsBrowseStrip.astro';
+import { sortLeisureReads, sortReadsByAddedDesc } from '../../utils/data-utils';
+import { loadReadsBrowseData } from '../../utils/reads-browse';
+
+const reads = (await getCollection('reads')).sort(sortReadsByAddedDesc);
+const technicalReads = reads.filter((r) => r.data.shelf === 'technical');
+const leisureReads = reads.filter((r) => r.data.shelf === 'leisure').sort(sortLeisureReads);
+
+const { topics: technicalTopics } = await loadReadsBrowseData({ shelf: 'technical' });
+const { topics: leisureTopics } = await loadReadsBrowseData({ shelf: 'leisure' });
+---
+
+<BaseLayout
+    title="Bookshelf"
+    description="Technical references and leisure reading in one place."
+    showHeader={false}
+>
+    <div class="pt-16 sm:pt-24 pb-24 sm:pb-32">
+        <p class="font-mono text-xs text-muted mb-4 select-none">
+            <span class="opacity-50">{'// '}</span>bookshelf
+        </p>
+        <h1 class="font-sans text-3xl sm:text-4xl font-medium tracking-tight text-main mb-3">Bookshelf</h1>
+        <p class="text-muted text-sm sm:text-base leading-relaxed max-w-2xl mb-10 sm:mb-12">
+            Work shelf vs. leisure — switch tabs; optional format and topic filters live under the funnel control.
+        </p>
+
+        <BookshelfShelfToggle pathname={Astro.url.pathname}>
+            <BookshelfShelfPanel shelf="technical">
+                <p class="text-muted text-sm sm:text-base leading-relaxed max-w-2xl mb-8">References I keep coming back to.</p>
+                <ReadsBrowseStrip
+                    pathname={Astro.url.pathname}
+                    topics={technicalTopics}
+                    active={{ type: 'all' }}
+                    shelf="technical"
+                />
+                <div data-bookshelf-read-list>
+                    {
+                        technicalReads.length > 0 ? (
+                            technicalReads.map((read) => <ReadPreview read={read} />)
+                        ) : (
+                            <p class="text-muted text-sm py-8">Nothing on the technical shelf yet.</p>
+                        )
+                    }
+                </div>
+            </BookshelfShelfPanel>
+            <BookshelfShelfPanel shelf="leisure">
+                <p class="text-muted text-sm sm:text-base leading-relaxed max-w-2xl mb-8">Fiction and fun, separate from work.</p>
+                <ReadsBrowseStrip
+                    pathname={Astro.url.pathname}
+                    topics={leisureTopics}
+                    active={{ type: 'all' }}
+                    shelf="leisure"
+                />
+                <div data-bookshelf-read-list>
+                    {
+                        leisureReads.length > 0 ? (
+                            leisureReads.map((read) => <ReadPreview read={read} />)
+                        ) : (
+                            <p class="text-muted text-sm py-8">Nothing on the leisure shelf yet.</p>
+                        )
+                    }
+                </div>
+            </BookshelfShelfPanel>
+        </BookshelfShelfToggle>
+    </div>
+</BaseLayout>

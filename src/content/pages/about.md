@@ -7,6 +7,8 @@ seo:
 
 Senior Full Stack Engineer with 4+ years architecting AI/ML platforms and distributed systems. Currently at Visa leading the ML platform serving 200+ engineers and the control plane managing fraud models processing 10M+ daily transactions.
 
+[Resume (PDF)](https://drive.google.com/file/d/1v1T8hgVPnij6_8762_Vl7HfQB1efQ_7Q/view?usp=drivesdk) — traditional CV if you need the one-pager.
+
 ---
 
 ## Experience

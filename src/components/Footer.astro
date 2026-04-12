@@ -14,8 +14,16 @@ const navLinks = siteConfig.footerNavLinks || [];
                     <a
                         class="font-mono text-xs text-muted hover:text-main transition-colors duration-200"
                         href={link.href}
+                        target={link.newTab ? '_blank' : undefined}
+                        rel={link.newTab ? 'noopener noreferrer' : undefined}
                     >
                         {link.text}
+                        {link.newTab && (
+                            <>
+                                {' '}
+                                <span class="opacity-40">&#8599;</span>
+                            </>
+                        )}
                     </a>
                 ))
             }
@@ -27,7 +35,7 @@ const navLinks = siteConfig.footerNavLinks || [];
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        {link.text} <span class="opacity-40">↗</span>
+                        {link.text} <span class="opacity-40">&#8599;</span>
                     </a>
                 ))
             }

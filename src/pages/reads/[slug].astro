@@ -2,6 +2,8 @@
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { readKindToBadge } from '../../data/read-kinds';
+import { readProgressToBadge } from '../../data/read-progress';
+import { withReadsBrowseQuery } from '../../utils/reads-links';
 
 export async function getStaticPaths() {
     const reads = await getCollection('reads');
@@ -17,6 +19,7 @@ const { read } = Astro.props;
 const { title, authors, kind, url, source, publicationYear, addedDate, topics, description, seo } = read.data;
 const { Content } = await read.render();
 const kindBadge = readKindToBadge(kind);
+const progressBadge = readProgressToBadge(read.data.readProgress);
 const hasBody = read.body.trim().length > 0;
 const layoutTitle = seo?.title ?? title;
 const layoutDescription = seo?.description ?? description;
@@ -25,14 +28,21 @@ const layoutDescription = seo?.description ?? description;
 <BaseLayout title={layoutTitle} description={layoutDescription} image={seo?.image} showHeader={false}>
     <article class="pt-16 sm:pt-24 pb-16 sm:pb-24">
         <a
-            href="/reads/"
+            href={withReadsBrowseQuery('/reads/', { shelf: read.data.shelf, kind: read.data.kind })}
             class="inline-flex items-center gap-1 font-mono text-xs text-muted hover:text-main transition-colors duration-200 mb-8"
         >
-            ← All reads
+            ← Bookshelf
         </a>
 
         <header class="mb-10 sm:mb-12">
             <div class="flex flex-wrap items-center gap-2 mb-4">
+                {
+                    progressBadge && (
+                        <span class:list={['font-mono text-xs px-1.5 py-0.5 leading-tight', progressBadge.classes]}>
+                            {progressBadge.label}
+                        </span>
+                    )
+                }
                 <span class:list={['font-mono text-xs px-1.5 py-0.5 leading-tight', kindBadge.classes]}>{kindBadge.label}</span>
                 {
                     topics.map((t) => (

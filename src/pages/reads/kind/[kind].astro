@@ -1,0 +1,31 @@
+---
+/**
+ * Legacy /reads/kind/:kind URLs → query-only format filter on /reads/
+ */
+import { READ_KINDS, type ReadKind } from '../../../data/read-kinds';
+import { DEFAULT_READ_SHELF } from '../../../data/read-shelves';
+
+export function getStaticPaths() {
+    return READ_KINDS.map((kind) => ({ params: { kind } }));
+}
+
+const kind = Astro.params.kind as ReadKind;
+const target = `/reads/?kind=${encodeURIComponent(kind)}&shelf=${encodeURIComponent(DEFAULT_READ_SHELF)}`;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="robots" content="noindex" />
+        <meta http-equiv="refresh" content={`0;url=${target}`} />
+        <link rel="canonical" href={Astro.site ? new URL(target, Astro.site).href : target} />
+        <title>Redirect</title>
+        <script is:inline define:vars={{ target }}>
+            location.replace(target);
+        </script>
+    </head>
+    <body>
+        <p><a href={target}>Continue to bookshelf</a></p>
+    </body>
+</html>

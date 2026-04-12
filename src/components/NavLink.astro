@@ -9,7 +9,17 @@ const { pathname } = Astro.url;
 const pathNorm = pathname.replace(/\/$/, '') || '/';
 const hrefStr = href != null ? String(href) : '';
 const isExternal = hrefStr.startsWith('http');
-const hrefNorm = hrefStr.replace(/\/$/, '') || '/';
+
+/** Path only — query/hash break active matching (e.g. Bookshelf is /reads with any ?shelf=&kind=). */
+let hrefPathOnly = hrefStr;
+if (!isExternal && hrefStr) {
+    try {
+        hrefPathOnly = new URL(hrefStr, 'https://nav-link.invalid').pathname;
+    } catch {
+        hrefPathOnly = hrefStr.split('?')[0].split('#')[0];
+    }
+}
+const hrefNorm = hrefPathOnly.replace(/\/$/, '') || '/';
 
 let isActive = false;
 if (isExternal) {

@@ -4,11 +4,12 @@ authors:
     - Ben Moseley
     - Peter Marks
 kind: paper
-url: 'https://github.com/papers-we-love/papers-we-love/blob/master/design/out-of-the-tar-pit.pdf'
+url: 'https://raw.githubusercontent.com/papers-we-love/papers-we-love/master/design/out-of-the-tar-pit.pdf'
 source: 'Papers We Love'
 publicationYear: 2006
 addedDate: 'Mar 15 2025'
 topics:
+    - Non-fiction
     - Software design
     - Complexity
     - Architecture

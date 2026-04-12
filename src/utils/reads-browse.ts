@@ -1,15 +1,22 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import type { ReadShelf } from '../data/read-shelves';
 import { slugifyTopic } from './slugify';
 import { sortReadsByAddedDesc } from './data-utils';
-import type { ReadKind } from '../data/read-kinds';
+export type LoadReadsBrowseOptions = {
+    /** When set, topic counts and lists only include reads on this shelf. */
+    shelf?: ReadShelf;
+};
 
 export type TopicBrowseItem = { slug: string; label: string; count: number };
 
-export async function loadReadsBrowseData(): Promise<{
+export async function loadReadsBrowseData(options?: LoadReadsBrowseOptions): Promise<{
     readsSorted: CollectionEntry<'reads'>[];
     topics: TopicBrowseItem[];
 }> {
-    const reads = await getCollection('reads');
+    let reads = await getCollection('reads');
+    if (options?.shelf) {
+        reads = reads.filter((r) => r.data.shelf === options.shelf);
+    }
     const readsSorted = reads.sort(sortReadsByAddedDesc);
 
     const topicMap = new Map<string, { label: string; count: number }>();
@@ -30,7 +37,4 @@ export async function loadReadsBrowseData(): Promise<{
     return { readsSorted, topics };
 }
 
-export type BrowseActive =
-    | { type: 'all' }
-    | { type: 'kind'; kind: ReadKind }
-    | { type: 'topic'; slug: string };
+export type BrowseActive = { type: 'all' } | { type: 'topic'; slug: string };

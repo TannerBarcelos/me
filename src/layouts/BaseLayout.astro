@@ -7,9 +7,10 @@ import '@fontsource-variable/ibm-plex-sans';
 import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/400-italic.css';
 
-export type Props = HeadProps & { showHeader?: boolean };
+export type Props = HeadProps & { showHeader?: boolean; contentWidth?: 'default' | 'wide' };
 
-const { showHeader = true, ...head } = Astro.props;
+const { showHeader = true, contentWidth = 'default', ...head } = Astro.props;
+const mainMaxWidth = contentWidth === 'wide' ? 'max-w-4xl' : 'max-w-3xl';
 ---
 
 <!doctype html>
@@ -27,7 +28,7 @@ const { showHeader = true, ...head } = Astro.props;
     <body class="bg-main text-main min-h-screen flex flex-col">
         <div class="flex flex-col min-h-screen px-6 md:px-10 lg:px-16">
             <Nav />
-            <main class="grow w-full max-w-3xl mx-auto mt-0">
+            <main class:list={['grow w-full mx-auto mt-0', mainMaxWidth]}>
                 <slot />
             </main>
             <Footer />

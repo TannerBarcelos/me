@@ -6,8 +6,8 @@ const { topics } = await loadReadsBrowseData();
 ---
 
 <BaseLayout
-    title="Read topics"
-    description="Browse favorite reads by topic — scales as the library grows."
+    title="Bookshelf topics"
+    description="Browse the bookshelf by topic — scales as the library grows."
     showHeader={false}
 >
     <div class="pt-16 sm:pt-24 pb-24 sm:pb-32">
@@ -15,7 +15,7 @@ const { topics } = await loadReadsBrowseData();
             href="/reads/"
             class="inline-flex items-center gap-1 font-mono text-xs text-muted hover:text-main transition-colors duration-200 mb-8"
         >
-            ← All reads
+            ← Bookshelf
         </a>
         <p class="font-mono text-xs text-muted mb-4 select-none">
             <span class="opacity-50">{'// '}</span>topics
