@@ -2,6 +2,7 @@
 title: 'Coffee Connection'
 description: Coffee Connection is a simple web application that connects coffee enthusiasts with local coffee shops, allowing users to discover new cafes, read reviews, and save their favorite spots.
 publishDate: 'Apr 22 2021'
+status: 'live'
 seo:
   image:
     src: '/coffee_connection.jpeg'

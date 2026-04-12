@@ -2,6 +2,8 @@
 title: 'BI Secretary'
 description: BI Secretary is an application that enables NLQ (natural language querying) analytics on critical Visa business data and provides insights to business users all through a conversational interface.
 publishDate: 'Jan 02 2024'
+isFeatured: true
+status: 'live'
 seo:
   image:
     src: '/bi_secretary.jpeg'

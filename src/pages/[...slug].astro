@@ -20,9 +20,14 @@ const { Content } = await page.render();
 ---
 
 <BaseLayout title={seo?.title ?? title} description={seo?.description} image={seo?.image} showHeader={false}>
-    <article class="mb-16 sm:mb-24">
-        <header class="mb-8">
-            <h1 class="text-3xl leading-tight font-serif font-medium sm:text-5xl sm:leading-tight">{title}</h1>
+    <article class="pt-16 sm:pt-24 pb-16 sm:pb-24">
+        <header class="mb-12 sm:mb-16">
+            <p class="font-mono text-xs text-muted mb-4 select-none">
+                <span class="opacity-50">{'// '}</span>{title.toLowerCase()}
+            </p>
+            <h1 class="font-sans text-3xl sm:text-5xl font-medium tracking-tight text-main leading-tight">
+                {title}
+            </h1>
         </header>
         <div class="max-w-none prose prose-dante sm:prose-lg">
             <Content />

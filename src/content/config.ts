@@ -25,6 +25,7 @@ const projects = defineCollection({
         description: z.string().optional(),
         publishDate: z.coerce.date(),
         isFeatured: z.boolean().default(false),
+        status: z.enum(['live', 'in-progress', 'planned']).default('planned'),
         seo: seoSchema.optional()
     })
 });

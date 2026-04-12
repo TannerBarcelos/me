@@ -2,54 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
-@theme {
-    --font-sans: 'Lora Variable', 'serif';
-    --font-serif: 'IBM Plex Sans Variable', 'sans-serif';
-}
-
 @layer base {
+    /* ─── Light mode — warm paper ─── */
     :root {
-        --color-text-main: 23 23 23; /* #171717 */
-        --color-bg-main: 242 241 236; /* #F2F1EC */
-        --color-bg-muted: 234 233 225; /* #EAE9E1 */
-        --color-border-main: 23 23 23; /* #171717 */
-    }
-    html.dark {
-        --color-text-main: 242 241 236; /* #F2F1EC */
-        --color-bg-main: 23 23 23; /* #171717 */
-        --color-bg-muted: 36 36 36; /* #242424 */
-        --color-border-main: 242 241 236; /* #F2F1EC */
+        --color-text-main: 18 18 16;      /* #121210 */
+        --color-text-muted: 118 116 110;  /* #76746E */
+        --color-bg-main: 246 245 240;     /* #F6F5F0 */
+        --color-bg-muted: 236 235 228;    /* #ECEBE4 */
+        --color-border-main: 214 212 206; /* #D6D4CE */
     }
 
-    /* Cyan */
-    /*
-    :root {
-        --color-text-main: 22 42 43;
-        --color-bg-main: 214 224 226;
-        --color-bg-muted: 204 216 219;
-        --color-border-main: 22 42 43;
-    }
+    /* ─── Dark mode — editor dark ─── */
     html.dark {
-        --color-text-main: 214 224 226;
-        --color-bg-main: 22 42 43;
-        --color-bg-muted: 28 53 55;
-        --color-border-main: 214 224 226;
+        --color-text-main: 226 224 218;   /* #E2E0DA */
+        --color-text-muted: 108 106 100;  /* #6C6A64 */
+        --color-bg-main: 13 13 11;        /* #0D0D0B */
+        --color-bg-muted: 22 22 19;       /* #161613 */
+        --color-border-main: 40 39 35;    /* #282723 */
     }
-    */
 
-    /* Green */
-    /*
-    :root {
-        --color-text-main: 58 66 56;
-        --color-bg-main: 243 239 230;
-        --color-bg-muted: 238 233 220;
-        --color-border-main: 58 66 56;
+    /* ─── Blinking cursor ─── */
+    @keyframes cursor-blink {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
     }
+
+    html,
+    body {
+        height: 100%;
+    }
+
+    /* Smooth scrolling */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Better default selection */
+    ::selection {
+        background-color: rgb(var(--color-text-main) / 0.12);
+    }
+
+    /* Thin scrollbar on dark */
     html.dark {
-        --color-text-main: 243 239 230;
-        --color-bg-main: 94 108 91;
-        --color-bg-muted: 89 103 86;
-        --color-border-main: 243 239 230;
+        color-scheme: dark;
     }
-    */
 }

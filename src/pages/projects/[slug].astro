@@ -17,28 +17,70 @@ export async function getStaticPaths() {
     }));
 }
 
-type Props = { project: CollectionEntry<'projects'>; prevProject: CollectionEntry<'projects'>; nextProject: CollectionEntry<'projects'> };
+type Props = {
+    project: CollectionEntry<'projects'>;
+    prevProject: CollectionEntry<'projects'>;
+    nextProject: CollectionEntry<'projects'>;
+};
 
 const { project, prevProject, nextProject } = Astro.props;
-const { title, description, seo } = project.data;
+const { title, description, seo, publishDate, status = 'planned' } = project.data;
 const { Content } = await project.render();
+const year = publishDate.getFullYear();
+
+const statusConfig = {
+    live: {
+        label: 'live',
+        classes:
+            'border border-emerald-600/35 bg-emerald-500/[0.06] text-emerald-700 dark:border-emerald-400/25 dark:bg-emerald-400/[0.05] dark:text-emerald-400'
+    },
+    'in-progress': {
+        label: 'in progress',
+        classes:
+            'border border-violet-600/35 bg-violet-500/[0.06] text-violet-700 dark:border-violet-400/25 dark:bg-violet-400/[0.05] dark:text-violet-400'
+    },
+    planned: {
+        label: 'planned',
+        classes:
+            'border border-zinc-500/30 bg-zinc-400/[0.05] text-zinc-500 dark:border-zinc-500/25 dark:bg-zinc-400/[0.04] dark:text-zinc-500'
+    }
+};
+
+const tag = statusConfig[status] ?? statusConfig.planned;
 ---
 
 <BaseLayout title={seo?.title ?? title} description={seo?.description ?? description} image={seo?.image} pageType="article" showHeader={false}>
-    <article class="mb-16 sm:mb-24">
-        <header class="mb-8">
-            <h1 class="text-3xl leading-tight font-serif font-medium sm:text-5xl sm:leading-tight">{title}</h1>
+    <article class="pt-16 sm:pt-24 pb-16 sm:pb-24">
+        <header class="mb-12 sm:mb-16">
+            <p class="font-mono text-xs text-muted mb-4 select-none">
+                <span class="opacity-50">{'// '}</span>{year}
+            </p>
+            <div class="flex items-start gap-4 flex-wrap mb-4">
+                <h1 class="font-sans text-3xl sm:text-5xl font-medium tracking-tight text-main leading-tight">
+                    {title}
+                </h1>
+                <span class:list={['font-mono text-xs px-1.5 py-0.5 leading-tight self-start mt-1.5 sm:mt-2.5', tag.classes]}>
+                    {tag.label}
+                </span>
+            </div>
+            {description && <p class="mt-2 text-lg text-muted leading-relaxed max-w-xl">{description}</p>}
         </header>
+
         <div class="max-w-none prose prose-dante sm:prose-lg">
             <Content />
         </div>
     </article>
+
     {
         (prevProject || nextProject) && (
-            <div class="my-16 sm:my-24">
-                <h2 class="mb-12 text-xl font-serif italic sm:mb-16 sm:text-2xl">View Next</h2>
-                {nextProject && <ProjectPreview project={nextProject} class="mb-10 sm:mb-12" headingLevel="h3" />}
-                {prevProject && <ProjectPreview project={prevProject} class="mb-10 sm:mb-12" headingLevel="h3" />}
+            <div class="pb-24 sm:pb-32 border-t border-main/15 pt-12 sm:pt-16">
+                <p class="font-mono text-xs text-muted mb-8 select-none">
+                    <span class="opacity-50">{'// '}</span>more projects
+                </p>
+                <div>
+                    {nextProject && <ProjectPreview project={nextProject} headingLevel="h3" />}
+                    {prevProject && <ProjectPreview project={prevProject} headingLevel="h3" />}
+                </div>
             </div>
         )
     }

@@ -2,6 +2,8 @@
 title: 'Spendaro'
 description: Spendaro is an AI driven, personal finance management application that helps users track their expenses, set budgets, and achieve financial goals following the give every dollar a job philosophy.
 publishDate: 'Jan 05 2024'
+isFeatured: true
+status: 'in-progress'
 seo:
   image:
     src: '/spendaro.jpeg'
