@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Animatable custom property for the tagline letter-fill sweep */
+@property --tagline-sw {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: -20%;
+}
+
 @layer base {
     /* ─── Light mode — warm paper ─── */
     :root {
@@ -11,6 +18,7 @@
         --color-bg-muted: 236 235 228;    /* #ECEBE4 */
         --color-border-main: 214 212 206; /* #D6D4CE */
         --color-accent: 145 90 48;
+        --color-sweep-highlight: var(--color-accent); /* amber in light mode */
     }
 
     /* ─── Dark mode — editor dark ─── */
@@ -22,6 +30,7 @@
         --color-bg-muted: 22 22 19;       /* #161613 */
         --color-border-main: 40 39 35;    /* #282723 */
         --color-accent: 212 168 120;
+        --color-sweep-highlight: 220 218 213; /* near-white warm in dark mode */
     }
 
     @keyframes cursor-blink {
