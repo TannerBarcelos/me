@@ -156,12 +156,10 @@ const hero = siteConfig.hero;
 
 <script>
     const PHRASES = [
-        'building ai/ml platforms',
+        'building ai developer tools',
         'senior ml engineer @ visa',
-        'react · typescript · go',
-        'distributed systems',
-        'ai enthusiast',
-        'building developer tooling',
+        'web & agent enthusiast',
+        'avid book reader',
         'silicon valley'
     ] as const;
 
@@ -196,9 +194,8 @@ const hero = siteConfig.hero;
 
         switch (state) {
             case 'idle': {
-                // Clean up previous phrase's animations
+                // Clean up sweep from previous phrase; logo keeps breathing uninterrupted
                 phrase.classList.remove('is-sweeping');
-                logo.classList.remove('is-breathing');
                 // Set new phrase text while row is faded out
                 phrase.textContent = PHRASES[phraseIndex];
                 // Ensure row is faded, then trigger fade-in via double rAF
@@ -213,9 +210,8 @@ const hero = siteConfig.hero;
                 break;
             }
             case 'active': {
-                // Start sweep and logo breathe together
+                // Start sweep (logo already breathing continuously from init)
                 phrase.classList.add('is-sweeping');
-                logo.classList.add('is-breathing');
                 state = 'fading';
                 timerId = setTimeout(tick, SWEEP_MS + HOLD_MS);
                 break;
@@ -263,6 +259,9 @@ const hero = siteConfig.hero;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             initReducedMotion();
         } else {
+            // Start logo breathing immediately; it runs continuously until destroy
+            const { logo } = getEls();
+            if (logo) logo.classList.add('is-breathing');
             timerId = setTimeout(tick, 250);
         }
     }
