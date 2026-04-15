@@ -187,8 +187,8 @@ const modelRankings: RankItem[] = [
             { label: 'research', tone: 'sky' },
             { label: 'tech', tone: 'emerald' }
         ],
-        body: 'Opus 4.6 is where I go for hardcore reasoning and technical research. It is the model I trust most when the task is messy, the architecture is unclear, or I want a strong thinking partner on difficult engineering tradeoffs.',
-        pros: ['Excellent for deep technical reasoning and architecture work', 'Strong at research-heavy problem framing and critique'],
+        body: 'Opus 4.6 is my heavy-focus model — where I go for deep research, long-form technical discussions, and anything that demands sustained reasoning. It is the model I trust most when the task is messy, the architecture is unclear, or I want a serious thinking partner on difficult engineering tradeoffs. If I need to go deep, I open Claude.',
+        pros: ['Best-in-class for deep research and long-form technical discussion', 'Excellent for architecture reasoning, critique, and problem framing', 'The model I trust most for sustained, focused intellectual work'],
         cons: ['Slower and more expensive than faster editor-native options', 'Not the model I reach for first when the task is mostly visual iteration or quick tasks']
     },
     {
@@ -202,9 +202,9 @@ const modelRankings: RankItem[] = [
             { label: 'general assistant', tone: 'neutral' },
             { label: 'up-to-date', tone: 'sky' }
         ],
-        body: 'GPT 5.4 sits below Opus and Composer 2 for how I route most work, but it is still incredible for building modern tools and software. It has fast, reliable tool calling and will often one-shot a feature or feedback pass when I give it a strong prompt, and the more up-to-date training data shows up in newer APIs, libraries, and patterns.',
-        pros: ['Fast, reliable tool calling with strong one-shot implementation ability', 'Very strong for building modern software against newer tooling', 'Nice for general conversations and non-technical tasks'],
-        cons: ['Opus and Composer 2 still win for my default reasoning and in-editor loops', 'I review output carefully on anything production-critical']
+        body: 'GPT 5.4 is my go-to general assistant for text-based work. I lean on it for general conversations, general technical discussions, and building against modern tooling — anywhere that is not image-heavy. It has fast, reliable tool calling and will often one-shot a feature or feedback pass when I give it a strong prompt, and the more up-to-date training data shows up in newer APIs, libraries, and patterns.',
+        pros: ['My primary general assistant for non-image work', 'Fast, reliable tool calling with strong one-shot implementation ability', 'Great for general technical conversations and modern software development'],
+        cons: ['Opus and Composer 2 still win for my default deep reasoning and in-editor loops', 'I review output carefully on anything production-critical']
     },
     {
         rank: '04',
@@ -212,10 +212,11 @@ const modelRankings: RankItem[] = [
         icon: siGooglegemini,
         tags: [
             { label: 'general assistant', tone: 'neutral' },
-            { label: 'multimodal', tone: 'violet' }
+            { label: 'multimodal', tone: 'violet' },
+            { label: 'image gen', tone: 'sky' }
         ],
-        body: 'I use Gemini 3.1 Pro in the Gemini app for everyday, non-technical conversations — travel, drafting, general chat — separate from my coding harnesses. It has the full breadth of Google behind it, which shows up in multimodal workflows and general knowledge.',
-        pros: ['Strong multimodal and long-context workflows in the app', 'Great breadth for general chatting and non-technical assistant tasks'],
+        body: 'Gemini is also a general assistant in my rotation, but it has a distinct lane: I lean on it for image generation and quick, lightweight tasks where I want something fast and low-friction. It has the full breadth of Google behind it, which shows up in multimodal workflows and general knowledge. When I want to generate an image or knock out something small, Gemini is usually where I start.',
+        pros: ['My default pick for image generation', 'Great for quick, lightweight tasks and everyday general chat', 'Strong multimodal and long-context workflows in the app'],
         cons: [
             'Not where I lean for agent harnesses or agentic coding workloads right now — tool calling is not strong enough compared to my top picks',
             'Not my primary coding agent and less integrated into my editor-centric loop',
