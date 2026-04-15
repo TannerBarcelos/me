@@ -2,6 +2,7 @@
 title: 'Seeker'
 description: 'A new way to enjoy podcasts. Multi-queue playback so you never lose your place, plus agentic features like natural-language show discovery and queue playground.'
 publishDate: 'Apr 14 2026'
+lane: apps
 tags:
   - planned
 seo:

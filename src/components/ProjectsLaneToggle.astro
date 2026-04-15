@@ -1,0 +1,33 @@
+---
+import { PROJECT_LANES, projectLanePath, projectLaneTabLabel, type ProjectLane } from '../data/project-lanes';
+
+type Props = {
+    currentLane: ProjectLane;
+};
+
+const { currentLane } = Astro.props;
+---
+
+<div class="projects-lane-toggle">
+    <nav class="mb-8" aria-label="Project lanes">
+        <div class="flex flex-wrap gap-2">
+            {
+                PROJECT_LANES.map((laneId: ProjectLane) => (
+                    <a
+                        href={projectLanePath(laneId)}
+                        class:list={[
+                            'font-mono text-xs px-1.5 py-0.5 leading-tight border transition-colors duration-200',
+                            'border-main/10 text-muted hover:text-main hover:border-main/20',
+                            'dark:border-main/15 dark:hover:border-main/25',
+                            'aria-[current=page]:border-main/25 aria-[current=page]:bg-muted aria-[current=page]:text-main'
+                        ]}
+                        aria-current={laneId === currentLane ? 'page' : undefined}
+                    >
+                        {projectLaneTabLabel[laneId]}
+                    </a>
+                ))
+            }
+        </div>
+    </nav>
+    <slot />
+</div>

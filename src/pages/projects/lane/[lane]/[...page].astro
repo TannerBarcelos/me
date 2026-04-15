@@ -1,0 +1,54 @@
+---
+import type { GetStaticPathsOptions, Page } from 'astro';
+import { type CollectionEntry, getCollection } from 'astro:content';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import Pagination from '../../../../components/Pagination.astro';
+import ProjectPreview from '../../../../components/ProjectPreview.astro';
+import ProjectsLanePanel from '../../../../components/ProjectsLanePanel.astro';
+import ProjectsLaneToggle from '../../../../components/ProjectsLaneToggle.astro';
+import siteConfig from '../../../../data/site-config';
+import { PROJECT_LANES, parseProjectLaneFromParam, type ProjectLane } from '../../../../data/project-lanes';
+import { sortItemsByDateDesc } from '../../../../utils/data-utils';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+    const allProjects = (await getCollection('projects')).sort(sortItemsByDateDesc);
+    const pageSize = siteConfig.projectsPerPage || 6;
+    return PROJECT_LANES.flatMap((lane: ProjectLane) => {
+        const filtered = allProjects.filter((p) => p.data.lane === lane);
+        return paginate(filtered, { params: { lane }, pageSize });
+    });
+}
+
+type Props = { page: Page<CollectionEntry<'projects'>> };
+
+const { page } = Astro.props;
+const portfolio = page.data;
+const lane = parseProjectLaneFromParam(Astro.params.lane);
+---
+
+<BaseLayout title="Projects" description="A selection of things I've built" showHeader={false}>
+    <div class="pt-16 sm:pt-24 pb-24 sm:pb-32">
+        <p class="font-mono text-xs text-muted mb-4 select-none">
+            <span class="opacity-50">{'// '}</span>projects
+        </p>
+        <h1 class="font-sans text-3xl sm:text-4xl font-medium tracking-tight text-main mb-12 sm:mb-16">
+            Things I've built
+        </h1>
+
+        <ProjectsLaneToggle currentLane={lane}>
+            <ProjectsLanePanel lane={lane}>
+                <div>
+                    {
+                        portfolio.length > 0 ? (
+                            portfolio.map((project) => <ProjectPreview project={project} />)
+                        ) : (
+                            <p class="text-muted text-sm py-8">Nothing in this lane yet.</p>
+                        )
+                    }
+                </div>
+
+                {page.lastPage > 1 && <Pagination page={page} class="mt-16 sm:mt-24" />}
+            </ProjectsLanePanel>
+        </ProjectsLaneToggle>
+    </div>
+</BaseLayout>

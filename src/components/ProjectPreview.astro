@@ -1,12 +1,14 @@
 ---
 import { type CollectionEntry } from 'astro:content';
+import { projectTagsToBadges } from '../data/project-tags';
 
 type Props = { project: CollectionEntry<'projects'>; class?: string; headingLevel?: 'h2' | 'h3' };
 
 const { project, class: className, headingLevel = 'h2' } = Astro.props;
-const { title, description, publishDate } = project.data;
+const { title, description, publishDate, tags } = project.data;
 const TitleTag = headingLevel;
 const year = publishDate.getFullYear();
+const tagBadges = projectTagsToBadges(tags);
 ---
 
 <a class:list={['group block focus-visible:outline-offset-4', className]} href={`/projects/${project.slug}/`}>
@@ -15,11 +17,20 @@ const year = publishDate.getFullYear();
     >
         {/* Left: title + description */}
         <div class="min-w-0 pt-0.5">
-            <TitleTag
-                class="font-sans text-lg sm:text-xl font-medium text-main leading-snug tracking-tight group-hover:opacity-75 transition-opacity duration-200"
-            >
-                {title}
-            </TitleTag>
+            <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1.5">
+                <TitleTag
+                    class="font-sans text-lg sm:text-xl font-medium text-main leading-snug tracking-tight group-hover:opacity-75 transition-opacity duration-200"
+                >
+                    {title}
+                </TitleTag>
+                {
+                    tagBadges.length > 0 && (
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            {tagBadges.map((t) => <span class:list={['font-mono text-xs px-1.5 py-0.5 leading-tight', t.classes]}>{t.label}</span>)}
+                        </div>
+                    )
+                }
+            </div>
             {
                 description && (
                     <p class="mt-1.5 text-sm text-muted leading-relaxed line-clamp-2">{description}</p>

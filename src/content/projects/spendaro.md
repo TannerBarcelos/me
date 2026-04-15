@@ -2,6 +2,7 @@
 title: 'Spendaro'
 description: 'Development paused. Personal finance app for expenses, budgets, and “give every dollar a job”—built for individuals and families. Not in active development.'
 publishDate: 'Jan 05 2024'
+lane: apps
 tags:
   - paused
 seo:
