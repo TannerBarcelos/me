@@ -10,7 +10,7 @@ const { page, class: className } = Astro.props;
                 class="font-mono text-xs text-muted hover:text-main transition-colors duration-200 px-2 py-1 -mx-2 border border-transparent hover:border-main/25 hover:bg-muted/50"
                 aria-label={`Go to page ${page.currentPage - 1} of ${page.lastPage}`}
             >
-                ← prev
+                ← Prev
             </a>
         ) : (
             <span />
@@ -28,7 +28,7 @@ const { page, class: className } = Astro.props;
                 class="font-mono text-xs text-muted hover:text-main transition-colors duration-200 px-2 py-1 -mx-2 border border-transparent hover:border-main/25 hover:bg-muted/50"
                 aria-label={`Go to page ${page.currentPage + 1} of ${page.lastPage}`}
             >
-                next →
+                Next →
             </a>
         ) : (
             <span />

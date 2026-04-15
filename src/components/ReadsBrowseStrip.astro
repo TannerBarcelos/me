@@ -84,7 +84,7 @@ function topicChipTitle(t: TopicBrowseItem): string {
     </summary>
     <div class="pt-4 pb-2 sm:pt-5 sm:pb-3 mt-3 space-y-8 border-t border-main/10">
         <div>
-            <p class="font-mono text-[0.65rem] uppercase tracking-wider text-muted/70 mb-3">Format</p>
+            <p class="font-mono text-xs uppercase tracking-wider text-muted/70 mb-3">Format</p>
             <div class="flex flex-wrap gap-2">
                 <a
                     href={shelf !== undefined ? withReadsBrowseQuery(path, { shelf }) : withReadsBrowseQuery(path, {})}
@@ -123,7 +123,7 @@ function topicChipTitle(t: TopicBrowseItem): string {
             topics.length > 0 && (
                 <div>
                     <div class="flex items-baseline justify-between gap-4 mb-3">
-                        <p class="font-mono text-[0.65rem] uppercase tracking-wider text-muted/70">Topics</p>
+                        <p class="font-mono text-xs uppercase tracking-wider text-muted/70">Topics</p>
                         <a
                             href={shelf !== undefined ? `/reads/topics/${shelf}/` : '/reads/topics/'}
                             data-topics-index-link=""

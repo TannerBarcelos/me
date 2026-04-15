@@ -25,11 +25,7 @@ const canonicalURL = new URL(Astro.request.url, Astro.site);
 function formatCanonicalURL(url: string | URL) {
     const path = url.toString();
     const hasQueryParams = path.includes('?');
-    // If there are query params, make sure the URL has no trailing slash
-    if (hasQueryParams) {
-        path.replace(/\/?$/, '');
-    }
-    // otherwise, canonical URL always has a trailing slash
+    // Strip trailing slash when query params present; otherwise always add one
     return path.replace(/\/?$/, hasQueryParams ? '' : '/');
 }
 ---
