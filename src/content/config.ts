@@ -1,12 +1,14 @@
 import { defineCollection, z } from 'astro:content';
 import { READ_KINDS, type ReadKind } from '../data/read-kinds';
 import { READ_SHELVES, type ReadShelf } from '../data/read-shelves';
+import { PROJECT_LANES, type ProjectLane } from '../data/project-lanes';
 import { PROJECT_TAG_IDS, type ProjectTagId } from '../data/project-tags';
 
 const readKindSchema = z.enum(READ_KINDS as [ReadKind, ...ReadKind[]]);
 const readShelfSchema = z.enum(READ_SHELVES as [ReadShelf, ...ReadShelf[]]);
 const readProgressSchema = z.enum(['reading', 'finished', 'queued']);
 
+const projectLaneSchema = z.enum(PROJECT_LANES as [ProjectLane, ...ProjectLane[]]);
 const projectTagIdSchema = z.enum(PROJECT_TAG_IDS as [ProjectTagId, ...ProjectTagId[]]);
 
 const seoSchema = z.object({
@@ -34,6 +36,8 @@ const projects = defineCollection({
         description: z.string().optional(),
         publishDate: z.coerce.date(),
         isFeatured: z.boolean().default(false),
+        /** Apps vs AI & agents — drives the two lane tabs on the projects page. */
+        lane: projectLaneSchema.default('apps'),
         tags: z.array(projectTagIdSchema).min(1).default(['planned']),
         seo: seoSchema.optional()
     })

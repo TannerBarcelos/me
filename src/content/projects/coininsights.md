@@ -2,6 +2,7 @@
 title: 'CoinInsights'
 description: CoinInsights is a cryptocurrency portfolio tracker that provides real-time market data, portfolio analysis, and personalized insights to help users make informed investment decisions.
 publishDate: 'Oct 04 2022'
+lane: apps
 tags:
   - live
 seo:

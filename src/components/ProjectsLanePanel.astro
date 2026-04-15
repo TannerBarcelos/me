@@ -1,0 +1,11 @@
+---
+import type { ProjectLane } from '../data/project-lanes';
+
+type Props = { lane: ProjectLane };
+
+const { lane } = Astro.props;
+---
+
+<div data-projects-lane-panel={lane}>
+    <slot />
+</div>
