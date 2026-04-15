@@ -202,8 +202,8 @@ const modelRankings: RankItem[] = [
             { label: 'general assistant', tone: 'neutral' },
             { label: 'up-to-date', tone: 'sky' }
         ],
-        body: 'GPT 5.4 is my go-to general assistant for text-based work. I lean on it for general conversations, general technical discussions, and building against modern tooling — anywhere that is not image-heavy. It has fast, reliable tool calling and will often one-shot a feature or feedback pass when I give it a strong prompt, and the more up-to-date training data shows up in newer APIs, libraries, and patterns.',
-        pros: ['My primary general assistant for non-image work', 'Fast, reliable tool calling with strong one-shot implementation ability', 'Great for general technical conversations and modern software development'],
+        body: 'GPT 5.4 is my primary general assistant. I reach for it for everyday conversations, general technical discussions, and building against modern tooling. It has fast, reliable tool calling and will often one-shot a feature or feedback pass when I give it a strong prompt, and the more up-to-date training data shows up in newer APIs, libraries, and patterns.',
+        pros: ['My primary general assistant for everyday and technical conversations', 'Fast, reliable tool calling with strong one-shot implementation ability', 'Very strong for building modern software against newer tooling'],
         cons: ['Opus and Composer 2 still win for my default deep reasoning and in-editor loops', 'I review output carefully on anything production-critical']
     },
     {
@@ -215,8 +215,8 @@ const modelRankings: RankItem[] = [
             { label: 'multimodal', tone: 'violet' },
             { label: 'image gen', tone: 'sky' }
         ],
-        body: 'Gemini is also a general assistant in my rotation, but it has a distinct lane: I lean on it for image generation and quick, lightweight tasks where I want something fast and low-friction. It has the full breadth of Google behind it, which shows up in multimodal workflows and general knowledge. When I want to generate an image or knock out something small, Gemini is usually where I start.',
-        pros: ['My default pick for image generation', 'Great for quick, lightweight tasks and everyday general chat', 'Strong multimodal and long-context workflows in the app'],
+        body: 'Gemini is my pick for fast, one-off chats and image generation in the app. It is not where I go for deep work, but it is great when I want a quick answer or need to generate an image without switching contexts. The full breadth of Google behind it makes it reliable for everyday general use.',
+        pros: ['Great for fast, one-off chats where I want a quick answer', 'My go-to for image generation in the app', 'Strong multimodal and long-context workflows'],
         cons: [
             'Not where I lean for agent harnesses or agentic coding workloads right now — tool calling is not strong enough compared to my top picks',
             'Not my primary coding agent and less integrated into my editor-centric loop',
