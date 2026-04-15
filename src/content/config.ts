@@ -26,7 +26,9 @@ const seoSchema = z.object({
 const pages = defineCollection({
     schema: z.object({
         title: z.string(),
-        seo: seoSchema.optional()
+        seo: seoSchema.optional(),
+        /** Markdown fragments for the About layout (custom page only). */
+        aboutBlocks: z.array(z.string()).optional()
     })
 });
 

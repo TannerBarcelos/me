@@ -2,13 +2,18 @@
 title: About
 seo:
   title: About — Tanner Barcelos
-  description: Full-stack engineer in the Bay Area. I build platforms for ML and shipping software—with humans and agents in the loop.
+  description: Full-stack and AI engineer building products for people and machines. Reading, writing, shipping.
+aboutBlocks:
+  - |
+    I'm Tanner. I build things for the web — **full-stack**, all the way through. The database schema, the API layer, the interface someone actually touches. I love that a single person can hold the whole picture and ship something real. That's the part I never get tired of.
+  - |
+    Right now I work at **Visa**, where I build platforms at the intersection of **machine learning and product engineering**. Control planes, federated services, UIs that make complex systems feel simple. The kind of work where good abstractions save hundreds of people time they didn't know they were losing.
+  - |
+    I've gone deep on **agentic AI** — not the hype, the craft. AI as a genuine collaborator: exploring architecture, stress-testing decisions, turning a rough idea into a working diff in one session. I think the best software is about to be built by **humans and agents together**, and I want to be at that edge.
+  - |
+    What drives me is **building products and experiences** — for users who'll never see a line of code, and for engineers who live in it every day. I care about the details: the component API that feels obvious, the deploy pipeline that just works, the error message that actually helps. **Craft** is the word. I take it seriously.
+  - |
+    Outside of code, I **read** — a lot. Fiction, technical papers, long essays. It's how I think. I **write** to make sense of what I'm learning and to leave breadcrumbs for anyone working on the same problems. Side projects are the playground. This site is one of them.
+  - |
+    Want the formal version? There's a **[resume](https://drive.google.com/file/d/1_boaCqTE2CgyBFrr7qtSEl6dvAHLKtaO/view?usp=sharing)** for that. Otherwise — I build systems people depend on, and I try to make the work feel human.
 ---
-
-I’m Tanner, a full-stack engineer based in the Bay Area. I work at Visa, where most of my time goes to the space where **machine learning meets real infrastructure**: control planes, federated services, and UIs that have to stay fast and legible when the systems behind them are anything but simple. I like the work that sits between “make the model go” and “make the team able to ship without losing their minds”—platforms, tooling, and the glue that turns a pile of services into something coherent.
-
-I care a lot about **craft at scale**. Small details in a component library matter when thirty apps inherit them. A GraphQL boundary matters when five teams stop duplicating the same fetch logic. I’m as happy in React and TypeScript as I am in Go when the problem is orchestration, reliability, or shaving seconds off a path that runs thousands of times a day. The through-line is always the same: **clarity for the people using what we build**, whether they’re engineers, analysts, or customers who will never see the repo.
-
-Lately I’ve been deep on **agentic coding**—not as a gimmick, but as a way to stay in flow. I use AI as a serious pair programmer: exploring designs, stress-testing APIs, and turning vague ideas into concrete diffs faster than I could alone. The best sessions feel like having a patient, encyclopedic collaborator who never tires of “what if we tried it this way?” I’m interested in how that changes how we review code, how we document intent, and how we keep quality high when the machine can generate so much, so fast. It’s still early, and that’s what makes it fun.
-
-Outside the job I read, tinker on side projects, and try to leave things a little more understandable than I found them. If you want the formal timeline—titles, dates, and the bullet points—there’s a **[resume (PDF)](https://drive.google.com/file/d/1_boaCqTE2CgyBFrr7qtSEl6dvAHLKtaO/view?usp=sharing)** for that. This page is the short version: **I build systems people rely on, and I’m happiest when the path from idea to production feels humane.**
