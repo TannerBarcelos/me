@@ -164,21 +164,8 @@ type RankItem = {
 };
 
 const modelRankings: RankItem[] = [
-    {
+{
         rank: '01',
-        name: 'Claude Opus 4.6',
-        icon: siAnthropic,
-        tags: [
-            { label: 'reasoning', tone: 'violet' },
-            { label: 'research', tone: 'sky' },
-            { label: 'tech', tone: 'emerald' }
-        ],
-        body: 'Opus 4.6 is where I go for hardcore reasoning and technical research. It is the model I trust most when the task is messy, the architecture is unclear, or I want a strong thinking partner on difficult engineering tradeoffs.',
-        pros: ['Excellent for deep technical reasoning and architecture work', 'Strong at research-heavy problem framing and critique'],
-        cons: ['Slower and more expensive than faster editor-native options', 'Not the model I reach for first when the task is mostly visual iteration']
-    },
-    {
-        rank: '02',
         name: 'Composer 2',
         icon: siCursor,
         tags: [
@@ -192,6 +179,19 @@ const modelRankings: RankItem[] = [
         cons: ['Tied to Cursor subscriptions and routing', 'Less suited than Opus for ambiguous deep research and hardest reasoning']
     },
     {
+        rank: '02',
+        name: 'Claude Opus 4.6',
+        icon: siAnthropic,
+        tags: [
+            { label: 'reasoning', tone: 'violet' },
+            { label: 'research', tone: 'sky' },
+            { label: 'tech', tone: 'emerald' }
+        ],
+        body: 'Opus 4.6 is where I go for hardcore reasoning and technical research. It is the model I trust most when the task is messy, the architecture is unclear, or I want a strong thinking partner on difficult engineering tradeoffs.',
+        pros: ['Excellent for deep technical reasoning and architecture work', 'Strong at research-heavy problem framing and critique'],
+        cons: ['Slower and more expensive than faster editor-native options', 'Not the model I reach for first when the task is mostly visual iteration or quick tasks']
+    },
+    {
         rank: '03',
         name: 'GPT 5.4',
         icon: siOpenAI,
@@ -199,10 +199,11 @@ const modelRankings: RankItem[] = [
         tags: [
             { label: 'coding', tone: 'violet' },
             { label: 'modern tools', tone: 'emerald' },
+            { label: 'general assistant', tone: 'neutral' },
             { label: 'up-to-date', tone: 'sky' }
         ],
         body: 'GPT 5.4 sits below Opus and Composer 2 for how I route most work, but it is still incredible for building modern tools and software. It has fast, reliable tool calling and will often one-shot a feature or feedback pass when I give it a strong prompt, and the more up-to-date training data shows up in newer APIs, libraries, and patterns.',
-        pros: ['Fast, reliable tool calling with strong one-shot implementation ability', 'Very strong for building modern software against newer tooling'],
+        pros: ['Fast, reliable tool calling with strong one-shot implementation ability', 'Very strong for building modern software against newer tooling', 'Nice for general conversations and non-technical tasks'],
         cons: ['Opus and Composer 2 still win for my default reasoning and in-editor loops', 'I review output carefully on anything production-critical']
     },
     {
@@ -211,14 +212,13 @@ const modelRankings: RankItem[] = [
         icon: siGooglegemini,
         tags: [
             { label: 'general assistant', tone: 'neutral' },
-            { label: 'non-technical', tone: 'sky' },
             { label: 'multimodal', tone: 'violet' }
         ],
         body: 'I use Gemini 3.1 Pro in the Gemini app for everyday, non-technical conversations — travel, drafting, general chat — separate from my coding harnesses. It has the full breadth of Google behind it, which shows up in multimodal workflows and general knowledge.',
         pros: ['Strong multimodal and long-context workflows in the app', 'Great breadth for general chatting and non-technical assistant tasks'],
         cons: [
             'Not where I lean for agent harnesses or agentic coding workloads right now — tool calling is not strong enough compared to my top picks',
-            'Not my primary coding agent and less integrated into my editor-centric loop'
+            'Not my primary coding agent and less integrated into my editor-centric loop',
         ]
     },
 ];
@@ -231,43 +231,29 @@ const harnessRankings: RankItem[] = [
         tags: [
             { label: 'coding', tone: 'violet' },
             { label: 'editor', tone: 'sky' },
-            { label: 'composer', tone: 'neutral' },
             { label: 'cloud agents', tone: 'emerald' }
         ],
-        body: 'My main harness and clear number one. Cursor wins for me because I can use all the models I care about, Composer usage is generous, cloud agents are a huge plus for real development work, and the overall UX, speed, and reliability are strong enough that it just works and just makes sense.',
+        body: 'My main harness and clear number one. Cursor wins for me because I can use all the models I care about, Composer usage is generous, cloud agents are a huge plus for real, ad-hoc development work, and the overall UX, speed, and reliability are strong enough that it just works and just makes sense.',
         pros: [
-            'Cloud agents are a major strength — I lean on them heavily for development work',
-            'Best overall mix of model access, generous Composer, UX, speed, and reliability'
+            'Cloud agents are a major strength',
+            'Best overall mix of model access, UX, speed, and reliability',
+            'Multi-surface clients (agents UI, editor, CLI) that all consume the same models and agents on my subscription'
+
         ],
-        cons: ['Platform churn still happens from time to time', 'Worth budgeting inference spend deliberately']
+        cons: ['Platform churn still happens from time to time, espeically for research tasks']
     },
     {
         rank: '02',
-        name: 'OpenCode',
-        icon: siTmux,
-        tags: [
-            { label: 'tui', tone: 'sky' },
-            { label: 'terminal', tone: 'neutral' },
-            { label: 'oss models', tone: 'emerald' }
-        ],
-        body: 'OpenCode is my number two when I want CLI or TUI workflows: open source, free models for experimentation, and sometimes light feature work in a keyboard-driven session with minimal chrome.',
-        pros: [
-            'My personal pick for terminal-first work when I am not in Cursor',
-            'Great sandbox for OSS models without meter anxiety; fast for small scoped changes'
-        ],
-        cons: ['Not my first pick for heavy production refactors or deep debugging', 'Smaller ecosystem than mainstream IDEs']
-    },
-    {
-        rank: '03',
-        name: 'Claude',
+        name: 'Claude Code',
         icon: siClaude,
         tags: [
-            { label: 'planning & writing', tone: 'violet' },
-            { label: 'app & api', tone: 'neutral' }
+            { label: 'coding', tone: 'violet' },
+            { label: 'research', tone: 'sky' },
+            { label: 'tech', tone: 'emerald' }
         ],
-        body: 'Claude (app and API) for planning, writing, architecture reasoning, and long-form work outside the editor — not my primary coding harness.',
-        pros: ['Flexible across tasks beyond code', 'Great for structured outputs and critique'],
-        cons: ['Separate from repo context unless wired in manually']
+        body: 'My second choice for coding harness. Claude Code is great for planning, writing, architecture reasoning, and long-form work tasks.',
+        pros: ['Great for planning, writing, architecture reasoning, and long-form work tasks', 'Great for structured outputs and critique', 'New desktop app is great', 'Can kick off work from mobile app'],
+        cons: ['Not the most efficient for coding tasks compared to Cursor', 'Not the most integrated with the editor']
     }
 ];
 
@@ -299,7 +285,7 @@ function tagClasses(tone: RankItem['tags'][number]['tone']) {
                 class="mt-6 max-w-2xl border-l border-main/20 dark:border-main/25 pl-3.5 text-[0.7rem] sm:text-xs text-muted/75 dark:text-muted/70 leading-relaxed tracking-wide"
             >
                 <span class="font-mono text-muted/90">Disclaimer.</span>{' '}
-                Rankings here are my personal defaults and opinion — not universal truth or a live snapshot of the field. I still
+                Rankings here are my personal opinions — not universal truth or a live snapshot of the current state of thefield. I still
                 review anything that touches production; models speed exploration but do not replace ownership.
             </p>
         </header>
@@ -308,7 +294,7 @@ function tagClasses(tone: RankItem['tags'][number]['tone']) {
         <section class="mb-20 sm:mb-24" aria-labelledby="state-ai-heading">
             <div class="border-b border-main/20 pb-3.5 mb-6">
                 <h2 id="state-ai-heading" class="font-sans text-3xl sm:text-4xl font-semibold tracking-tight text-main leading-tight">
-                    State of AI
+                    My State of AI
                 </h2>
             </div>
 
