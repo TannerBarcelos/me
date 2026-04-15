@@ -1,0 +1,106 @@
+---
+import { getEntry } from 'astro:content';
+import { marked } from 'marked';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const page = await getEntry('pages', 'about');
+if (!page) {
+    throw new Error('Missing content entry pages/about');
+}
+
+const { title, seo, aboutBlocks } = page.data;
+if (!aboutBlocks?.length) {
+    throw new Error('about.md must define aboutBlocks for the About page layout');
+}
+
+const htmlBlocks = aboutBlocks.map((md) => {
+    const out = marked.parse(md.trim(), { async: false });
+    if (typeof out !== 'string') {
+        throw new Error('marked.parse returned non-string; enable sync parsing for About blocks');
+    }
+    return out;
+});
+---
+
+<BaseLayout title={seo?.title ?? title} description={seo?.description} image={seo?.image} showHeader={false}>
+    <article class="about-motion pt-16 sm:pt-24 pb-20 sm:pb-28">
+        <header class="mb-14 sm:mb-20 px-4 sm:px-8">
+            <p class="font-mono text-xs text-muted mb-4 select-none">
+                <span class="opacity-50">{'// '}</span>{title.toLowerCase()}
+            </p>
+            <h1 class="font-sans text-3xl sm:text-5xl font-medium tracking-tight text-main leading-tight">
+                Who am I?
+            </h1>
+        </header>
+
+        <div
+            class="border-x-2 border-main/25 dark:border-main/35 bg-muted/15 dark:bg-muted/10"
+            aria-label="About sections"
+        >
+            {
+                htmlBlocks.map((html, i) => (
+                    <section
+                        class:list={[
+                            'about-block border-b border-main/20 dark:border-main/30 last:border-b-0',
+                            'px-5 py-10 sm:px-10 sm:py-14'
+                        ]}
+                        style={`animation-delay: ${80 + i * 110}ms`}
+                    >
+                        <div
+                            class:list={[
+                                'prose prose-dante max-w-none',
+                                '[&_p]:text-[1.05rem] sm:[&_p]:text-lg [&_p]:leading-[1.8] [&_p]:text-main/85',
+                                '[&_p+p]:mt-3'
+                            ]}
+                            set:html={html}
+                        />
+                    </section>
+                ))
+            }
+        </div>
+    </article>
+</BaseLayout>
+
+<style>
+    @keyframes about-reveal-left {
+        from {
+            opacity: 0;
+            transform: translateX(-1.25rem);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes about-reveal-right {
+        from {
+            opacity: 0;
+            transform: translateX(1.25rem);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .about-block {
+        opacity: 0;
+        animation-duration: 0.72s;
+        animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+        animation-fill-mode: forwards;
+        animation-name: about-reveal-left;
+    }
+
+    .about-block:nth-child(even) {
+        animation-name: about-reveal-right;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .about-motion .about-block {
+            animation: none;
+            opacity: 1;
+            transform: none;
+        }
+    }
+</style>

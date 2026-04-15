@@ -10,7 +10,7 @@ const pathNorm = pathname.replace(/\/$/, '') || '/';
 const hrefStr = href != null ? String(href) : '';
 const isExternal = hrefStr.startsWith('http');
 
-/** Path only — query/hash break active matching (e.g. Bookshelf is /reads with any ?shelf=&kind=). */
+/** Path only — query/hash break active matching. Deep nav hrefs (Bookshelf, Projects tabs) still light up for the whole section. */
 let hrefPathOnly = hrefStr;
 if (!isExternal && hrefStr) {
     try {
@@ -29,6 +29,9 @@ if (isExternal) {
 } else if (hrefNorm === '/reads' || hrefNorm.startsWith('/reads/shelf')) {
     /* One nav item for the bookshelf; stay highlighted on any /reads/* route (shelves, topics, entries). */
     isActive = pathNorm === '/reads' || pathNorm.startsWith('/reads/');
+} else if (hrefNorm === '/projects' || hrefNorm.startsWith('/projects/')) {
+    /* One nav item for projects; stay highlighted on any /projects/* route (type/stack tabs, pagination, entries). */
+    isActive = pathNorm === '/projects' || pathNorm.startsWith('/projects/');
 } else {
     isActive = pathNorm === hrefNorm || pathNorm.startsWith(`${hrefNorm}/`);
 }

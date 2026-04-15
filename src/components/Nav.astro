@@ -43,7 +43,7 @@ const navLinks = siteConfig.headerNavLinks || [];
                                     rel={link.newTab ? 'noopener noreferrer' : undefined}
                                     aria-label={link.text}
                                 >
-                                    {link.text}
+                                    {link.text}{link.newTab && <span class="ml-0.5 text-[0.6rem] opacity-50 select-none" aria-hidden="true">↗</span>}
                                 </NavLink>
                             </li>
                         ))}
