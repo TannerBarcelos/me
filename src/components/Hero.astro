@@ -1,4 +1,5 @@
 ---
+import { siClaude } from 'simple-icons';
 import Button from './Button.astro';
 import siteConfig from '../data/site-config';
 
@@ -13,9 +14,21 @@ const hero = siteConfig.hero;
         Tanner Barcelos<span class="name-cursor" aria-hidden="true" />
     </h1>
 
-    {/* Typed rotating tagline */}
-    <div class="hero-tagline font-mono text-sm sm:text-base text-muted mb-12 min-h-[1.5rem] tracking-tight">
-        <span id="typed-tagline" class="text-main/85"></span>
+    {/* Claude Code–style animated tagline */}
+    <div class="hero-tagline font-mono text-sm sm:text-base mb-12 min-h-[1.5rem] tracking-tight">
+        <div id="tagline-row" class="inline-flex items-center gap-2">
+            <svg
+                id="claude-logo"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                class="shrink-0"
+                style="width:14px;height:14px;"
+            >
+                <path fill="currentColor" d={siClaude.path} />
+            </svg>
+            <span id="tagline-phrase" aria-live="polite" aria-atomic="true"></span>
+        </div>
     </div>
 
     {/* CTA buttons — optional; tagline stays even with no actions */}
@@ -33,7 +46,7 @@ const hero = siteConfig.hero;
 </section>
 
 <style>
-    /* Blinking underscore cursor on the name */
+    /* ── Name cursor (unchanged) ── */
     .name-cursor::after {
         content: '_';
         animation: cursor-blink 1.1s step-end infinite;
@@ -53,56 +66,211 @@ const hero = siteConfig.hero;
         }
     }
 
+    /* ── Tagline row fade ── */
+    #tagline-row {
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    #tagline-row.is-fading {
+        opacity: 0;
+    }
+
+    /* ── Claude logo breathe ── */
+    #claude-logo {
+        color: rgb(var(--color-accent));
+        transform-origin: center;
+        opacity: 0.4;
+    }
+
+    @keyframes logo-breathe {
+        0%,
+        100% {
+            opacity: 0.3;
+            transform: scale(0.9);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    #claude-logo.is-breathing {
+        animation: logo-breathe 1.3s ease-in-out infinite;
+    }
+
+    /* ── Phrase text with left-to-right shimmer sweep ── */
+    #tagline-phrase {
+        color: rgb(var(--color-text-main) / 0.85);
+        position: relative;
+        overflow: hidden;
+    }
+
+    @keyframes phrase-sweep {
+        from {
+            transform: translateX(-100%);
+        }
+        to {
+            transform: translateX(200%);
+        }
+    }
+
+    #tagline-phrase.is-sweeping::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 50%;
+        background: linear-gradient(90deg, transparent, rgb(var(--color-accent) / 0.45), transparent);
+        pointer-events: none;
+        animation: phrase-sweep 1.3s ease-in-out 1 forwards;
+    }
+
+    /* ── Reduced motion ── */
     @media (prefers-reduced-motion: reduce) {
         .name-cursor::after {
             animation: none;
             opacity: 0.35;
         }
+
+        #claude-logo.is-breathing {
+            animation: none;
+            opacity: 0.6;
+            transform: scale(1);
+        }
+
+        #tagline-row {
+            transition: opacity 0.15s ease;
+        }
     }
 </style>
 
 <script>
-    import Typed from 'typed.js';
+    const PHRASES = [
+        'building ai/ml platforms',
+        'senior ml engineer @ visa',
+        'react · typescript · go',
+        'distributed systems',
+        'ai enthusiast',
+        'building developer tooling',
+        'silicon valley'
+    ] as const;
 
-    let typedInstance: InstanceType<typeof Typed> | null = null;
+    const FADE_MS  = 300;
+    const SWEEP_MS = 1300;
+    const HOLD_MS  = 1600;
 
-    function initTyped() {
-        const el = document.getElementById('typed-tagline');
-        if (!el) return;
+    type State = 'idle' | 'active' | 'fading';
 
-        if (typedInstance) {
-            typedInstance.destroy();
-            typedInstance = null;
-        }
+    let phraseIndex = 0;
+    let state: State = 'idle';
+    let timerId: ReturnType<typeof setTimeout> | null = null;
 
-        typedInstance = new Typed('#typed-tagline', {
-            strings: [
-                'building ai/ml platforms',
-                'senior ml engineer @ visa',
-                'react · typescript · go',
-                'distributed systems',
-                'ai enthusiast',
-                'building developer tooling',
-                'silicon valley'
-            ],
-            typeSpeed: 42,
-            backSpeed: 22,
-            backDelay: 2200,
-            startDelay: 250,
-            loop: true,
-            cursorChar: '_',
-            smartBackspace: false,
-            contentType: 'text'
-        });
+    function getEls() {
+        return {
+            row:    document.getElementById('tagline-row'),
+            phrase: document.getElementById('tagline-phrase'),
+            logo:   document.getElementById('claude-logo'),
+        };
     }
 
-    document.addEventListener('astro:before-swap', () => {
-        if (typedInstance) {
-            typedInstance.destroy();
-            typedInstance = null;
+    function clearTimer() {
+        if (timerId !== null) {
+            clearTimeout(timerId);
+            timerId = null;
         }
-    });
+    }
 
-    document.addEventListener('astro:page-load', initTyped);
-    initTyped();
+    function tick() {
+        const { row, phrase, logo } = getEls();
+        if (!row || !phrase || !logo) return;
+
+        switch (state) {
+            case 'idle': {
+                // Clean up previous phrase's animations
+                phrase.classList.remove('is-sweeping');
+                logo.classList.remove('is-breathing');
+                // Set new phrase text while row is faded out
+                phrase.textContent = PHRASES[phraseIndex];
+                // Ensure row is faded, then trigger fade-in via double rAF
+                row.classList.add('is-fading');
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        row.classList.remove('is-fading');
+                        state = 'active';
+                        timerId = setTimeout(tick, FADE_MS);
+                    });
+                });
+                break;
+            }
+            case 'active': {
+                // Start sweep and logo breathe together
+                phrase.classList.add('is-sweeping');
+                logo.classList.add('is-breathing');
+                state = 'fading';
+                timerId = setTimeout(tick, SWEEP_MS + HOLD_MS);
+                break;
+            }
+            case 'fading': {
+                // Fade out, then advance to next phrase
+                row.classList.add('is-fading');
+                phraseIndex = (phraseIndex + 1) % PHRASES.length;
+                state = 'idle';
+                timerId = setTimeout(tick, FADE_MS);
+                break;
+            }
+        }
+    }
+
+    function initReducedMotion() {
+        const { row, phrase, logo } = getEls();
+        if (!row || !phrase || !logo) return;
+
+        phrase.textContent = PHRASES[phraseIndex];
+        row.classList.remove('is-fading');
+
+        function cycle() {
+            const { row: r, phrase: p } = getEls();
+            if (!r || !p) return;
+            r.classList.add('is-fading');
+            timerId = setTimeout(() => {
+                phraseIndex = (phraseIndex + 1) % PHRASES.length;
+                const { row: r2, phrase: p2 } = getEls();
+                if (!r2 || !p2) return;
+                p2.textContent = PHRASES[phraseIndex];
+                r2.classList.remove('is-fading');
+                timerId = setTimeout(cycle, 3000);
+            }, 150);
+        }
+
+        timerId = setTimeout(cycle, 3000);
+    }
+
+    function initAnimation() {
+        phraseIndex = 0;
+        state = 'idle';
+        clearTimer();
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            initReducedMotion();
+        } else {
+            timerId = setTimeout(tick, 250);
+        }
+    }
+
+    function destroyAnimation() {
+        clearTimer();
+        const { row, phrase, logo } = getEls();
+        if (row) row.classList.remove('is-fading');
+        if (phrase) {
+            phrase.classList.remove('is-sweeping');
+            phrase.textContent = '';
+        }
+        if (logo) logo.classList.remove('is-breathing');
+        state = 'idle';
+    }
+
+    document.addEventListener('astro:before-swap', destroyAnimation);
+    document.addEventListener('astro:page-load', initAnimation);
+    initAnimation();
 </script>
