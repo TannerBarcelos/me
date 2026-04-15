@@ -4,7 +4,6 @@ description: RoleMark is an AI-powered resume scoring and tailoring SaaS that he
 publishDate: 'Mar 29 2025'
 lane: ai-agents
 tags:
-  - live
   - in-progress
 seo:
   image:
