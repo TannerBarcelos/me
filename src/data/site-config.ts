@@ -47,7 +47,7 @@ const siteConfig: SiteConfig = {
         },
         {
             text: 'Projects',
-            href: '/projects/lane/apps/'
+            href: '/projects/'
         },
         {
             text: 'Stack',

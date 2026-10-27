@@ -4,6 +4,13 @@ export function sortItemsByDateDesc(itemA: CollectionEntry<'projects'>, itemB: C
     return new Date(itemB.data.publishDate).getTime() - new Date(itemA.data.publishDate).getTime();
 }
 
+/** Curated order first; unranked projects and ties fall back to publication date. */
+export function sortFeaturedProjects(itemA: CollectionEntry<'projects'>, itemB: CollectionEntry<'projects'>) {
+    const orderA = itemA.data.featuredOrder ?? Number.MAX_SAFE_INTEGER;
+    const orderB = itemB.data.featuredOrder ?? Number.MAX_SAFE_INTEGER;
+    return orderA - orderB || sortItemsByDateDesc(itemA, itemB);
+}
+
 export function sortReadsByAddedDesc(itemA: CollectionEntry<'reads'>, itemB: CollectionEntry<'reads'>) {
     return new Date(itemB.data.addedDate).getTime() - new Date(itemA.data.addedDate).getTime();
 }

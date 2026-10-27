@@ -38,6 +38,8 @@ const projects = defineCollection({
         description: z.string().optional(),
         publishDate: z.coerce.date(),
         isFeatured: z.boolean().default(false),
+        /** Lower numbers first in the shared featured project list. */
+        featuredOrder: z.number().int().positive().optional(),
         /** Employer / client work — hides the GitHub link since the code isn't mine to share. */
         isWorkProject: z.boolean().default(false),
         /** Repo link, shown under the title with a GitHub icon. Omit for work projects or private repos. */

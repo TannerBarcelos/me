@@ -2,21 +2,14 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import ProjectPreview from '../components/ProjectPreview.astro';
-import FeaturedProjectCard from '../components/FeaturedProjectCard.astro';
+import ProjectsShowcase from '../components/ProjectsShowcase.astro';
 import ReadPreview from '../components/ReadPreview.astro';
 import siteConfig from '../data/site-config';
-import { sortItemsByDateDesc, sortReadsReadingNow } from '../utils/data-utils';
+import { sortReadsReadingNow } from '../utils/data-utils';
 import { DEFAULT_READ_SHELF } from '../data/read-shelves';
 import { readsShelfPath } from '../utils/reads-links';
 
-const projects = (await getCollection('projects')).sort(sortItemsByDateDesc);
-/** Hand-picked highlights spanning the stack (full-stack, AI engineering, native) — set via `isFeatured`. */
-const featuredProjects = projects.filter(({ data }) => data.isFeatured);
-/** "What I'm building" = projects whose tags include `in-progress` (excludes paused, live-only, etc.). */
-const buildingProjects = projects.filter(
-    ({ data, slug }) => data.tags.includes('in-progress') && !featuredProjects.some((f) => f.slug === slug)
-);
+const projects = await getCollection('projects');
 
 const reads = await getCollection('reads');
 const readingNow = reads.filter(({ data }) => data.readingNow).sort(sortReadsReadingNow);
@@ -27,46 +20,9 @@ const readingNowShelfOnly = readingNowShelves.length === 1 ? readingNowShelves[0
 <BaseLayout description={siteConfig.description} showHeader={false}>
     <Hero />
 
-    {
-        (featuredProjects?.length > 0 || buildingProjects?.length > 0) && (
-            <section class="pb-24 sm:pb-32">
-                {/* Section label */}
-                <div class="flex items-baseline justify-between mb-8">
-                    <p class="font-mono text-xs text-muted select-none">
-                        <span class="opacity-50">{'// '}</span>what I'm building
-                    </p>
-                    <a
-                        href="/projects/lane/apps/"
-                        class="font-mono text-xs text-muted hover:text-main transition-colors duration-200 underline underline-offset-[5px] decoration-dashed decoration-accent/35 hover:decoration-solid hover:decoration-accent/65"
-                    >
-                        view all →
-                    </a>
-                </div>
-
-                {/* Featured: one pick per part of the stack (full-stack, AI engineering, native) */}
-                {
-                    featuredProjects?.length > 0 && (
-                        <div class="grid gap-4 sm:grid-cols-3">
-                            {featuredProjects.map((project) => (
-                                <FeaturedProjectCard project={project} />
-                            ))}
-                        </div>
-                    )
-                }
-
-                {/* Everything else currently in progress */}
-                {
-                    buildingProjects?.length > 0 && (
-                        <div class={featuredProjects?.length > 0 ? 'mt-4' : undefined}>
-                            {buildingProjects.map((project) => (
-                                <ProjectPreview project={project} headingLevel="h3" />
-                            ))}
-                        </div>
-                    )
-                }
-            </section>
-        )
-    }
+    <div class="pb-24 sm:pb-32">
+        <ProjectsShowcase projects={projects} />
+    </div>
 
     {
         readingNow?.length > 0 && (
