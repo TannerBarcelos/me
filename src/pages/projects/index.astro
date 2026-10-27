@@ -1,31 +1,20 @@
 ---
-/**
- * `/projects/` redirects to the default lane; mirrors `/reads/` → shelf entry.
- */
-import { DEFAULT_PROJECT_LANE, projectLanePath } from '../../data/project-lanes';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectsShowcase from '../../components/ProjectsShowcase.astro';
 
-const fallbackHref = projectLanePath(DEFAULT_PROJECT_LANE);
+const projects = await getCollection('projects');
 ---
 
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="robots" content="noindex" />
-        <meta http-equiv="refresh" content={`0;url=${fallbackHref}`} />
-        <link rel="canonical" href={Astro.site ? new URL(fallbackHref, Astro.site).href : fallbackHref} />
-        <title>Projects</title>
-        <script is:inline define:vars={{ fallbackHref }}>
-            (function () {
-                try {
-                    if (window.location.pathname + window.location.search + window.location.hash !== fallbackHref) {
-                        window.location.replace(fallbackHref);
-                    }
-                } catch (e) {}
-            })();
-        </script>
-    </head>
-    <body>
-        <p><a href={fallbackHref}>Continue to projects</a></p>
-    </body>
-</html>
+<BaseLayout title="Projects" description="A selection of things I've built" showHeader={false}>
+    <div class="pt-16 sm:pt-24 pb-24 sm:pb-32">
+        <p class="font-mono text-xs text-muted mb-4 select-none">
+            <span class="opacity-50">{'// '}</span>projects
+        </p>
+        <h1 class="font-sans text-3xl sm:text-4xl font-medium tracking-tight text-main mb-12 sm:mb-16">
+            Things I've built
+        </h1>
+
+        <ProjectsShowcase projects={projects} />
+    </div>
+</BaseLayout>

@@ -6,6 +6,7 @@ lane: apps
 tags:
   - in-progress
 isFeatured: true
+featuredOrder: 2
 github: 'https://github.com/tannerbarcelos/rolemark'
 technologies:
   - TanStack Start

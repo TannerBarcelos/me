@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProjectPreview from './ProjectPreview.astro';
+import { sortFeaturedProjects, sortItemsByDateDesc } from '../utils/data-utils';
+
+type Props = { projects: CollectionEntry<'projects'>[] };
+
+const { projects } = Astro.props;
+const featuredProjects = projects.filter(({ data }) => data.isFeatured).sort(sortFeaturedProjects).slice(0, 3);
+const allProjects = [...projects].sort(sortItemsByDateDesc);
+---
+
+<div class="projects-showcase">
+    <section aria-labelledby="featured-projects-heading">
+        <h2 id="featured-projects-heading" class="font-mono text-xs font-normal text-muted mb-8">
+            <span class="opacity-50 select-none">{'// '}</span>Featured Projects
+        </h2>
+        <div>
+            {featuredProjects.map((project) => <ProjectPreview project={project} headingLevel="h3" />)}
+        </div>
+    </section>
+
+    <details class="all-projects mt-10 sm:mt-12 border border-main/15 px-4 sm:px-5 hover:border-main/25 open:border-accent/25 transition-colors duration-200">
+        <summary class="flex items-center justify-between gap-4 py-4 cursor-pointer select-none list-none text-muted hover:text-main transition-colors duration-200 [&::-webkit-details-marker]:hidden">
+            <h2 class="font-mono text-xs font-normal">
+                All Projects <span class="ml-1 text-muted/70 tabular-nums">({allProjects.length})</span>
+            </h2>
+            <span class="disclosure-indicator font-mono text-base leading-none" aria-hidden="true"></span>
+        </summary>
+        <div class="border-t border-main/15 pb-4">
+            {allProjects.map((project) => <ProjectPreview project={project} headingLevel="h3" />)}
+        </div>
+    </details>
+</div>
+
+<style>
+    .disclosure-indicator::before {
+        content: '+';
+    }
+
+    details[open] .disclosure-indicator::before {
+        content: '−';
+    }
+</style>

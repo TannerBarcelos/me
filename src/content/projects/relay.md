@@ -5,7 +5,6 @@ publishDate: 'Aug 04 2026'
 lane: apps
 tags:
   - in-progress
-isFeatured: true
 github: 'https://github.com/tannerbarcelos/relay'
 technologies:
   - Swift
