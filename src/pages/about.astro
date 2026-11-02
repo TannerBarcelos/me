@@ -94,7 +94,7 @@ const inlineLink =
                     <h2 id="about-impact" class={sectionLabel}>
                         <span class="opacity-50">{'// '}</span>impact at visa
                     </h2>
-                    <div class:list={['grid grid-cols-1 sm:grid-cols-2 border-l border-t bg-muted/15 dark:bg-muted/10', cellBorder]}>
+                    <div class:list={['grid grid-cols-1 border-l border-t bg-muted/15 dark:bg-muted/10', about.metrics.length % 3 === 0 ? 'sm:grid-cols-3' : 'sm:grid-cols-2', cellBorder]}>
                         {about.metrics.map((m) => (
                             <div class:list={['border-r border-b px-5 py-6 sm:px-7 sm:py-8', cellBorder]}>
                                 <p class="font-mono text-2xl sm:text-3xl tracking-tight text-main whitespace-nowrap">{m.value}</p>
@@ -281,7 +281,7 @@ const inlineLink =
                 <span class="opacity-50">{'// '}</span>get in touch
             </h2>
             <p class="text-[1.05rem] leading-[1.75] text-main/85 max-w-2xl mb-8">
-                I like talking about ML platforms, developer tools, and agent workflows. Reach out if you're working on any of them.
+                I like talking about AI products, multi-agent systems, ML platforms, and developer tools. Reach out if you're working on any of them.
             </p>
             <div class="flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 [&>*]:w-full [&>*]:sm:w-auto">
                 <Button href="/contact">Contact</Button>
