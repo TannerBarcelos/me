@@ -23,12 +23,54 @@ const seoSchema = z.object({
     pageType: z.enum(['website', 'article']).default('website')
 });
 
+/** Structured profile data for the About page (pages/about.md only). Inline markdown is allowed in text fields. */
+const aboutSchema = z.object({
+    /** One-sentence headline shown as the page h1. */
+    headline: z.string(),
+    /** Intro paragraphs (markdown). */
+    intro: z.array(z.string()).min(1),
+    /** Quick facts strip: role, team, location, etc. */
+    facts: z.array(z.object({ label: z.string(), value: z.string() })).default([]),
+    /** Headline numbers from work, each with a short context line. */
+    metrics: z.array(z.object({ value: z.string(), label: z.string() })).default([]),
+    /** Areas of focus, each optionally linking to related project slugs. */
+    focus: z
+        .array(
+            z.object({
+                title: z.string(),
+                body: z.string(),
+                projects: z.array(z.string()).default([])
+            })
+        )
+        .default([]),
+    /** Working principles (markdown body). */
+    principles: z.array(z.object({ title: z.string(), body: z.string() })).default([]),
+    /** Career history, newest first. */
+    experience: z
+        .array(
+            z.object({
+                company: z.string(),
+                role: z.string(),
+                period: z.string(),
+                location: z.string().optional(),
+                highlights: z.array(z.string()).default([])
+            })
+        )
+        .default([]),
+    education: z
+        .object({
+            school: z.string(),
+            degree: z.string(),
+            year: z.string()
+        })
+        .optional()
+});
+
 const pages = defineCollection({
     schema: z.object({
         title: z.string(),
         seo: seoSchema.optional(),
-        /** Markdown fragments for the About layout (custom page only). */
-        aboutBlocks: z.array(z.string()).optional()
+        about: aboutSchema.optional()
     })
 });
 

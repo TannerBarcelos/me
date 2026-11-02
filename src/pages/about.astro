@@ -1,103 +1,322 @@
 ---
-import { getEntry } from 'astro:content';
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import { marked } from 'marked';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import siteConfig from '../data/site-config';
+import { projectTagsToBadges } from '../data/project-tags';
+import { readKindToBadge } from '../data/read-kinds';
+import { sortReadsReadingNow } from '../utils/data-utils';
 
 const page = await getEntry('pages', 'about');
-if (!page) {
-    throw new Error('Missing content entry pages/about');
+if (!page?.data.about) {
+    throw new Error('pages/about.md must define an `about` block for the About page layout');
 }
 
-const { title, seo, aboutBlocks } = page.data;
-if (!aboutBlocks?.length) {
-    throw new Error('about.md must define aboutBlocks for the About page layout');
-}
+const { title, seo, about } = page.data;
 
-const htmlBlocks = aboutBlocks.map((md) => {
-    const out = marked.parse(md.trim(), { async: false });
-    if (typeof out !== 'string') {
-        throw new Error('marked.parse returned non-string; enable sync parsing for About blocks');
-    }
+function md(src: string): string {
+    const out = marked.parse(src.trim(), { async: false });
+    if (typeof out !== 'string') throw new Error('marked.parse returned non-string');
     return out;
-});
+}
+
+function mdInline(src: string): string {
+    const out = marked.parseInline(src.trim(), { async: false });
+    if (typeof out !== 'string') throw new Error('marked.parseInline returned non-string');
+    return out;
+}
+
+const projects = await getCollection('projects');
+const projectsBySlug = new Map(projects.map((p) => [p.slug, p]));
+
+function resolveProjects(slugs: string[]): CollectionEntry<'projects'>[] {
+    return slugs.map((slug) => {
+        const project = projectsBySlug.get(slug);
+        if (!project) throw new Error(`about.md references unknown project slug "${slug}"`);
+        return project;
+    });
+}
+
+const focus = about.focus.map((f) => ({ ...f, bodyHtml: mdInline(f.body), linked: resolveProjects(f.projects) }));
+
+/** Personal work that is actively moving: beta or in progress. */
+const building = projects
+    .filter((p) => !p.data.isWorkProject && p.data.tags.some((t) => t === 'beta' || t === 'in-progress'))
+    .sort((a, b) => (a.data.featuredOrder ?? 99) - (b.data.featuredOrder ?? 99) || a.data.title.localeCompare(b.data.title));
+
+const reads = await getCollection('reads');
+const readingNow = reads.filter((r) => r.data.readingNow).sort(sortReadsReadingNow);
+
+const resume = siteConfig.footerNavLinks?.find((l) => l.text === 'Resume');
+const linkedin = siteConfig.socialLinks?.find((l) => l.text === 'LinkedIn');
+const github = siteConfig.socialLinks?.find((l) => l.text === 'GitHub');
+
+const sectionLabel = 'font-mono text-xs text-muted mb-6 sm:mb-8 select-none';
+const cellBorder = 'border-main/25 dark:border-main/35';
+const badgeBase = 'font-mono text-xs px-1.5 py-0.5 leading-tight';
+const inlineLink =
+    'underline underline-offset-[5px] decoration-dashed decoration-accent/35 hover:decoration-solid hover:decoration-accent/65 transition-colors duration-200';
 ---
 
 <BaseLayout title={seo?.title ?? title} description={seo?.description} image={seo?.image} showHeader={false}>
-    <article class="about-motion pt-16 sm:pt-24 pb-20 sm:pb-28">
-        <header class="mb-14 sm:mb-20 px-4 sm:px-8">
-            <p class="font-mono text-xs text-muted mb-4 select-none">
-                <span class="opacity-50">{'// '}</span>{title.toLowerCase()}
-            </p>
-            <h1 class="font-sans text-3xl sm:text-5xl font-medium tracking-tight text-main leading-tight">
-                Who am I?
+    <article class="about-motion pt-16 sm:pt-24 pb-20 sm:pb-28 space-y-20 sm:space-y-28">
+        {/* ── Intro ── */}
+        <header class="reveal">
+            <p class={sectionLabel}><span class="opacity-50">{'// '}</span>{title.toLowerCase()}</p>
+            <h1 class="font-sans text-3xl sm:text-5xl font-medium tracking-tight text-main leading-[1.12] max-w-3xl">
+                {about.headline}
             </h1>
+            <div
+                class="prose prose-dante max-w-2xl mt-8 sm:mt-10 [&_p]:text-[1.05rem] sm:[&_p]:text-lg [&_p]:leading-[1.8] [&_p]:text-main/85"
+            >
+                {about.intro.map((p) => <Fragment set:html={md(p)} />)}
+            </div>
+
+            {
+                about.facts.length > 0 && (
+                    <dl class:list={['mt-10 sm:mt-12 grid grid-cols-2 sm:grid-cols-4 border-l border-t', cellBorder]}>
+                        {about.facts.map((fact) => (
+                            <div class:list={['border-r border-b px-4 py-3 sm:px-5 sm:py-4', cellBorder]}>
+                                <dt class="font-mono text-[0.65rem] uppercase tracking-wider text-muted">{fact.label}</dt>
+                                <dd class="mt-1 text-sm sm:text-[0.95rem] text-main">{fact.value}</dd>
+                            </div>
+                        ))}
+                    </dl>
+                )
+            }
         </header>
 
-        <div
-            class="border-x-2 border-main/25 dark:border-main/35 bg-muted/15 dark:bg-muted/10"
-            aria-label="About sections"
-        >
-            {
-                htmlBlocks.map((html, i) => (
-                    <section
-                        class:list={[
-                            'about-block border-b border-main/20 dark:border-main/30 last:border-b-0',
-                            'px-5 py-10 sm:px-10 sm:py-14'
-                        ]}
-                        style={`animation-delay: ${80 + i * 110}ms`}
-                    >
-                        <div
-                            class:list={[
-                                'prose prose-dante max-w-none',
-                                '[&_p]:text-[1.05rem] sm:[&_p]:text-lg [&_p]:leading-[1.8] [&_p]:text-main/85',
-                                '[&_p+p]:mt-3'
-                            ]}
-                            set:html={html}
-                        />
-                    </section>
-                ))
-            }
-        </div>
+        {/* ── Metrics ── */}
+        {
+            about.metrics.length > 0 && (
+                <section class="reveal" aria-labelledby="about-impact">
+                    <h2 id="about-impact" class={sectionLabel}>
+                        <span class="opacity-50">{'// '}</span>impact at visa
+                    </h2>
+                    <div class:list={['grid grid-cols-1 sm:grid-cols-2 border-l border-t bg-muted/15 dark:bg-muted/10', cellBorder]}>
+                        {about.metrics.map((m) => (
+                            <div class:list={['border-r border-b px-5 py-6 sm:px-7 sm:py-8', cellBorder]}>
+                                <p class="font-mono text-2xl sm:text-3xl tracking-tight text-main whitespace-nowrap">{m.value}</p>
+                                <p class="mt-2 text-sm leading-relaxed text-muted max-w-xs">{m.label}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )
+        }
+
+        {/* ── Focus areas ── */}
+        {
+            focus.length > 0 && (
+                <section class="reveal" aria-labelledby="about-focus">
+                    <h2 id="about-focus" class={sectionLabel}>
+                        <span class="opacity-50">{'// '}</span>what I work on
+                    </h2>
+                    <div class="space-y-10 sm:space-y-12">
+                        {focus.map((f, i) => (
+                            <div class="grid gap-3 sm:grid-cols-[3rem_1fr] sm:gap-6">
+                                <span class="font-mono text-xs text-muted pt-1.5 select-none">{String(i + 1).padStart(2, '0')}</span>
+                                <div>
+                                    <h3 class="font-sans text-xl sm:text-2xl font-medium tracking-tight text-main">{f.title}</h3>
+                                    <p class="mt-3 text-[1.05rem] leading-[1.75] text-main/85 max-w-2xl" set:html={f.bodyHtml} />
+                                    {f.linked.length > 0 && (
+                                        <ul class="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+                                            {f.linked.map((p) => (
+                                                <li class="flex items-center gap-2">
+                                                    <a href={`/projects/${p.slug}/`} class:list={['font-mono text-xs text-main/80 hover:text-main', inlineLink]}>
+                                                        {p.data.title.replace(/\s*\(.*\)$/, '')}
+                                                    </a>
+                                                    {projectTagsToBadges(p.data.tags)
+                                                        .slice(0, 1)
+                                                        .map((b) => (
+                                                            <span class:list={[badgeBase, b.classes]}>{b.label}</span>
+                                                        ))}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )
+        }
+
+        {/* ── Principles ── */}
+        {
+            about.principles.length > 0 && (
+                <section class="reveal" aria-labelledby="about-principles">
+                    <h2 id="about-principles" class={sectionLabel}>
+                        <span class="opacity-50">{'// '}</span>how I work
+                    </h2>
+                    <div class:list={['grid sm:grid-cols-2 border-l border-t', cellBorder]}>
+                        {about.principles.map((p) => (
+                            <div class:list={['border-r border-b px-5 py-6 sm:px-7 sm:py-7', cellBorder]}>
+                                <h3 class="font-sans text-lg font-medium tracking-tight text-main">{p.title}</h3>
+                                <p
+                                    class="mt-2 text-[0.95rem] leading-[1.7] text-main/80 [&_a]:underline [&_a]:underline-offset-[3px] [&_a]:decoration-dashed [&_a]:decoration-accent/35 hover:[&_a]:decoration-solid"
+                                    set:html={mdInline(p.body)}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )
+        }
+
+        {/* ── Experience ── */}
+        {
+            about.experience.length > 0 && (
+                <section class="reveal" aria-labelledby="about-experience">
+                    <div class="flex items-baseline justify-between mb-6 sm:mb-8">
+                        <h2 id="about-experience" class="font-mono text-xs text-muted select-none">
+                            <span class="opacity-50">{'// '}</span>experience
+                        </h2>
+                        {resume && (
+                            <a href={resume.href} target="_blank" rel="noopener" class:list={['font-mono text-xs text-muted hover:text-main', inlineLink]}>
+                                full resume →
+                            </a>
+                        )}
+                    </div>
+                    <ol class:list={['border-l-2', cellBorder]}>
+                        {about.experience.map((job) => (
+                            <li class="relative pl-6 sm:pl-8 pb-10 last:pb-0">
+                                <span
+                                    class="absolute -left-[5px] top-2 h-2 w-2 [background:rgb(var(--color-accent))]"
+                                    aria-hidden="true"
+                                />
+                                <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+                                    <h3 class="font-sans text-xl font-medium tracking-tight text-main">
+                                        {job.company}
+                                        <span class="text-muted font-normal"> · {job.role}</span>
+                                    </h3>
+                                    <p class="font-mono text-xs text-muted shrink-0">{job.period}</p>
+                                </div>
+                                {job.location && <p class="mt-1 font-mono text-xs text-muted">{job.location}</p>}
+                                {job.highlights.length > 0 && (
+                                    <ul class="mt-4 space-y-2.5 max-w-2xl">
+                                        {job.highlights.map((h) => (
+                                            <li class="relative pl-5 text-[0.95rem] leading-[1.7] text-main/85">
+                                                <span class="absolute left-0 top-0 font-mono text-muted select-none" aria-hidden="true">
+                                                    –
+                                                </span>
+                                                <Fragment set:html={mdInline(h)} />
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </li>
+                        ))}
+                        {about.education && (
+                            <li class="relative pl-6 sm:pl-8 pt-10">
+                                <span class:list={['absolute -left-[5px] top-12 h-2 w-2 border-2 bg-main', cellBorder]} aria-hidden="true" />
+                                <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+                                    <h3 class="font-sans text-lg font-medium tracking-tight text-main">
+                                        {about.education.school}
+                                        <span class="text-muted font-normal"> · {about.education.degree}</span>
+                                    </h3>
+                                    <p class="font-mono text-xs text-muted shrink-0">{about.education.year}</p>
+                                </div>
+                            </li>
+                        )}
+                    </ol>
+                </section>
+            )
+        }
+
+        {/* ── Currently ── */}
+        {
+            (building.length > 0 || readingNow.length > 0) && (
+                <section class="reveal" aria-labelledby="about-currently">
+                    <h2 id="about-currently" class={sectionLabel}>
+                        <span class="opacity-50">{'// '}</span>currently
+                    </h2>
+                    <div class:list={['grid sm:grid-cols-2 border-l border-t', cellBorder]}>
+                        {building.length > 0 && (
+                            <div class:list={['border-r border-b px-5 py-6 sm:px-7', cellBorder]}>
+                                <p class="font-mono text-[0.65rem] uppercase tracking-wider text-muted mb-4">Building</p>
+                                <ul class="space-y-3">
+                                    {building.map((p) => (
+                                        <li class="flex items-center justify-between gap-3">
+                                            <a href={`/projects/${p.slug}/`} class:list={['text-[0.95rem] text-main', inlineLink]}>
+                                                {p.data.title}
+                                            </a>
+                                            {projectTagsToBadges(p.data.tags)
+                                                .slice(0, 1)
+                                                .map((b) => (
+                                                    <span class:list={[badgeBase, 'shrink-0', b.classes]}>{b.label}</span>
+                                                ))}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                        {readingNow.length > 0 && (
+                            <div class:list={['border-r border-b px-5 py-6 sm:px-7', cellBorder]}>
+                                <p class="font-mono text-[0.65rem] uppercase tracking-wider text-muted mb-4">Reading</p>
+                                <ul class="space-y-3">
+                                    {readingNow.map((r) => (
+                                        <li class="flex items-center justify-between gap-3">
+                                            <a href={`/reads/${r.slug}/`} class:list={['text-[0.95rem] text-main', inlineLink]}>
+                                                {r.data.title}
+                                            </a>
+                                            <span class:list={[badgeBase, 'shrink-0', readKindToBadge(r.data.kind).classes]}>
+                                                {readKindToBadge(r.data.kind).label}
+                                            </span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                </section>
+            )
+        }
+
+        {/* ── Links ── */}
+        <section class="reveal" aria-labelledby="about-elsewhere">
+            <h2 id="about-elsewhere" class={sectionLabel}>
+                <span class="opacity-50">{'// '}</span>get in touch
+            </h2>
+            <p class="text-[1.05rem] leading-[1.75] text-main/85 max-w-2xl mb-8">
+                I like talking about ML platforms, developer tools, and agent workflows. Reach out if you're working on any of them.
+            </p>
+            <div class="flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 [&>*]:w-full [&>*]:sm:w-auto">
+                <Button href="/contact">Contact</Button>
+                {resume && <Button href={resume.href} target="_blank" variant="ghost">Resume</Button>}
+                {github && <Button href={github.href} target="_blank" variant="ghost">GitHub</Button>}
+                {linkedin && <Button href={linkedin.href} target="_blank" variant="ghost">LinkedIn</Button>}
+            </div>
+        </section>
     </article>
 </BaseLayout>
 
 <style>
-    @keyframes about-reveal-left {
+    @keyframes about-reveal {
         from {
             opacity: 0;
-            transform: translateX(-1.25rem);
+            transform: translateY(0.75rem);
         }
         to {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateY(0);
         }
     }
 
-    @keyframes about-reveal-right {
-        from {
-            opacity: 0;
-            transform: translateX(1.25rem);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    .about-block {
+    .reveal {
         opacity: 0;
-        animation-duration: 0.72s;
-        animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-        animation-fill-mode: forwards;
-        animation-name: about-reveal-left;
+        animation: about-reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
-    .about-block:nth-child(even) {
-        animation-name: about-reveal-right;
-    }
+    .reveal:nth-child(1) { animation-delay: 40ms; }
+    .reveal:nth-child(2) { animation-delay: 140ms; }
+    .reveal:nth-child(3) { animation-delay: 240ms; }
+    .reveal:nth-child(n + 4) { animation-delay: 320ms; }
 
     @media (prefers-reduced-motion: reduce) {
-        .about-motion .about-block {
+        .about-motion .reveal {
             animation: none;
             opacity: 1;
             transform: none;
