@@ -25,11 +25,31 @@ seo:
 
 **Status:** RoamReady is in **beta on TestFlight**, with testers on it now. The App Store release will be a **$4.99 one-time purchase**: no subscription, no in-app purchases, no ads. Want to try it before launch? [Get in touch](/contact) and I'll send you an invite.
 
-## Why I built it
+## The trip that started it
 
-I built RoamReady for my own camping trips. Before every trip, the same details were scattered everywhere: the setup steps for the rig lived in my head or in a notes app, the reservation was buried in an email, and the manual for the water heater was a PDF I couldn't open once I lost signal at camp. Each trip started with digging through all of it again.
+The dealer's walkthrough took forty minutes. I nodded through all of it: the tongue jack, the breakaway cable, the black tank, the gray tank, the pressure regulator, which switch runs the water heater and why you never flip it on while the tank is empty. I filmed some of it on my phone and drove my new Forest River No Boundaries home convinced I had it handled.
 
-RoamReady puts it in one place and keeps it on the device, so it still works at the campsite, where you need it most and where reception often runs out.
+I did not have it handled.
+
+My first trip was to a state park a couple of hours from home. I rolled in at dusk, and the first problem was the ranger station. They wanted the confirmation number, and it was in an email that wouldn't load. There was one bar of signal at the gate and none at the site. I scrolled through a frozen inbox while a line of trucks formed behind me.
+
+The site itself was worse. It sloped, I had no idea how much, and my leveling blocks were buried under the camp chairs. I started unhitching before I chocked the wheels, and the trailer shifted an inch on its own. That inch felt like a mile. I stood there in the dark with a headlamp, trying to remember the order from a dealer video that wouldn't play without a connection. I wasn't sure whether the surge protector went on before or after the power cord, or whether the regulator went at the spigot or at the trailer. I wasn't sure about the water heater either. I had a vague memory of the dealer saying something about it, and the manual was a PDF sitting in that same unreachable inbox. I left it off and took a cold shower.
+
+Packing up the next morning went the same way. I dumped the tanks in the wrong order, and I learned why the order matters. I was pulling out when a neighbor jogged over and waved me down: one stabilizer jack was still down. Two more feet and I'd have bent it.
+
+At a gas station on the drive home, I opened my notes app and typed out everything I'd forgotten, everything I'd done in the wrong order, and everything I couldn't find when I needed it. It was long. Somewhere around "chock the wheels *before* you unhitch," I realized the list was the product. It was a setup checklist and a teardown checklist, written by someone who'd just gotten both of them wrong.
+
+## The trip after that
+
+That list became RoamReady's first checklist.
+
+On the next trip, the booking was already in the app, saved on my phone with the confirmation number, site number, and check-in time. No signal needed. When I pulled into the site, I opened the setup checklist and went down it in order: chock, level, unhitch, stabilizers, surge protector, power, regulator, water. One step at a time, checked off as I went. Nothing got skipped. Nothing rolled.
+
+Then I got to the water heater, and this time the manual was in the app too. I asked the Assistant whether it was safe to turn on the electric element. It answered from the manual itself, citing the exact page, with no signal, and confirmed what the dealer had said: fill the tank first. Hot shower.
+
+Teardown the next morning was boring, which is the highest compliment I can give it. Black tank, then gray, then flush. Every jack up. Hitch checked, lights checked, chocks pulled. Before I left, I took a photo of the site, added a note about which way it sloped, and marked it as a place to return to.
+
+RoamReady is everything I wish I'd had on that first night: the steps in the right order, the paperwork, and the manuals, all on the phone and all working without a signal.
 
 ## What it does
 
