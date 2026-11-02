@@ -1,5 +1,5 @@
 /** Allowed project status / phase tags (order in frontmatter controls display order). */
-export const PROJECT_TAG_IDS = ['live', 'in-progress', 'paused', 'planned'] as const;
+export const PROJECT_TAG_IDS = ['live', 'beta', 'in-progress', 'paused', 'planned'] as const;
 export type ProjectTagId = (typeof PROJECT_TAG_IDS)[number];
 
 export const projectTagConfig: Record<ProjectTagId, { label: string; classes: string }> = {
@@ -7,6 +7,11 @@ export const projectTagConfig: Record<ProjectTagId, { label: string; classes: st
         label: 'live',
         classes:
             'border border-emerald-600/35 bg-emerald-500/[0.06] text-emerald-700 dark:border-emerald-400/25 dark:bg-emerald-400/[0.05] dark:text-emerald-400'
+    },
+    beta: {
+        label: 'beta',
+        classes:
+            'border border-sky-600/35 bg-sky-500/[0.06] text-sky-700 dark:border-sky-400/25 dark:bg-sky-400/[0.05] dark:text-sky-400'
     },
     'in-progress': {
         label: 'in progress',
