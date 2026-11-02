@@ -6,6 +6,9 @@ import tailwind from '@astrojs/tailwind';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://example.com',
+    redirects: {
+        '/projects/control-plane': '/projects/aios-console'
+    },
     integrations: [
         mdx(),
         sitemap(),

@@ -1,5 +1,5 @@
 ---
-title: 'Control Plane (AIOS)'
+title: 'AIOS Console'
 description: 'The web app that runs Visa''s ML platform: deploy, monitor, roll back, and switch traffic between fraud models across multiple data centers, all from one place.'
 publishDate: '2026-10-27'
 isFeatured: true
@@ -9,14 +9,14 @@ isWorkProject: true
 technologies:
   - React
   - TypeScript
-  - Node.js
+  - Go
 tags:
   - live
 ---
 
 **Note:** I built this at Visa, so some details are left out or kept general for confidentiality.
 
-Control Plane is the web app that operates Visa's AI platform (AIOS). The fraud models on that platform score more than **10 million transactions a day** across multiple data centers. Control Plane is where every change to those models in production starts, gets approved, and gets watched.
+AIOS Console is the web app that operates Visa's AI platform (AIOS). The fraud models on that platform score more than **10 million transactions a day** across multiple data centers. AIOS Console is where every change to those models in production starts, gets approved, and gets watched.
 
 ## The problem
 
@@ -24,7 +24,7 @@ Getting a new fraud model version into production took about **45 minutes** of c
 
 ## What it does
 
-Control Plane puts the whole lifecycle in one web app, so every team sees the same platform:
+AIOS Console puts the whole lifecycle in one web app, so every team sees the same platform:
 
 - **Deploy and roll back:** Push a model version to one or more data centers and roll it back in a single step if it misbehaves.
 - **Traffic switching:** Move traffic between model versions and data centers with canary releases, percentage splits, and failover.
@@ -40,7 +40,7 @@ Control Plane puts the whole lifecycle in one web app, so every team sees the sa
 
 ## My role
 
-I was the **tech lead**. I owned the architecture and a large share of the code, and I led the team through end-to-end delivery: a React and TypeScript frontend on a Node backend that brings release automation, monitoring, and traffic switching into one deployment workflow.
+I was the **tech lead**. I owned the architecture and a large share of the code, and I led the team through end-to-end delivery: a React and TypeScript frontend on a Go backend that brings release automation, monitoring, and traffic switching into one deployment workflow.
 
 ## Outcome
 

@@ -2,12 +2,12 @@
 title: About
 seo:
   title: About — Tanner Barcelos
-  description: Senior full-stack and AI engineer at Visa building AI-powered products, multi-agent systems, and the ML platforms behind them.
+  description: Senior full-stack engineer at Visa building AI-powered products, multi-agent systems, and the ML platforms behind them.
 about:
   headline: I build AI-powered products and the platforms that run them.
   intro:
     - |
-      I'm Tanner, a **senior full-stack and AI engineer** on the **AI Studio** team at **Visa**. I lead products from requirements through architecture and into production: React and TypeScript frontends, federated GraphQL backends, Go services, and the multi-agent systems and generative UI that are now part of how people use them.
+      I'm Tanner, a **senior full-stack engineer** on the **AI Studio** team at **Visa**, focused on AI products. I lead products from requirements through architecture and into production: React and TypeScript frontends, federated GraphQL backends, Go services, and the multi-agent systems and generative UI that are now part of how people use them.
     - |
       Outside of Visa I build developer tools for coding agents and native apps for iPhone, iPad, and Mac. I read a lot, both technical books and fiction, and I keep the list on my [bookshelf](/reads/shelf/technical/).
   facts:
@@ -34,7 +34,7 @@ about:
     - title: ML platform engineering
       body: I built AIOS Console, the React and Go application ML and reliability teams use to deploy models, manage traffic, scale services, plan capacity, and run day-two operations across Kubernetes and Nomad.
       projects:
-        - control-plane
+        - aios-console
     - title: Tools for coding agents
       body: I use coding agents every day, and I build tools for the gaps I run into, like keeping track of many agent sessions at once or cutting noisy command output before it fills an agent's context.
       projects:
@@ -57,7 +57,7 @@ about:
       body: I introduced structured AI-assisted workflows with Claude Code, Codex, and Cursor across requirements, planning, review, and delivery. My current setup is on the [stack page](/stack).
   experience:
     - company: Visa
-      role: Senior Software Engineer · AI Studio
+      role: Senior Full Stack Engineer · AI Studio
       period: Feb 2022 – Present
       location: Foster City, CA
       highlights:
