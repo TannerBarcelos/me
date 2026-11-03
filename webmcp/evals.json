@@ -253,6 +253,48 @@
         ]
     },
     {
+        "name": "Mid-chain recovery: technology named as a project",
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "Tell me about his Go work."
+            },
+            {
+                "role": "model",
+                "type": "functioncall",
+                "name": "get_project",
+                "arguments": {
+                    "project": "Go"
+                }
+            },
+            {
+                "role": "user",
+                "type": "functionresponse",
+                "name": "get_project",
+                "response": {
+                    "result": {
+                        "error": "\"Go\" is a technology, not a project name.",
+                        "code": "TECHNOLOGY_NOT_PROJECT",
+                        "retryable": false,
+                        "projects_using": ["AIOS Console"],
+                        "suggestion": "Call list_projects with technology \"Go\", or ask the user which of projects_using they mean."
+                    }
+                }
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "list_projects",
+                "arguments": {
+                    "technology": {
+                        "$pattern": "^[Gg]o$"
+                    }
+                }
+            }
+        ]
+    },
+    {
         "name": "Read a named section after the overview",
         "messages": [
             {

@@ -81,7 +81,7 @@ const fixture: SiteData = {
             title: 'Seeker',
             statuses: ['in-progress'],
             technologies: ['Swift', 'SwiftData'],
-            description: 'A native iOS podcast player with semantic search.'
+            description: 'A native iOS podcast player with semantic search and a listening inbox.'
         }),
         project({ slug: 'spendaro', title: 'Spendaro', technologies: ['Next.js', 'React Native'], description: 'Budgeting with email receipts.' })
     ],
@@ -253,10 +253,18 @@ describe('get_project', () => {
         expect((await call('get_project', { project: 'RELAY' })).title).toBe('Relay');
     });
 
-    it('asks for clarification when a reference fits several projects', async () => {
+    it('treats a technology name as a technology, never guessing a project', async () => {
         const { call } = await setup();
-        const res = await call('get_project', { project: 'swift' });
-        expect(res).toMatchObject({ code: 'AMBIGUOUS', matches: ['Relay', 'Seeker'] });
+        // "go" fits exactly one project, but the user almost certainly means the language.
+        expect(await call('get_project', { project: 'go' })).toMatchObject({ code: 'TECHNOLOGY_NOT_PROJECT', projects_using: ['AIOS Console'] });
+        expect(await call('get_project', { project: 'swift' })).toMatchObject({ code: 'TECHNOLOGY_NOT_PROJECT', projects_using: ['Relay', 'Seeker'] });
+        expect(await call('open_page', { page: 'project', item: 'go' })).toMatchObject({ code: 'TECHNOLOGY_NOT_PROJECT' });
+        expect(navigate).not.toHaveBeenCalled();
+    });
+
+    it('asks for clarification when a description fits several projects', async () => {
+        const { call } = await setup();
+        expect(await call('get_project', { project: 'inbox' })).toMatchObject({ code: 'AMBIGUOUS', matches: ['Relay', 'Seeker'] });
     });
 
     it('points unknown employer products to get_experience', async () => {

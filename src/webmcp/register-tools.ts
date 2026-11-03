@@ -240,7 +240,18 @@ async function getExperience(args: Args, signal: AbortSignal) {
 }
 
 const projectOwnership = (p: ProjectRecord) => (p.isWorkProject ? 'work' : 'personal');
-const describeProject = (p: ProjectRecord) => `${p.description} ${p.technologies.join(' ')}`;
+/** Technologies are left out on purpose: "go" or "swift" names a language, not a project. */
+const describeProject = (p: ProjectRecord) => p.description;
+
+/** A reference like "go" or "swift" means a technology, so send the agent to the technology filter. */
+function technologyReference(projects: ProjectRecord[], input: string): ToolError | undefined {
+    const using = projects.filter((p) => usesTechnology(p.technologies, input));
+    if (using.length === 0) return undefined;
+    return fail('TECHNOLOGY_NOT_PROJECT', `"${input}" is a technology, not a project name.`, {
+        projects_using: using.map((p) => p.title),
+        suggestion: `Call list_projects with technology "${input}", or ask the user which of projects_using they mean.`
+    });
+}
 const describeRead = (r: ReadRecord) => `${r.authors.join(' ')} ${r.topics.join(' ')} ${r.description}`;
 
 async function listProjects(args: Args, signal: AbortSignal) {
@@ -293,7 +304,7 @@ async function getProject(args: Args, signal: AbortSignal) {
     if (!name) return fail('MISSING_PROJECT', 'project is required.', { suggestion: 'Ask the user which project, or call list_projects.' });
 
     const found = resolveEntry(projects, name, describeProject);
-    if ('candidates' in found) return notFound('project', name, found.candidates, projects);
+    if ('candidates' in found) return technologyReference(projects, name) ?? notFound('project', name, found.candidates, projects);
     const p = found.entry;
 
     const sectionName = str(args.section);
@@ -463,7 +474,9 @@ async function openPage(args: Args, signal: AbortSignal) {
         const data = await loadData(signal);
         const items: { title: string }[] = page === 'project' ? data.projects : data.reads;
         const found = page === 'project' ? resolveEntry(data.projects, item, describeProject) : resolveEntry(data.reads, item, describeRead);
-        if ('candidates' in found) return notFound(page, item, found.candidates, items);
+        if ('candidates' in found) {
+            return (page === 'project' && technologyReference(data.projects, item)) || notFound(page, item, found.candidates, items);
+        }
         url = found.entry.url;
         if ('externalUrl' in found.entry && found.entry.externalUrl) externalUrl = found.entry.externalUrl;
     }
