@@ -1,46 +1,219 @@
 [
     {
         "name": "Intro: who is Tanner",
-        "messages": [{ "role": "user", "type": "message", "content": "Who runs this site and what do they do?" }],
-        "expectedCall": [{ "functionName": "get_profile", "arguments": {} }]
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "Who runs this site and what do they do?"
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "get_profile",
+                "arguments": {}
+            }
+        ]
     },
     {
         "name": "Contact info routes to profile, not navigation",
-        "messages": [{ "role": "user", "type": "message", "content": "What's the best way to reach Tanner? Does he have a LinkedIn?" }],
-        "expectedCall": [{ "functionName": "get_profile", "arguments": {} }]
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "What's the best way to reach Tanner? Does he have a LinkedIn?"
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "get_profile",
+                "arguments": {}
+            }
+        ]
     },
     {
         "name": "Career timeline",
-        "messages": [{ "role": "user", "type": "message", "content": "Where has Tanner worked before?" }],
-        "expectedCall": [{ "functionName": "get_experience", "arguments": {} }]
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "Where has Tanner worked before?"
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "get_experience",
+                "arguments": {}
+            }
+        ]
     },
     {
         "name": "Single employer detail",
-        "messages": [{ "role": "user", "type": "message", "content": "What did he actually accomplish at Visa?" }],
-        "expectedCall": [{ "functionName": "get_experience", "arguments": { "company": { "$pattern": "^[Vv]isa$" } } }]
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "What did he actually accomplish at Visa?"
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "get_experience",
+                "arguments": {
+                    "company": {
+                        "$pattern": "^[Vv]isa$"
+                    }
+                }
+            }
+        ]
     },
     {
         "name": "Projects by technology",
-        "messages": [{ "role": "user", "type": "message", "content": "Has he built anything in Swift?" }],
-        "expectedCall": [{ "functionName": "list_projects", "arguments": { "technology": { "$pattern": "^[Ss]wift$" } } }]
-    },
-    {
-        "name": "Shipped side projects (status + ownership mapping)",
-        "messages": [{ "role": "user", "type": "message", "content": "Which of his personal projects have actually shipped?" }],
-        "expectedCall": [{ "functionName": "list_projects", "arguments": { "status": "live", "ownership": "personal" } }]
-    },
-    {
-        "name": "Named project deep dive",
-        "messages": [{ "role": "user", "type": "message", "content": "Tell me about RoamReady." }],
-        "expectedCall": [{ "functionName": "get_project", "arguments": { "project": { "$pattern": "[Rr]oam ?[Rr]eady" } } }]
-    },
-    {
-        "name": "Coreference: list then drill into 'the podcast one'",
-        "messages": [{ "role": "user", "type": "message", "content": "What iOS apps has he made? Then tell me how the podcast one works." }],
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "Has he built anything in Swift?"
+            }
+        ],
         "expectedCall": [
             {
                 "functionName": "list_projects",
-                "arguments": { "$any": true },
+                "arguments": {
+                    "technology": {
+                        "$pattern": "^[Ss]wift$"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "name": "Shipped side projects (status + ownership mapping)",
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "Which of his personal projects have actually shipped?"
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "list_projects",
+                "arguments": {
+                    "status": "live",
+                    "ownership": "personal"
+                }
+            }
+        ]
+    },
+    {
+        "name": "AI projects map to the AI lane",
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "What has he built in the AI and agents space?"
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "list_projects",
+                "arguments": {
+                    "lane": "ai"
+                }
+            }
+        ]
+    },
+    {
+        "name": "Over-constrained query is relaxed, not retried blindly",
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "Does he have any agent observability tools?"
+            },
+            {
+                "role": "model",
+                "type": "functioncall",
+                "name": "list_projects",
+                "arguments": {
+                    "query": "agent observability tools"
+                }
+            },
+            {
+                "role": "user",
+                "type": "functionresponse",
+                "name": "list_projects",
+                "response": {
+                    "result": {
+                        "projects": [
+                            {
+                                "slug": "relay",
+                                "title": "Relay",
+                                "status": "in-progress",
+                                "lane": "apps",
+                                "ownership": "personal",
+                                "technologies": ["Swift", "SwiftUI", "AppKit"],
+                                "summary": "A native macOS control plane for agentic software."
+                            }
+                        ],
+                        "match": "partial",
+                        "note": "No project matched every keyword; these match some of them.",
+                        "page": 1,
+                        "page_size": 5,
+                        "total_count": 1,
+                        "total_pages": 1,
+                        "has_more": false
+                    }
+                }
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "get_project",
+                "arguments": {
+                    "project": {
+                        "$pattern": "[Rr]elay"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "name": "Named project deep dive",
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "Tell me about RoamReady."
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "get_project",
+                "arguments": {
+                    "project": {
+                        "$pattern": "[Rr]oam ?[Rr]eady"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "name": "Coreference: list then drill into 'the podcast one'",
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "What iOS apps has he made? Then tell me how the podcast one works."
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "list_projects",
+                "arguments": {
+                    "$any": true
+                },
                 "mockOutput": {
                     "projects": [
                         {
@@ -69,14 +242,32 @@
                     "has_more": false
                 }
             },
-            { "functionName": "get_project", "arguments": { "project": { "$pattern": "[Ss]eeker" } } }
+            {
+                "functionName": "get_project",
+                "arguments": {
+                    "project": {
+                        "$pattern": "[Ss]eeker"
+                    }
+                }
+            }
         ]
     },
     {
         "name": "Read a named section after the overview",
         "messages": [
-            { "role": "user", "type": "message", "content": "How is Relay architected under the hood?" },
-            { "role": "model", "type": "functioncall", "name": "get_project", "arguments": { "project": "Relay" } },
+            {
+                "role": "user",
+                "type": "message",
+                "content": "How is Relay architected under the hood?"
+            },
+            {
+                "role": "model",
+                "type": "functioncall",
+                "name": "get_project",
+                "arguments": {
+                    "project": "Relay"
+                }
+            },
             {
                 "role": "user",
                 "type": "functionresponse",
@@ -104,15 +295,33 @@
         "expectedCall": [
             {
                 "functionName": "get_project",
-                "arguments": { "project": { "$pattern": "[Rr]elay" }, "section": { "$pattern": "[Nn]ative [Bb]y [Dd]esign|[Tt]echnology [Ss]tack" } }
+                "arguments": {
+                    "project": {
+                        "$pattern": "[Rr]elay"
+                    },
+                    "section": {
+                        "$pattern": "[Nn]ative [Bb]y [Dd]esign|[Tt]echnology [Ss]tack"
+                    }
+                }
             }
         ]
     },
     {
         "name": "Mid-chain recovery: unknown project falls back to experience",
         "messages": [
-            { "role": "user", "type": "message", "content": "Tell me about the Nexus project." },
-            { "role": "model", "type": "functioncall", "name": "get_project", "arguments": { "project": "Nexus" } },
+            {
+                "role": "user",
+                "type": "message",
+                "content": "Tell me about the Nexus project."
+            },
+            {
+                "role": "model",
+                "type": "functioncall",
+                "name": "get_project",
+                "arguments": {
+                    "project": "Nexus"
+                }
+            },
             {
                 "role": "user",
                 "type": "functionresponse",
@@ -141,36 +350,126 @@
                 }
             }
         ],
-        "expectedCall": [{ "functionName": "get_experience", "arguments": { "$any": true } }]
+        "expectedCall": [
+            {
+                "functionName": "get_experience",
+                "arguments": {
+                    "$any": true
+                }
+            }
+        ]
     },
     {
         "name": "Currently reading",
-        "messages": [{ "role": "user", "type": "message", "content": "What is Tanner reading right now?" }],
-        "expectedCall": [{ "functionName": "list_reads", "arguments": { "progress": "reading" } }]
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "What is Tanner reading right now?"
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "list_reads",
+                "arguments": {
+                    "progress": "reading"
+                }
+            }
+        ]
     },
     {
         "name": "Technical book recommendation by topic",
-        "messages": [{ "role": "user", "type": "message", "content": "Any book recommendations from him on distributed systems?" }],
-        "expectedCall": [{ "functionName": "list_reads", "arguments": { "query": { "$pattern": "[Dd]istributed" } } }]
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "Any book recommendations from him on distributed systems?"
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "list_reads",
+                "arguments": {
+                    "query": {
+                        "$pattern": "[Dd]istributed"
+                    }
+                }
+            }
+        ]
     },
     {
         "name": "AI model preference",
-        "messages": [{ "role": "user", "type": "message", "content": "Which AI model does he use for coding, and why?" }],
-        "expectedCall": [{ "functionName": "get_tech_stack", "arguments": { "category": "ai_models" } }]
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "Which AI model does he use for coding, and why?"
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "get_tech_stack",
+                "arguments": {
+                    "category": "ai_models"
+                }
+            }
+        ]
     },
     {
         "name": "Coding agent harness preference",
-        "messages": [{ "role": "user", "type": "message", "content": "Does he prefer Claude Code or Cursor?" }],
-        "expectedCall": [{ "functionName": "get_tech_stack", "arguments": { "category": "coding_harnesses" } }]
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "Does he prefer Claude Code or Cursor?"
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "get_tech_stack",
+                "arguments": {
+                    "category": "coding_harnesses"
+                }
+            }
+        ]
     },
     {
         "name": "Explicit navigation to a project",
-        "messages": [{ "role": "user", "type": "message", "content": "Open the RoamReady page for me." }],
-        "expectedCall": [{ "functionName": "open_page", "arguments": { "page": "project", "item": { "$pattern": "[Rr]oam ?[Rr]eady" } } }]
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "Open the RoamReady page for me."
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "open_page",
+                "arguments": {
+                    "page": "project",
+                    "item": {
+                        "$pattern": "[Rr]oam ?[Rr]eady"
+                    }
+                }
+            }
+        ]
     },
     {
         "name": "Navigation to a static page",
-        "messages": [{ "role": "user", "type": "message", "content": "Take me to his stack page." }],
-        "expectedCall": [{ "functionName": "open_page", "arguments": { "page": "stack" } }]
+        "messages": [
+            {
+                "role": "user",
+                "type": "message",
+                "content": "Take me to his stack page."
+            }
+        ],
+        "expectedCall": [
+            {
+                "functionName": "open_page",
+                "arguments": {
+                    "page": "stack"
+                }
+            }
+        ]
     }
 ]

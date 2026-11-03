@@ -7,7 +7,8 @@
         "start": "astro dev",
         "build": "astro build",
         "preview": "astro preview",
-        "astro": "astro"
+        "astro": "astro",
+        "test": "vitest run"
     },
     "dependencies": {
         "@astrojs/mdx": "^4.3.1",
@@ -26,6 +27,7 @@
         "@tailwindcss/typography": "^0.5.15",
         "prettier": "^3.3.3",
         "prettier-plugin-tailwindcss": "^0.6.6",
+        "vitest": "^3.2.7",
         "webmcp-types": "^0.1.10"
     }
 }

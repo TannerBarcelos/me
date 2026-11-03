@@ -40,6 +40,74 @@ const norm = (s: string) =>
         .replace(/[^a-z0-9]+/g, ' ')
         .trim();
 
+// ── word matching ──
+// Whole-word, not substring: "go" must not match "mongodb", "ai" must not match "failed".
+
+const STOP_WORDS = new Set([
+    'the',
+    'a',
+    'an',
+    'and',
+    'or',
+    'of',
+    'for',
+    'with',
+    'about',
+    'on',
+    'in',
+    'to',
+    'his',
+    'that',
+    'one',
+    'app',
+    'apps',
+    'project',
+    'projects',
+    'book',
+    'books'
+]);
+/** Drop a trailing plural "s" so "agents" and "agent" match (both sides are stemmed). */
+const stem = (w: string) => (w.length > 3 && w.endsWith('s') ? w.slice(0, -1) : w);
+const tokensOf = (s: string) => new Set(norm(s).split(' ').filter(Boolean).map(stem));
+const queryWords = (q: string) => [
+    ...new Set(
+        norm(q)
+            .split(' ')
+            .filter((w) => w && !STOP_WORDS.has(w))
+            .map(stem)
+    )
+];
+/** Exact token, or a prefix for words of 3+ chars ("swift" → "swiftui"). */
+const hasWord = (tokens: Set<string>, w: string) => tokens.has(w) || (w.length >= 3 && [...tokens].some((t) => t.startsWith(w)));
+
+/**
+ * Keep items containing every query word. If none do, fall back to items containing some of them,
+ * best first, and flag `partial` so the agent can tell the user the match was relaxed.
+ */
+function searchByWords<T>(items: T[], query: string, text: (item: T) => string): { items: T[]; partial: boolean } {
+    const words = queryWords(query);
+    if (words.length === 0) return { items, partial: false };
+    const scored = items.map((item, idx) => {
+        const tokens = tokensOf(text(item));
+        return { item, idx, score: words.filter((w) => hasWord(tokens, w)).length };
+    });
+    const full = scored.filter((s) => s.score === words.length);
+    if (full.length > 0) return { items: full.map((s) => s.item), partial: false };
+    const some = scored.filter((s) => s.score > 0).sort((a, b) => b.score - a.score || a.idx - b.idx);
+    return { items: some.map((s) => s.item), partial: some.length > 0 };
+}
+
+/** "Node" ↔ "Node.js", "nextjs" ↔ "Next.js", "React" ↔ "React Native"; never "Go" ↔ "MongoDB". */
+function usesTechnology(technologies: string[], wanted: string): boolean {
+    const w = norm(wanted);
+    return technologies.some((t) => {
+        const n = norm(t);
+        if (n === w || n.replace(/ /g, '') === w.replace(/ /g, '')) return true;
+        const tokens = new Set(n.split(' '));
+        return w.split(' ').every((part) => tokens.has(part));
+    });
+}
+
 const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim() : undefined);
 const int = (v: unknown, min: number) => (typeof v === 'number' && Number.isInteger(v) && v >= min ? v : undefined);
 
@@ -73,17 +141,14 @@ function resolveEntry<T extends { slug: string; title: string }>(
     if (exact) return { entry: exact };
     const partial = items.filter((i) => {
         const t = norm(i.title);
-        return t.includes(q) || (q.length >= 4 && q.includes(bare(i.title))) || norm(i.slug).includes(q);
+        return q.length >= 3 && (t.includes(q) || norm(i.slug).includes(q) || (q.length >= 4 && q.includes(bare(i.title))));
     });
     if (partial.length === 1) return { entry: partial[0] };
     if (partial.length > 1) return { candidates: partial };
-    const STOP = new Set(['the', 'app', 'one', 'that', 'his', 'about', 'project', 'book', 'with', 'for']);
-    const words = q.split(' ').filter((w) => w.length > 2 && !STOP.has(w));
-    if (words.length === 0) return { candidates: [] };
-    const hay = (i: T) => norm(`${i.title} ${i.slug} ${describe(i)}`);
-    const all = items.filter((i) => words.every((w) => hay(i).includes(w)));
-    if (all.length === 1) return { entry: all[0] };
-    return { candidates: all.length > 1 ? all : items.filter((i) => words.some((w) => hay(i).includes(w))) };
+    // Descriptive references ("the camping app"): one item holding every word is a confident match.
+    const found = searchByWords(items, input, (i) => `${i.title} ${i.slug} ${describe(i)}`);
+    if (!found.partial && found.items.length === 1 && found.items.length < items.length) return { entry: found.items[0] };
+    return { candidates: found.items.length < items.length ? found.items : [] };
 }
 
 function notFound(kind: 'project' | 'read', input: string, candidates: { title: string }[], all: { title: string }[]): ToolError {
@@ -185,25 +250,16 @@ async function listProjects(args: Args, signal: AbortSignal) {
     const { lane, status, ownership } = args as Record<string, string | undefined>;
     const page = int(args.page, 1) ?? 1;
 
-    const matches = projects.filter((p) => {
+    const filtered = projects.filter((p) => {
         if (lane && p.lane !== lane) return false;
         if (status && !p.statuses.includes(status as ProjectRecord['statuses'][number])) return false;
         if (ownership && projectOwnership(p) !== ownership) return false;
-        if (technology) {
-            const t = norm(technology);
-            if (!p.technologies.some((x) => norm(x) === t || norm(x).includes(t))) return false;
-        }
-        if (query) {
-            const hay = norm([p.title, p.description, p.slug, ...p.technologies].join(' '));
-            if (
-                !norm(query)
-                    .split(' ')
-                    .every((w) => hay.includes(w))
-            )
-                return false;
-        }
+        if (technology && !usesTechnology(p.technologies, technology)) return false;
         return true;
     });
+    const { items: matches, partial } = query
+        ? searchByWords(filtered, query, (p) => [p.title, p.description, p.slug, p.lane === 'ai' ? 'AI' : '', ...p.technologies].join(' '))
+        : { items: filtered, partial: false };
 
     if (matches.length === 0) {
         return fail('NO_RESULTS', 'No projects match those filters.', {
@@ -226,6 +282,7 @@ async function listProjects(args: Args, signal: AbortSignal) {
             technologies: p.technologies.slice(0, 5),
             summary: clip(p.description, 110)
         })),
+        ...(partial ? { match: 'partial', note: 'No project matched every keyword; these match some of them.' } : {}),
         ...meta
     };
 }
@@ -287,24 +344,18 @@ async function listReads(args: Args, signal: AbortSignal) {
     const page = int(args.page, 1) ?? 1;
 
     const progressOf = (r: ReadRecord) => (r.readingNow ? 'reading' : r.progress);
-    const matches = reads
+    const filtered = reads
         .filter((r) => {
             if (shelf && r.shelf !== shelf) return false;
             if (kind && r.kind !== kind) return false;
             if (progress && progressOf(r) !== progress) return false;
-            if (query) {
-                const hay = norm([r.title, ...r.authors, ...r.topics, r.description, r.notes, r.source ?? ''].join(' '));
-                if (
-                    !norm(query)
-                        .split(' ')
-                        .every((w) => hay.includes(w))
-                )
-                    return false;
-            }
             return true;
         })
         // Currently-reading first (in the site's own order), then most recently added.
         .sort((a, b) => Number(b.readingNow) - Number(a.readingNow) || (a.readingNowOrder ?? 999) - (b.readingNowOrder ?? 999));
+    const { items: matches, partial } = query
+        ? searchByWords(filtered, query, (r) => [r.title, ...r.authors, ...r.topics, r.description, r.notes, r.source ?? ''].join(' '))
+        : { items: filtered, partial: false };
 
     if (matches.length === 0) {
         return fail('NO_RESULTS', 'No reads match those filters.', {
@@ -327,9 +378,10 @@ async function listReads(args: Args, signal: AbortSignal) {
             progress: progressOf(r) ?? 'unspecified',
             ...(r.year ? { year: r.year } : {}),
             topics: r.topics.slice(0, 3),
-            about: clip(r.description, 130),
+            about: clip(r.description, 120),
             ...(r.notes ? { tanners_note: clip(r.notes, 110) } : {})
         })),
+        ...(partial ? { match: 'partial', note: 'Nothing matched every keyword; these match some.' } : {}),
         ...meta
     };
 }
