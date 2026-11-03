@@ -34,5 +34,13 @@ const contentMaxWidthClass = 'max-w-4xl';
             </main>
             <Footer contentMaxWidthClass={contentMaxWidthClass} />
         </div>
+        <script>
+            // WebMCP tools for in-browser AI agents. Bundled module scripts run once per full page load,
+            // so the tools stay registered across ClientRouter navigations.
+            import { registerSiteTools } from '../webmcp/register-tools';
+
+            const controller = registerSiteTools();
+            import.meta.hot?.dispose(() => controller?.abort());
+        </script>
     </body>
 </html>

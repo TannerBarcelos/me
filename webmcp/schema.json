@@ -1,0 +1,174 @@
+{
+    "tools": [
+        {
+            "name": "get_profile",
+            "description": "Returns Tanner Barcelos's professional summary: headline, current role, team and location, focus areas, working principles, and contact links (email, LinkedIn, GitHub, resume, blog). Use for introductions, 'who is Tanner' questions, or when the user wants to get in touch.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {}
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "get_experience",
+            "description": "Returns Tanner's work history (companies, roles, dates, accomplishments), headline impact metrics, and education. Use for questions about past jobs, career timeline, seniority, or resume-style background. For personal side projects, use list_projects instead.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "company": {
+                        "type": "string",
+                        "description": "Company to show in full detail, as the user said it (e.g. 'Visa'). Omit for the whole career timeline."
+                    }
+                }
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "list_projects",
+            "description": "Lists projects Tanner has built, featured first, with status, tech stack, and a one-line summary. Use when the user asks what he has built, wants projects using a technology, or wants to filter by status or by personal vs. employer work. Follow with get_project for the full write-up of one.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "Keywords matched against project titles, summaries, and technologies (e.g. 'podcast', 'agents')."
+                    },
+                    "technology": {
+                        "type": "string",
+                        "description": "Only projects built with this technology, as the user said it (e.g. 'Swift', 'Go', 'React')."
+                    },
+                    "lane": {
+                        "type": "string",
+                        "enum": ["apps", "ai"],
+                        "description": "apps = products people use; ai = AI infrastructure, agents, and developer tooling."
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": ["live", "beta", "in-progress", "paused", "planned"],
+                        "description": "Only projects at this stage. 'Shipped' or 'launched' means live."
+                    },
+                    "ownership": {
+                        "type": "string",
+                        "enum": ["personal", "work"],
+                        "description": "personal = Tanner's own side projects (usually open source); work = built for an employer."
+                    },
+                    "page": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "Results page, starting at 1."
+                    }
+                }
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "get_project",
+            "description": "Returns the write-up of one project, one section at a time: status, stack, links, plus the overview or a named section (features, architecture, roadmap, outcome). Use when the user names a specific project or wants more depth on one from list_projects.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "project": {
+                        "type": "string",
+                        "description": "Project name or slug as the user said it (e.g. 'RoamReady', 'relay')."
+                    },
+                    "section": {
+                        "type": "string",
+                        "description": "Section heading to read, from the sections list in a previous response. Omit for the overview."
+                    },
+                    "offset": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "description": "Character offset to continue a long section, from next_offset in a previous response."
+                    }
+                },
+                "required": ["project"]
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "list_reads",
+            "description": "Lists books, articles, and papers on Tanner's bookshelf with authors, format, topics, reading progress, and his short take on each. Use for reading recommendations, what he is reading now, or what he has read on a topic.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "Keywords matched against titles, authors, topics, and notes (e.g. 'distributed systems', 'Kleppmann')."
+                    },
+                    "shelf": {
+                        "type": "string",
+                        "enum": ["technical", "leisure"],
+                        "description": "technical = engineering and AI reading; leisure = fiction and general nonfiction."
+                    },
+                    "kind": {
+                        "type": "string",
+                        "enum": ["book", "article", "essay", "newsletter", "paper", "other"],
+                        "description": "Format of the read."
+                    },
+                    "progress": {
+                        "type": "string",
+                        "enum": ["reading", "finished", "queued"],
+                        "description": "reading = in progress now; finished = done; queued = up next."
+                    },
+                    "page": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "Results page, starting at 1."
+                    }
+                }
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "get_tech_stack",
+            "description": "Returns the languages, frameworks, infrastructure, and AI tools Tanner works with, including his ranked opinions of AI models and coding agent harnesses with pros and cons. Use for questions about his stack, which tools he uses, or which AI model or coding agent he prefers.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "category": {
+                        "type": "string",
+                        "enum": ["software", "ai_models", "coding_harnesses"],
+                        "description": "software = languages, frameworks, infra; ai_models / coding_harnesses = ranked picks with pros and cons. Omit for a brief overview of all."
+                    },
+                    "page": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "Results page for ranked categories, starting at 1."
+                    }
+                }
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "open_page",
+            "description": "Navigates the browser to a page on Tanner's site so the user can see it. Use when the user asks to show, open, or go to a page, a specific project, or the shelf a book is on, rather than just asking a question about it.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "page": {
+                        "type": "string",
+                        "enum": ["home", "projects", "project", "bookshelf", "read", "about", "stack", "contact"],
+                        "description": "Destination. project opens one project's page; read opens the bookshelf holding that book. Both need item."
+                    },
+                    "item": {
+                        "type": "string",
+                        "description": "For project or read: the project or book name or slug as the user said it. For bookshelf: 'technical' or 'leisure'."
+                    }
+                },
+                "required": ["page"]
+            }
+        }
+    ]
+}
