@@ -20,3 +20,12 @@ When adding a new badge type, **copy the pattern from `projectTagConfig` or `kin
 
 - Projects: [`src/content/projects/`](src/content/projects/), tags in [`src/data/project-tags.ts`](src/data/project-tags.ts).
 - Reads: [`src/content/reads/`](src/content/reads/), kinds in [`src/data/read-kinds.ts`](src/data/read-kinds.ts).
+
+## WebMCP tools (in-browser AI agents)
+
+The site registers [WebMCP](https://webmachinelearning.github.io/webmcp/) tools on `document.modelContext` so browser agents can query it without scraping.
+
+- **Tool contract:** [`webmcp/schema.json`](webmcp/schema.json) — names, descriptions, input schemas, annotations. The client imports this file directly, so edit tool metadata **here only**. Evals live next to it in [`webmcp/evals.json`](webmcp/evals.json) (`npx webmcp-evals local -t webmcp/schema.json -e webmcp/evals.json`).
+- **Handlers:** [`src/webmcp/register-tools.ts`](src/webmcp/register-tools.ts), loaded once from `BaseLayout.astro` (persists across `ClientRouter` navigations).
+- **Data:** [`src/pages/webmcp.json.ts`](src/pages/webmcp.json.ts) emits `/webmcp.json` at build time from the content collections, `about.md`, `site-config.ts`, and [`src/data/stack.ts`](src/data/stack.ts) (Stack page content lives there now, not inline in `stack.astro`).
+- **Rules:** keep every tool response ≤ 1,500 chars (paginate / clip), resolve errors as `{ error, code, retryable, suggestion }` instead of throwing, and only set annotations that are `true`. Adding a new content field? Expose it in `webmcp.json.ts` + `site-data.ts` if agents should see it.
